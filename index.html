@@ -3,293 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rachel Pinto | Bioinformatics & Neurobiology</title>
-    <style>
-        :root {
-            --bg-color: #050505;
-            --card-bg: rgba(23, 23, 23, 0.6);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --text-primary: #f5f5f5;
-            --text-secondary: #a3a3a3;
-            --accent: #2dd4bf; /* Teal/Cyan for Bio-Tech feel */
-            --spotlight-color: rgba(45, 212, 191, 0.15);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* The Moving Spotlight Background */
-        .spotlight-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none;
-            z-index: 1;
-            background: radial-gradient(
-                800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
-                var(--spotlight-color),
-                transparent 40%
-            );
-            transition: opacity 0.3s;
-        }
-
-        /* Layout Container */
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-            position: relative;
-            z-index: 2;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-        }
-
-        /* Typography */
-        h1 { font-size: 3rem; font-weight: 700; letter-spacing: -0.05em; margin-bottom: 0.5rem; }
-        h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; }
-        h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.2rem; color: var(--text-primary); }
-        h4 { font-size: 0.95rem; font-weight: 400; color: var(--text-secondary); margin-bottom: 0.5rem; font-style: italic; display: flex; justify-content: space-between;}
-        p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.8rem; }
-        
-        .sub-header { color: var(--accent); font-size: 1.1rem; font-weight: 500; margin-bottom: 2rem; }
-
-        /* Cards */
-        .section-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            transition: border-color 0.3s ease;
-        }
-
-        .section-card:hover {
-            border-color: rgba(45, 212, 191, 0.3);
-        }
-
-        /* Contact Links */
-        .contact-bar {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-            flex-wrap: wrap;
-        }
-        .contact-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            border: 1px solid var(--card-border);
-            padding: 0.5rem 1rem;
-            border-radius: 99px;
-            transition: all 0.2s;
-            background: rgba(255,255,255,0.03);
-        }
-        .contact-link:hover {
-            color: var(--accent);
-            border-color: var(--accent);
-            background: rgba(45, 212, 191, 0.1);
-        }
-
-        /* Lists */
-        ul { list-style-position: inside; margin-left: 0.5rem; color: var(--text-secondary); }
-        li { margin-bottom: 0.5rem; font-size: 0.95rem; line-height: 1.6; }
-        
-        /* Skills Tags */
-        .skills-grid { display: flex; flex-wrap: wrap; gap: 0.8rem; }
-        .skill-tag {
-            font-size: 0.85rem;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            background: rgba(255,255,255,0.05);
-            color: var(--text-primary);
-            border: 1px solid var(--card-border);
-        }
-        .skill-category {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-            margin-top: 1rem;
-            display: block;
-        }
-
-        /* Date alignments */
-        .date { color: var(--text-secondary); font-size: 0.9rem; white-space: nowrap; }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            h1 { font-size: 2.2rem; }
-            h4 { flex-direction: column; gap: 0.2rem; }
-            .container { padding: 2rem 1rem; }
-        }
-
-        /* Print Styles - Cleans it up for PDF export */
-        @media print {
-            body { background: white; color: black; }
-            .spotlight-overlay { display: none; }
-            .section-card { border: none; background: none; color: black; padding: 0; margin-bottom: 2rem; }
-            h1, h2, h3 { color: black; }
-            p, li { color: #333; }
-            .contact-link { border: none; padding: 0; color: black; }
-            .sub-header { color: #444; }
-        }
-    </style>
+    <title>Rachel Pinto</title>
+    <link rel="icon" href="favicon.ico" type="image/ico">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
     <div class="spotlight-overlay" id="spotlight"></div>
-
     <div class="container">
-        
-        <header>
+        <header class="animate-init">
             <h1>Rachel Pinto</h1>
-            <div class="sub-header">B.S. Neurobiology & Physiology • Bioinformatics • Data Science</div>
-            
+            <div class="subtitle">Bioinformatics • Neurobiology • Data Science</div>
             <div class="contact-bar">
-                <a href="mailto:rachelpinto8@outlook.com" class="contact-link">rachelpinto8@outlook.com</a>
-                <a href="tel:+12244092598" class="contact-link">(224) 409-2598</a>
-                <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank" class="contact-link">LinkedIn Profile</a>
+                <button class="pill profile-btn" onclick="openModal('profileContent')">View Profile</button>
+                <a href="mailto:rachelpinto8@outlook.com" class="pill">Email</a>
+                <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank" class="pill">LinkedIn</a>
+                <span class="pill" style="pointer-events: none; border:none; padding-left:0;">(224) 409-2598</span>
             </div>
         </header>
 
-        <section class="section-card">
-            <h2>Education</h2>
-            <div style="margin-bottom: 1.5rem;">
-                <div style="display:flex; justify-content:space-between; align-items:baseline;">
-                    <h3>Purdue University</h3>
-                    <span class="date">West Lafayette, IN</span>
+        <div id="profileContent" class="details-content">
+            <div class="profile-layout">
+                <img src="IMG_7982.jpeg" alt="Rachel Pinto" class="profile-img">
+                <div>
+                    <h2>About Me</h2>
+                    <h3 style="margin-bottom: 0.5rem;">Connecting Biology & Data Science</h3>
+                    <p>
+                        I am a Neurobiology and Physiology student at Purdue University with a strong focus on Bioinformatics. 
+                        My passion lies in bridging the gap between "wet lab" experimentation and "dry lab" computational analysis.
+                    </p>
+                    <br>
+                    <p>
+                        With experience in AI strategy for drug discovery, antibody sequence analysis, and pharmaceutical data science, 
+                        I am dedicated to solving complex biological problems using modern data-driven approaches.
+                    </p>
                 </div>
-                <h4>B.S. in Neurobiology and Physiology <span class="date">Exp. May 2026</span></h4>
-                <p><strong>Minor:</strong> Bioinformatics | <strong>Certificate:</strong> Applications in Data Science</p>
-                <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--accent);">Intend to pursue M.S. in Bioinformatics (Fall 2026)</p>
             </div>
-        </section>
+        </div>
 
-        <section class="section-card">
-            <h2>Experience</h2>
+        <div class="section-title animate-init">Education</div>
+        <div class="grid">
+            <div class="card animate-init" onclick="openModal('edu1')">
+                <div>
+                    <div class="card-role">B.S. Neurobiology & Physiology</div>
+                    <div class="card-company">Purdue University</div>
+                </div>
+                <div class="card-footer">
+                    <span class="card-date">Exp. May 2026</span>
+                    <span class="card-icon">→</span>
+                </div>
+                <div id="edu1" class="details-content">
+                    <h2>Purdue University</h2>
+                    <h3>B.S. Neurobiology & Physiology</h3>
+                    <p style="color: #ccc; margin-bottom: 1rem;"><strong>Minor:</strong> Bioinformatics <br> <strong>Certificate:</strong> Applications in Data Science</p>
+                    <ul>
+                        <li>Intend to pursue M.S. in Bioinformatics beginning Fall 2026.</li>
+                        <li>West Lafayette, IN</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
-            <div style="margin-bottom: 2rem;">
-                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+        <div class="section-title animate-init">Experience</div>
+        <div class="grid">
+            
+            <div class="card animate-init" onclick="openModal('exp1')">
+                <div>
+                    <div class="card-role">AI Strategy Intern</div>
+                    <div class="card-company">Indiana Biosciences Research Inst.</div>
+                </div>
+                <div class="card-footer">
+                    <span class="card-date">May 2025 – Aug 2025</span>
+                    <span class="card-icon">→</span>
+                </div>
+                <div id="exp1" class="details-content">
+                    <h2>AI Strategy Intern</h2>
                     <h3>Indiana Biosciences Research Institute</h3>
-                    <span class="date">Indianapolis, IN</span>
+                    <ul>
+                        <li>Conducted competitive landscape research on AI platforms supporting preclinical drug discovery.</li>
+                        <li>Identified unmet research needs and evaluated opportunities for AI-driven insights across early-stage R&D.</li>
+                        <li>Delivered a strategic roadmap to leadership outlining external partnership opportunities and AI solution classifications.</li>
+                        <li>Presented findings directly to the CEO and executive leadership as part of a final strategy proposal.</li>
+                    </ul>
                 </div>
-                <h4>Scientific Business Development - AI Strategy Intern <span class="date">May 2025 – Aug 2025</span></h4>
-                <ul>
-                    <li>Conducted competitive landscape research on AI platforms supporting preclinical drug discovery.</li>
-                    <li>Identified unmet research needs and evaluated opportunities for AI-driven insights across early-stage R&D.</li>
-                    <li>Delivered a strategic roadmap outlining external partnership opportunities and AI solution classifications.</li>
-                    <li>Presented findings directly to the CEO and executive leadership as part of a final strategy proposal.</li>
-                </ul>
             </div>
 
-            <div style="margin-bottom: 2rem;">
-                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+            <div class="card animate-init" onclick="openModal('exp2')">
+                <div>
+                    <div class="card-role">Bioinformatics Researcher</div>
+                    <div class="card-company">The Data Mine (Elanco)</div>
+                </div>
+                <div class="card-footer">
+                    <span class="card-date">Aug 2025 – Present</span>
+                    <span class="card-icon">→</span>
+                </div>
+                <div id="exp2" class="details-content">
+                    <h2>Bioinformatics Researcher</h2>
                     <h3>The Data Mine (Elanco & Purdue)</h3>
-                    <span class="date">West Lafayette, IN</span>
+                    <ul>
+                        <li>Analyzing feline immunoglobulin V genes using sequence alignment tools to identify conserved and variable regions across multiple breeds.</li>
+                        <li>Classifying antibody regions (CDRs vs. framework) and assessing variability in amino acid sequences across heavy and light chains.</li>
+                        <li>Gaining hands-on experience with BLAST and computational methods for antibody sequence analysis.</li>
+                    </ul>
                 </div>
-                <h4>Bioinformatics Researcher <span class="date">Aug 2025 – Present</span></h4>
-                <ul>
-                    <li>Analyzing feline immunoglobulin V genes using sequence alignment tools to identify conserved/variable regions.</li>
-                    <li>Classifying antibody regions (CDRs vs. framework) and assessing variability in amino acid sequences.</li>
-                    <li>Utilizing BLAST and computational methods for antibody sequence analysis.</li>
-                </ul>
             </div>
 
-            <div style="margin-bottom: 2rem;">
-                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+            <div class="card animate-init" onclick="openModal('exp3')">
+                <div>
+                    <div class="card-role">Teaching Intern</div>
+                    <div class="card-company">Purdue (BIOL232 & 242)</div>
+                </div>
+                <div class="card-footer">
+                    <span class="card-date">Aug 2024 – Present</span>
+                    <span class="card-icon">→</span>
+                </div>
+                <div id="exp3" class="details-content">
+                    <h2>Teaching Intern</h2>
+                    <h3>Purdue University Labs</h3>
+                    <ul>
+                        <li>Supported instruction in BIOL232: Cell Structure & Function and BIOL242: Genetics & Molecular Biology (70+ students).</li>
+                        <li>Guiding experiments in microscopy, protein analysis, PCR, gel electrophoresis, DNA extraction, and bacterial transformation.</li>
+                        <li>Reinforced concepts in cell biology, signaling, inheritance, and gene regulation.</li>
+                        <li>Evaluated lab reports and provided feedback to strengthen comprehension.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card animate-init" onclick="openModal('exp4')">
+                <div>
+                    <div class="card-role">Data Science Researcher</div>
+                    <div class="card-company">The Data Mine (AstraZeneca)</div>
+                </div>
+                <div class="card-footer">
+                    <span class="card-date">Jan 2025 – May 2025</span>
+                    <span class="card-icon">→</span>
+                </div>
+                <div id="exp4" class="details-content">
+                    <h2>Data Science Researcher</h2>
                     <h3>The Data Mine (AstraZeneca & Purdue)</h3>
-                    <span class="date">West Lafayette, IN</span>
+                    <ul>
+                        <li>Collaborated with AstraZeneca employees to design and implement digital tools using Tulip and Power BI.</li>
+                        <li>Analyzed and visualized data to support app functionality and improve decision-making processes.</li>
+                        <li>Applied Agile and Lean frameworks to develop and deploy applications in a pharmaceutical setting.</li>
+                    </ul>
                 </div>
-                <h4>Data Science Researcher <span class="date">Jan 2025 – May 2025</span></h4>
-                <ul>
-                    <li>Collaborated with AstraZeneca to design digital tools using Tulip and Power BI to streamline workflows.</li>
-                    <li>Analyzed and visualized data to support app functionality and improve decision-making processes.</li>
-                    <li>Applied Agile and Lean frameworks to develop applications in a pharmaceutical setting.</li>
-                </ul>
             </div>
+        </div>
 
-            <div>
-                <div style="display:flex; justify-content:space-between; align-items:baseline;">
-                    <h3>Purdue University (BIOL232 & BIOL242)</h3>
-                    <span class="date">West Lafayette, IN</span>
-                </div>
-                <h4>Teaching Intern <span class="date">Aug 2024 – Present</span></h4>
-                <ul>
-                    <li>Assisting 70+ students in Cell Structure & Function and Genetics & Molecular Biology labs.</li>
-                    <li>Guiding experiments in microscopy, protein analysis, PCR, gel electrophoresis, and DNA extraction.</li>
-                    <li>Evaluating lab reports and providing feedback to strengthen student comprehension.</li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="section-card">
-            <h2>Projects</h2>
+        <div class="section-title animate-init">Projects</div>
+        <div class="grid">
             
+            <div class="card animate-init" onclick="openModal('proj1')">
+                <div>
+                    <div class="card-role">Song Transposition</div>
+                    <div class="card-company">Carolina Chickadees Research</div>
+                </div>
+                <div class="card-footer">
+                    <span class="card-date">Research Paper</span>
+                    <span class="card-icon">→</span>
+                </div>
+                <div id="proj1" class="details-content">
+                    <h2>Song Transposition</h2>
+                    <h3>Carolina Chickadees Research</h3>
+                    <ul>
+                        <li>Analyzed regional differences in bird vocalization patterns using Praat software and Excel.</li>
+                        <li>Created visualizations of acoustic data to identify patterns in chirping behavior.</li>
+                        <li>Wrote research paper focusing on the ecological and behavioral implications of song transposition.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card animate-init" onclick="openModal('proj2')">
+                <div>
+                    <div class="card-role">CML Mutation Analysis</div>
+                    <div class="card-company">Chronic Myeloid Leukemia</div>
+                </div>
+                <div class="card-footer">
+                    <span class="card-date">Computational Bio</span>
+                    <span class="card-icon">→</span>
+                </div>
+                <div id="proj2" class="details-content">
+                    <h2>Effect of Mutations in CML</h2>
+                    <h3>Purdue University</h3>
+                    <ul>
+                        <li>Worked in a team of four to examine the impact of H396P and T315I mutations in Abl Kinase for Gleevec resistance.</li>
+                        <li>Utilized experimental and computational methods (PyMOL) to understand the mechanisms behind drug resistance.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title animate-init">Skills</div>
+        <div class="skills-container animate-init">
             <div style="margin-bottom: 1.5rem;">
-                <h3>Song Transposition in Carolina Chickadees</h3>
-                <p>Analyzed regional differences in bird vocalization patterns using Praat software and Excel. Created visualizations of acoustic data and wrote a research paper on ecological/behavioral implications.</p>
+                <h4 style="color:var(--accent); margin-bottom:0.5rem; text-transform:uppercase; font-size:0.8rem; letter-spacing:1px;">Laboratory (Wet Lab)</h4>
+                <div>
+                    <span class="skill-tag">Uv-Vis</span>
+                    <span class="skill-tag">Flow Cytometry</span>
+                    <span class="skill-tag">BSA-Quantification</span>
+                    <span class="skill-tag">Assay Development</span>
+                    <span class="skill-tag">Culture Media Prep</span>
+                    <span class="skill-tag">Gram Staining</span>
+                    <span class="skill-tag">Serial Dilutions</span>
+                    <span class="skill-tag">Gel Electrophoresis</span>
+                    <span class="skill-tag">PCR</span>
+                    <span class="skill-tag">Microscopy</span>
+                    <span class="skill-tag">DNA Extraction</span>
+                    <span class="skill-tag">Ultrafiltration</span>
+                </div>
             </div>
-
             <div>
-                <h3>Effect of Mutations in CML Treatment</h3>
-                <p>Examined the impact of H396P and T315I mutations in Abl Kinase for Gleevec resistance in Chronic Myeloid Leukemia. Utilized PyMOL and computational methods to understand drug resistance mechanisms.</p>
+                <h4 style="color:var(--accent); margin-bottom:0.5rem; text-transform:uppercase; font-size:0.8rem; letter-spacing:1px;">Software (Dry Lab)</h4>
+                <div>
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">R</span>
+                    <span class="skill-tag">SQL</span>
+                    <span class="skill-tag">Bash</span>
+                    <span class="skill-tag">PyMOL</span>
+                    <span class="skill-tag">Tulip</span>
+                    <span class="skill-tag">Power BI</span>
+                    <span class="skill-tag">Praat Software</span>
+                    <span class="skill-tag">ImageJ</span>
+                    <span class="skill-tag">Data Analysis</span>
+                </div>
             </div>
-        </section>
-
-        <section class="section-card">
-            <h2>Technical Skills</h2>
-            
-            <span class="skill-category">Laboratory & Research</span>
-            <div class="skills-grid">
-                <span class="skill-tag">Uv-Vis</span>
-                <span class="skill-tag">Flow Cytometry</span>
-                <span class="skill-tag">BSA-Quantification</span>
-                <span class="skill-tag">Assay Development</span>
-                <span class="skill-tag">Culture Media Prep</span>
-                <span class="skill-tag">Gram Staining</span>
-                <span class="skill-tag">PCR & Gel Electrophoresis</span>
-                <span class="skill-tag">Microscopy</span>
-                <span class="skill-tag">DNA Extraction</span>
-            </div>
-
-            <span class="skill-category">Software & Data</span>
-            <div class="skills-grid">
-                <span class="skill-tag">Python</span>
-                <span class="skill-tag">R</span>
-                <span class="skill-tag">SQL</span>
-                <span class="skill-tag">Bash</span>
-                <span class="skill-tag">PyMOL</span>
-                <span class="skill-tag">Tulip</span>
-                <span class="skill-tag">Power BI</span>
-                <span class="skill-tag">Praat</span>
-                <span class="skill-tag">ImageJ</span>
-            </div>
-        </section>
+        </div>
 
     </div>
 
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal-card">
+            <button class="close-btn" onclick="closeModal(event)">×</button>
+            <div id="modalBody">
+                </div>
+        </div>
+    </div>
+
     <script>
-        // This script tracks the mouse and moves the gradient spotlight
-        const spotlight = document.getElementById('spotlight');
-        
+        // Spotlight Effect
         document.addEventListener('mousemove', (e) => {
-            const x = e.clientX;
-            const y = e.clientY;
-            
-            // Set CSS variables that the CSS uses to position the gradient
-            document.body.style.setProperty('--mouse-x', `${x}px`);
-            document.body.style.setProperty('--mouse-y', `${y}px`);
+            document.body.style.setProperty('--mouse-x', `${e.clientX}px`);
+            document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
         });
+
+        // ENTRANCE ANIMATION LOGIC
+        document.addEventListener("DOMContentLoaded", () => {
+            const elements = document.querySelectorAll('.animate-init');
+            
+            elements.forEach((el, index) => {
+                // We add a delay based on the index (0.1s per item)
+                // animation: name duration timing-function delay fill-mode
+                el.style.animation = `fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) ${index * 0.1}s forwards`;
+            });
+        });
+
+        // Modal Logic
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalBody = document.getElementById('modalBody');
+
+        function openModal(contentId) {
+            const content = document.getElementById(contentId).innerHTML;
+            modalBody.innerHTML = content;
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(e) {
+            if (e.target === modalOverlay || e.target.classList.contains('close-btn')) {
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
     </script>
 </body>
 </html>
