@@ -3,44 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Under Construction</title>
+    <title>Rachel Pinto | Bioinformatics & Neurobiology</title>
     <style>
+        :root {
+            --bg-color: #050505;
+            --card-bg: rgba(23, 23, 23, 0.6);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #f5f5f5;
+            --text-secondary: #a3a3a3;
+            --accent: #2dd4bf; /* Teal/Cyan for Bio-Tech feel */
+            --spotlight-color: rgba(45, 212, 191, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f9;
-            color: #333;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
+
+        /* The Moving Spotlight Background */
+        .spotlight-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 1;
+            background: radial-gradient(
+                800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                var(--spotlight-color),
+                transparent 40%
+            );
+            transition: opacity 0.3s;
+        }
+
+        /* Layout Container */
         .container {
-            text-align: center;
-            padding: 2rem;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            max-width: 400px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
         }
-        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #d946ef; } /* .me pink/purple color */
-        p { font-size: 1.2rem; color: #666; margin-bottom: 1.5rem; }
-        .status {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background: #e0f2fe;
-            color: #0284c7;
-            border-radius: 999px;
-            font-weight: bold;
+
+        /* Typography */
+        h1 { font-size: 3rem; font-weight: 700; letter-spacing: -0.05em; margin-bottom: 0.5rem; }
+        h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; }
+        h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.2rem; color: var(--text-primary); }
+        h4 { font-size: 0.95rem; font-weight: 400; color: var(--text-secondary); margin-bottom: 0.5rem; font-style: italic; display: flex; justify-content: space-between;}
+        p { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 0.8rem; }
+        
+        .sub-header { color: var(--accent); font-size: 1.1rem; font-weight: 500; margin-bottom: 2rem; }
+
+        /* Cards */
+        .section-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: border-color 0.3s ease;
+        }
+
+        .section-card:hover {
+            border-color: rgba(45, 212, 191, 0.3);
+        }
+
+        /* Contact Links */
+        .contact-bar {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        .contact-link {
+            color: var(--text-secondary);
+            text-decoration: none;
             font-size: 0.9rem;
+            border: 1px solid var(--card-border);
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            transition: all 0.2s;
+            background: rgba(255,255,255,0.03);
+        }
+        .contact-link:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+            background: rgba(45, 212, 191, 0.1);
+        }
+
+        /* Lists */
+        ul { list-style-position: inside; margin-left: 0.5rem; color: var(--text-secondary); }
+        li { margin-bottom: 0.5rem; font-size: 0.95rem; line-height: 1.6; }
+        
+        /* Skills Tags */
+        .skills-grid { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+        .skill-tag {
+            font-size: 0.85rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.05);
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
+        }
+        .skill-category {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+            display: block;
+        }
+
+        /* Date alignments */
+        .date { color: var(--text-secondary); font-size: 0.9rem; white-space: nowrap; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            h4 { flex-direction: column; gap: 0.2rem; }
+            .container { padding: 2rem 1rem; }
+        }
+
+        /* Print Styles - Cleans it up for PDF export */
+        @media print {
+            body { background: white; color: black; }
+            .spotlight-overlay { display: none; }
+            .section-card { border: none; background: none; color: black; padding: 0; margin-bottom: 2rem; }
+            h1, h2, h3 { color: black; }
+            p, li { color: #333; }
+            .contact-link { border: none; padding: 0; color: black; }
+            .sub-header { color: #444; }
         }
     </style>
 </head>
 <body>
+
+    <div class="spotlight-overlay" id="spotlight"></div>
+
     <div class="container">
-        <h1>Hello World.</h1>
-        <p>This .me domain is successfully connected!</p>
-        <div class="status">● System Operational</div>
+        
+        <header>
+            <h1>Rachel Pinto</h1>
+            <div class="sub-header">B.S. Neurobiology & Physiology • Bioinformatics • Data Science</div>
+            
+            <div class="contact-bar">
+                <a href="mailto:rachelpinto8@outlook.com" class="contact-link">rachelpinto8@outlook.com</a>
+                <a href="tel:+12244092598" class="contact-link">(224) 409-2598</a>
+                <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank" class="contact-link">LinkedIn Profile</a>
+            </div>
+        </header>
+
+        <section class="section-card">
+            <h2>Education</h2>
+            <div style="margin-bottom: 1.5rem;">
+                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                    <h3>Purdue University</h3>
+                    <span class="date">West Lafayette, IN</span>
+                </div>
+                <h4>B.S. in Neurobiology and Physiology <span class="date">Exp. May 2026</span></h4>
+                <p><strong>Minor:</strong> Bioinformatics | <strong>Certificate:</strong> Applications in Data Science</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--accent);">Intend to pursue M.S. in Bioinformatics (Fall 2026)</p>
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2>Experience</h2>
+
+            <div style="margin-bottom: 2rem;">
+                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                    <h3>Indiana Biosciences Research Institute</h3>
+                    <span class="date">Indianapolis, IN</span>
+                </div>
+                <h4>Scientific Business Development - AI Strategy Intern <span class="date">May 2025 – Aug 2025</span></h4>
+                <ul>
+                    <li>Conducted competitive landscape research on AI platforms supporting preclinical drug discovery.</li>
+                    <li>Identified unmet research needs and evaluated opportunities for AI-driven insights across early-stage R&D.</li>
+                    <li>Delivered a strategic roadmap outlining external partnership opportunities and AI solution classifications.</li>
+                    <li>Presented findings directly to the CEO and executive leadership as part of a final strategy proposal.</li>
+                </ul>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                    <h3>The Data Mine (Elanco & Purdue)</h3>
+                    <span class="date">West Lafayette, IN</span>
+                </div>
+                <h4>Bioinformatics Researcher <span class="date">Aug 2025 – Present</span></h4>
+                <ul>
+                    <li>Analyzing feline immunoglobulin V genes using sequence alignment tools to identify conserved/variable regions.</li>
+                    <li>Classifying antibody regions (CDRs vs. framework) and assessing variability in amino acid sequences.</li>
+                    <li>Utilizing BLAST and computational methods for antibody sequence analysis.</li>
+                </ul>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                    <h3>The Data Mine (AstraZeneca & Purdue)</h3>
+                    <span class="date">West Lafayette, IN</span>
+                </div>
+                <h4>Data Science Researcher <span class="date">Jan 2025 – May 2025</span></h4>
+                <ul>
+                    <li>Collaborated with AstraZeneca to design digital tools using Tulip and Power BI to streamline workflows.</li>
+                    <li>Analyzed and visualized data to support app functionality and improve decision-making processes.</li>
+                    <li>Applied Agile and Lean frameworks to develop applications in a pharmaceutical setting.</li>
+                </ul>
+            </div>
+
+            <div>
+                <div style="display:flex; justify-content:space-between; align-items:baseline;">
+                    <h3>Purdue University (BIOL232 & BIOL242)</h3>
+                    <span class="date">West Lafayette, IN</span>
+                </div>
+                <h4>Teaching Intern <span class="date">Aug 2024 – Present</span></h4>
+                <ul>
+                    <li>Assisting 70+ students in Cell Structure & Function and Genetics & Molecular Biology labs.</li>
+                    <li>Guiding experiments in microscopy, protein analysis, PCR, gel electrophoresis, and DNA extraction.</li>
+                    <li>Evaluating lab reports and providing feedback to strengthen student comprehension.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2>Projects</h2>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <h3>Song Transposition in Carolina Chickadees</h3>
+                <p>Analyzed regional differences in bird vocalization patterns using Praat software and Excel. Created visualizations of acoustic data and wrote a research paper on ecological/behavioral implications.</p>
+            </div>
+
+            <div>
+                <h3>Effect of Mutations in CML Treatment</h3>
+                <p>Examined the impact of H396P and T315I mutations in Abl Kinase for Gleevec resistance in Chronic Myeloid Leukemia. Utilized PyMOL and computational methods to understand drug resistance mechanisms.</p>
+            </div>
+        </section>
+
+        <section class="section-card">
+            <h2>Technical Skills</h2>
+            
+            <span class="skill-category">Laboratory & Research</span>
+            <div class="skills-grid">
+                <span class="skill-tag">Uv-Vis</span>
+                <span class="skill-tag">Flow Cytometry</span>
+                <span class="skill-tag">BSA-Quantification</span>
+                <span class="skill-tag">Assay Development</span>
+                <span class="skill-tag">Culture Media Prep</span>
+                <span class="skill-tag">Gram Staining</span>
+                <span class="skill-tag">PCR & Gel Electrophoresis</span>
+                <span class="skill-tag">Microscopy</span>
+                <span class="skill-tag">DNA Extraction</span>
+            </div>
+
+            <span class="skill-category">Software & Data</span>
+            <div class="skills-grid">
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">R</span>
+                <span class="skill-tag">SQL</span>
+                <span class="skill-tag">Bash</span>
+                <span class="skill-tag">PyMOL</span>
+                <span class="skill-tag">Tulip</span>
+                <span class="skill-tag">Power BI</span>
+                <span class="skill-tag">Praat</span>
+                <span class="skill-tag">ImageJ</span>
+            </div>
+        </section>
+
     </div>
+
+    <script>
+        // This script tracks the mouse and moves the gradient spotlight
+        const spotlight = document.getElementById('spotlight');
+        
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            // Set CSS variables that the CSS uses to position the gradient
+            document.body.style.setProperty('--mouse-x', `${x}px`);
+            document.body.style.setProperty('--mouse-y', `${y}px`);
+        });
+    </script>
 </body>
 </html>
