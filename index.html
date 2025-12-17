@@ -1,18 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rachel Pinto</title>
-    <link rel="icon" href="favicon.ico" type="image/ico">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>Rachel Pinto | Portfolio</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
     <div class="spotlight-overlay" id="spotlight"></div>
+
     <div class="container">
+        
         <header class="animate-init">
+            
+            <button class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Theme">
+                <svg id="sun-icon" class="theme-icon" viewBox="0 0 24 24" style="display:none;">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg id="moon-icon" class="theme-icon" viewBox="0 0 24 24">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+
             <h1>Rachel Pinto</h1>
-            <div class="subtitle">Bioinformatics • Neurobiology • Data Science</div>
+            <div class="subtitle">Neurobiology & Physiology • Bioinformatics • Data Science</div>
             <div class="contact-bar">
                 <button class="pill profile-btn" onclick="openModal('profileContent')">View Profile</button>
                 <a href="mailto:rachelpinto8@outlook.com" class="pill">Email</a>
@@ -26,10 +47,10 @@
                 <img src="IMG_7982.jpeg" alt="Rachel Pinto" class="profile-img">
                 <div>
                     <h2>About Me</h2>
-                    <h3 style="margin-bottom: 0.5rem;">Connecting Biology & Data Science</h3>
+                    <h3 style="margin-bottom: 0.5rem;">Bridging Code & Biology</h3>
                     <p>
-                        I am a Neurobiology and Physiology student at Purdue University with a strong focus on Bioinformatics. 
-                        My passion lies in bridging the gap between "wet lab" experimentation and "dry lab" computational analysis.
+                        I am a Neurobiology and Physiology student at Purdue University, minoring in Bioinformatics. 
+                        My passion lies in bridging the gap between wet lab experimentation and dry lab computational analysis.
                     </p>
                     <br>
                     <p>
@@ -54,7 +75,7 @@
                 <div id="edu1" class="details-content">
                     <h2>Purdue University</h2>
                     <h3>B.S. Neurobiology & Physiology</h3>
-                    <p style="color: #ccc; margin-bottom: 1rem;"><strong>Minor:</strong> Bioinformatics <br> <strong>Certificate:</strong> Applications in Data Science</p>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong>Minor:</strong> Bioinformatics <br> <strong>Certificate:</strong> Applications in Data Science</p>
                     <ul>
                         <li>Intend to pursue M.S. in Bioinformatics beginning Fall 2026.</li>
                         <li>West Lafayette, IN</li>
@@ -239,24 +260,50 @@
     </div>
 
     <script>
-        // Spotlight Effect
+        // --- 1. THEME TOGGLE LOGIC ---
+        const htmlElement = document.documentElement;
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+
+        // Check local storage on load
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        htmlElement.setAttribute('data-theme', savedTheme);
+        updateIcons(savedTheme);
+
+        function toggleTheme() {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateIcons(newTheme);
+        }
+
+        function updateIcons(theme) {
+            if (theme === 'dark') {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            }
+        }
+
+        // --- 2. SPOTLIGHT EFFECT ---
         document.addEventListener('mousemove', (e) => {
             document.body.style.setProperty('--mouse-x', `${e.clientX}px`);
             document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
         });
 
-        // ENTRANCE ANIMATION LOGIC
+        // --- 3. ENTRANCE ANIMATION ---
         document.addEventListener("DOMContentLoaded", () => {
             const elements = document.querySelectorAll('.animate-init');
-            
             elements.forEach((el, index) => {
-                // We add a delay based on the index (0.1s per item)
-                // animation: name duration timing-function delay fill-mode
                 el.style.animation = `fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) ${index * 0.1}s forwards`;
             });
         });
 
-        // Modal Logic
+        // --- 4. MODAL LOGIC ---
         const modalOverlay = document.getElementById('modalOverlay');
         const modalBody = document.getElementById('modalBody');
 
