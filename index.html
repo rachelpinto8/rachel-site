@@ -253,12 +253,10 @@
     </div>
 
     <script>
-        // --- 1. THEME TOGGLE LOGIC ---
         const htmlElement = document.documentElement;
         const sunIcon = document.getElementById('sun-icon');
         const moonIcon = document.getElementById('moon-icon');
 
-        // Check local storage on load
         const savedTheme = localStorage.getItem('theme') || 'dark';
         htmlElement.setAttribute('data-theme', savedTheme);
         updateIcons(savedTheme);
@@ -288,7 +286,6 @@
             document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
         });
 
-        // --- 3. ENTRANCE ANIMATION ---
         document.addEventListener("DOMContentLoaded", () => {
             const elements = document.querySelectorAll('.animate-init');
             elements.forEach((el, index) => {
@@ -296,7 +293,6 @@
             });
         });
 
-        // --- 4. MODAL LOGIC ---
         const modalOverlay = document.getElementById('modalOverlay');
         const modalBody = document.getElementById('modalBody');
 
