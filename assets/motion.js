@@ -379,21 +379,26 @@ if (document.readyState === 'loading') {
   initializeSecretMenu();
 }
 
-const reveals = document.querySelectorAll(".reveal");
+// Only use intersection observer for reveal animations on desktop
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-const observer = new IntersectionObserver(
-  entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-        observer.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.15 }
-);
+if (!isMobile) {
+  const reveals = document.querySelectorAll(".reveal");
 
-reveals.forEach(el => observer.observe(el));
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  reveals.forEach(el => observer.observe(el));
+}
 
 // Dark/Light mode toggle with fade animation
 const theme = localStorage.getItem('theme') || 'dark';

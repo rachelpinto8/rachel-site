@@ -407,6 +407,15 @@ html[data-theme="light"] .nav {
   transform: translateY(0);
 }
 
+/* Disable reveal animation on mobile */
+@media (max-width: 768px) {
+  .reveal {
+    opacity: 1;
+    transform: translateY(0);
+    transition: none;
+  }
+}
+
 /* MODAL */
 .modal-overlay {
   display: none;
