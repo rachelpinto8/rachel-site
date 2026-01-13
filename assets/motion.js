@@ -166,6 +166,28 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
+      <a href="whack.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🦡</span>
+          <div class="secret-menu-text">
+            <h2>Whack-a-Mole</h2>
+            <p>Click fast!</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="breakout.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🧱</span>
+          <div class="secret-menu-text">
+            <h2>Breakout</h2>
+            <p>Break the bricks</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
       <a href="https://open.spotify.com/playlist/7kwg9GeqBKT8Sq1PXFR5Gx?si=86ccacd218eb453a" target="_blank" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🎵</span>

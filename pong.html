@@ -399,12 +399,17 @@
       },
       
       draw() {
-        // Clear canvas
-        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+        // Get current theme colors
+        const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+        const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
+        const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        
+        // Clear
+        ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, this.width, this.height);
         
         // Center line
-        ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
+        ctx.strokeStyle = borderColor;
         ctx.setLineDash([5, 5]);
         ctx.beginPath();
         ctx.moveTo(this.width / 2, 0);
@@ -413,13 +418,13 @@
         ctx.setLineDash([]);
         
         // Ball
-        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        ctx.fillStyle = accentColor;
         ctx.beginPath();
         ctx.arc(this.ball.x, this.ball.y, this.ballSize, 0, Math.PI * 2);
         ctx.fill();
         
         // Paddles
-        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        ctx.fillStyle = accentColor;
         ctx.fillRect(this.player.x, this.player.y, this.paddleWidth, this.paddleHeight);
         ctx.fillRect(this.computer.x, this.computer.y, this.paddleWidth, this.paddleHeight);
         

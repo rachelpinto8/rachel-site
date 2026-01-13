@@ -815,6 +815,31 @@ body.lock-scroll { overflow: hidden; }
   width: 100%;
 }
 
+/* Styled Scrollbar */
+.secret-menu-body::-webkit-scrollbar {
+  width: 10px;
+}
+
+.secret-menu-body::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+.secret-menu-body::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.secret-menu-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(236, 72, 153, 0.8);
+}
+
+/* Firefox scrollbar */
+.secret-menu-body {
+  scrollbar-color: var(--accent) var(--bg);
+  scrollbar-width: thin;
+}
+
 .secret-menu-options {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Breakout - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Play Breakout game.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .breakout-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .breakout-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .breakout-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .game-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-box {
+      text-align: center;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .instructions {
+      background: var(--bg);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .instructions h3 {
+      margin-top: 0;
+      color: var(--text-primary);
+    }
+
+    .instructions p {
+      margin: 0.5rem 0;
+    }
+
+    .game-wrapper {
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-start {
+      padding: 0.9rem 2rem;
+      border: none;
+      background: var(--accent);
+      color: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .btn-start:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .btn-start:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-back {
+      padding: 0.7rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .breakout-header h1 {
+        font-size: 2rem;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      .btn-start, .btn-back {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+   <nav class="nav reveal">
+    <div class="nav-left">
+        <a class="brand-avatar" href="index.html" aria-label="Home">
+        <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+        </a>
+        <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container breakout-container">
+    <section class="breakout-header reveal">
+      <h1>Breakout</h1>
+      <p style="color: var(--text-secondary);">Break all the bricks with the ball!</p>
+    </section>
+
+    <div class="game-stats reveal">
+      <div class="stat-box">
+        <div class="stat-label">Score</div>
+        <div class="stat-value" id="score">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Best</div>
+        <div class="stat-value" id="best">0</div>
+      </div>
+    </div>
+
+    <div class="instructions reveal">
+      <h3>How to Play</h3>
+      <p>Use LEFT/RIGHT arrows or A/D to move the paddle. Bounce the ball to break all bricks!</p>
+    </div>
+
+    <div class="game-wrapper reveal">
+      <canvas id="breakoutCanvas" width="600" height="500"></canvas>
+    </div>
+
+    <div class="controls reveal">
+      <button class="btn-start" id="startBtn">Start Game</button>
+      <a href="index.html" class="btn-back">Back Home</a>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    const canvas = document.getElementById('breakoutCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const game = {
+      canvas: canvas,
+      ballRadius: 8,
+      paddleHeight: 10,
+      paddleWidth: 80,
+      brickRowCount: 3,
+      brickColumnCount: 5,
+      brickWidth: 100,
+      brickHeight: 20,
+      brickPadding: 10,
+      brickOffsetTop: 30,
+      brickOffsetLeft: 30,
+      
+      ball: { x: 300, y: 400, dx: 3, dy: -3 },
+      paddle: { x: 260, y: canvas.height - 20 },
+      score: 0,
+      best: localStorage.getItem('breakout-best') || 0,
+      gameActive: false,
+      
+      init() {
+        this.createBricks();
+        document.getElementById('best').textContent = this.best;
+        document.getElementById('startBtn').addEventListener('click', () => this.start());
+        
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') {
+            if (this.paddle.x > 0) this.paddle.x -= 25;
+          } else if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') {
+            if (this.paddle.x + this.paddleWidth < canvas.width) this.paddle.x += 25;
+          }
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+          const rect = canvas.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          if (x > this.paddleWidth / 2 && x < canvas.width - this.paddleWidth / 2) {
+            this.paddle.x = x - this.paddleWidth / 2;
+          }
+        });
+      },
+      
+      createBricks() {
+        this.bricks = [];
+        for (let c = 0; c < this.brickColumnCount; c++) {
+          for (let r = 0; r < this.brickRowCount; r++) {
+            this.bricks.push({
+              x: r * (this.brickWidth + this.brickPadding) + this.brickOffsetLeft,
+              y: c * (this.brickHeight + this.brickPadding) + this.brickOffsetTop,
+              status: 1
+            });
+          }
+        }
+      },
+      
+      start() {
+        this.ball = { x: 300, y: 400, dx: 3, dy: -3 };
+        this.paddle = { x: 260, y: canvas.height - 20 };
+        this.score = 0;
+        this.gameActive = true;
+        this.createBricks();
+        document.getElementById('startBtn').disabled = true;
+        this.update();
+      },
+      
+      update() {
+        if (!this.gameActive) return;
+        
+        this.ball.x += this.ball.dx;
+        this.ball.y += this.ball.dy;
+        
+        // Wall collision
+        if (this.ball.x - this.ballRadius < 0 || this.ball.x + this.ballRadius > canvas.width) {
+          this.ball.dx = -this.ball.dx;
+        }
+        if (this.ball.y - this.ballRadius < 0) {
+          this.ball.dy = -this.ball.dy;
+        }
+        
+        // Paddle collision
+        if (
+          this.ball.y + this.ballRadius > this.paddle.y &&
+          this.ball.x > this.paddle.x &&
+          this.ball.x < this.paddle.x + this.paddleWidth
+        ) {
+          this.ball.dy = -this.ball.dy;
+          this.ball.y = this.paddle.y - this.ballRadius;
+        }
+        
+        // Brick collision
+        for (let brick of this.bricks) {
+          if (brick.status === 1) {
+            if (
+              this.ball.x > brick.x &&
+              this.ball.x < brick.x + this.brickWidth &&
+              this.ball.y > brick.y &&
+              this.ball.y < brick.y + this.brickHeight
+            ) {
+              brick.status = 0;
+              this.ball.dy = -this.ball.dy;
+              this.score += 10;
+              document.getElementById('score').textContent = this.score;
+            }
+          }
+        }
+        
+        // Game over
+        if (this.ball.y > canvas.height) {
+          this.gameActive = false;
+          if (this.score > this.best) {
+            this.best = this.score;
+            localStorage.setItem('breakout-best', this.best);
+            document.getElementById('best').textContent = this.best;
+          }
+          document.getElementById('startBtn').disabled = false;
+          document.getElementById('startBtn').textContent = 'Play Again';
+        }
+        
+        // Win condition
+        if (this.bricks.every(b => b.status === 0)) {
+          this.gameActive = false;
+          document.getElementById('startBtn').disabled = false;
+          document.getElementById('startBtn').textContent = 'You Won! Play Again';
+        }
+        
+        this.draw();
+        requestAnimationFrame(() => this.update());
+      },
+      
+      draw() {
+        // Get current theme colors
+        const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+        const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
+        const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        
+        // Clear
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Ball
+        ctx.fillStyle = accentColor;
+        ctx.beginPath();
+        ctx.arc(this.ball.x, this.ball.y, this.ballRadius, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Paddle
+        ctx.fillRect(this.paddle.x, this.paddle.y, this.paddleWidth, this.paddleHeight);
+        
+        // Bricks
+        for (let brick of this.bricks) {
+          if (brick.status === 1) {
+            ctx.fillStyle = accentColor;
+            ctx.globalAlpha = 0.8;
+            ctx.fillRect(brick.x, brick.y, this.brickWidth, this.brickHeight);
+            ctx.globalAlpha = 1;
+            ctx.strokeStyle = borderColor;
+            ctx.lineWidth = 1;
+            ctx.strokeRect(brick.x, brick.y, this.brickWidth, this.brickHeight);
+          }
+        }
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      game.init();
+      game.draw();
+    });
+  </script>
+</body>
+</html>

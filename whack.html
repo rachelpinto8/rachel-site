@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Whack-a-Mole - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Play Whack-a-Mole game.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .wam-container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .wam-header {
+      margin-bottom: 2rem;
+    }
+
+    .wam-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .game-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-box {
+      text-align: center;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .game-board {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .mole-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .mole-hole {
+      width: 100%;
+      aspect-ratio: 1;
+      background: var(--bg);
+      border: 3px solid var(--border);
+      border-radius: 50%;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+
+    .mole-hole:hover {
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    .mole-hole.active {
+      animation: popUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes popUp {
+      0% { transform: scale(0.3); }
+      100% { transform: scale(1); }
+    }
+
+    .mole {
+      font-size: 2.5rem;
+      opacity: 0;
+      transition: opacity 0.1s ease;
+    }
+
+    .mole-hole.active .mole {
+      opacity: 1;
+    }
+
+    .mole-hole.hit .mole {
+      animation: hit 0.3s ease;
+    }
+
+    @keyframes hit {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(0.7); }
+    }
+
+    .timer-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--bg);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .timer-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #ec4899);
+      width: 100%;
+      transition: width 0.1s linear;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-start, .btn-reset {
+      padding: 0.9rem 2rem;
+      border: none;
+      background: var(--accent);
+      color: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .btn-start:hover, .btn-reset:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .btn-start:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-back {
+      padding: 0.7rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .game-message {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      min-height: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .wam-header h1 {
+        font-size: 2rem;
+      }
+
+      .mole-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+      }
+
+      .mole-hole {
+        border-width: 2px;
+      }
+
+      .mole {
+        font-size: 2rem;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      .btn-start, .btn-reset, .btn-back {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+    <nav class="nav reveal">
+    <div class="nav-left">
+        <a class="brand-avatar" href="index.html" aria-label="Home">
+        <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+        </a>
+        <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container wam-container">
+    <section class="wam-header reveal">
+      <h1>Whack-a-Mole</h1>
+      <p style="color: var(--text-secondary);">Click moles before they disappear!</p>
+    </section>
+
+    <div class="game-stats reveal">
+      <div class="stat-box">
+        <div class="stat-label">Score</div>
+        <div class="stat-value" id="score">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Time</div>
+        <div class="stat-value" id="timeLeft">30</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Best</div>
+        <div class="stat-value" id="best">0</div>
+      </div>
+    </div>
+
+    <div class="game-board reveal">
+      <div class="game-message" id="message"></div>
+      
+      <div class="timer-bar">
+        <div class="timer-fill" id="timerFill"></div>
+      </div>
+
+      <div class="mole-grid" id="moleGrid"></div>
+
+      <div class="controls">
+        <button class="btn-start" id="startBtn">Start Game</button>
+        <a href="index.html" class="btn-back">Back Home</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    class WhackAMole {
+      constructor() {
+        this.score = 0;
+        this.best = localStorage.getItem('wam-best') || 0;
+        this.timeLeft = 30;
+        this.gameActive = false;
+        this.activeMole = null;
+        this.gameTime = 30;
+
+        this.moleGrid = document.getElementById('moleGrid');
+        this.scoreDisplay = document.getElementById('score');
+        this.timeDisplay = document.getElementById('timeLeft');
+        this.bestDisplay = document.getElementById('best');
+        this.startBtn = document.getElementById('startBtn');
+        this.messageDisplay = document.getElementById('message');
+        this.timerFill = document.getElementById('timerFill');
+
+        this.bestDisplay.textContent = this.best;
+        this.createMoles();
+        this.startBtn.addEventListener('click', () => this.start());
+      }
+
+      createMoles() {
+        this.moleGrid.innerHTML = '';
+        for (let i = 0; i < 9; i++) {
+          const hole = document.createElement('div');
+          hole.className = 'mole-hole';
+          hole.innerHTML = '<div class="mole">🦡</div>';
+          hole.addEventListener('click', () => this.hitMole(hole));
+          this.moleGrid.appendChild(hole);
+        }
+      }
+
+      start() {
+        this.score = 0;
+        this.timeLeft = this.gameTime;
+        this.gameActive = true;
+        this.activeMole = null;
+        this.startBtn.disabled = true;
+        this.messageDisplay.textContent = 'Go!';
+        this.updateDisplay();
+
+        this.gameLoop = setInterval(() => this.popMole(), 600);
+        this.timerInterval = setInterval(() => this.updateTimer(), 1000);
+      }
+
+      popMole() {
+        if (!this.gameActive) return;
+
+        // Hide previous mole
+        if (this.activeMole) {
+          this.activeMole.classList.remove('active');
+        }
+
+        // Show random mole
+        const holes = this.moleGrid.querySelectorAll('.mole-hole');
+        this.activeMole = holes[Math.floor(Math.random() * holes.length)];
+        this.activeMole.classList.add('active');
+      }
+
+      hitMole(hole) {
+        if (!this.gameActive) return;
+
+        if (hole === this.activeMole) {
+          this.score++;
+          hole.classList.add('hit');
+          setTimeout(() => hole.classList.remove('hit'), 300);
+          this.activeMole = null;
+          this.updateDisplay();
+        }
+      }
+
+      updateTimer() {
+        this.timeLeft--;
+        this.updateDisplay();
+        this.timerFill.style.width = (this.timeLeft / this.gameTime) * 100 + '%';
+
+        if (this.timeLeft <= 0) {
+          this.endGame();
+        }
+      }
+
+      updateDisplay() {
+        this.scoreDisplay.textContent = this.score;
+        this.timeDisplay.textContent = Math.max(0, this.timeLeft);
+      }
+
+      endGame() {
+        this.gameActive = false;
+        clearInterval(this.gameLoop);
+        clearInterval(this.timerInterval);
+
+        if (this.activeMole) {
+          this.activeMole.classList.remove('active');
+        }
+
+        if (this.score > this.best) {
+          this.best = this.score;
+          localStorage.setItem('wam-best', this.best);
+          this.bestDisplay.textContent = this.best;
+        }
+
+        this.messageDisplay.textContent = `Game Over! Final Score: ${this.score}`;
+        this.startBtn.disabled = false;
+        this.startBtn.textContent = 'Play Again';
+      }
+    }
+
+    let game;
+    document.addEventListener('DOMContentLoaded', () => {
+      game = new WhackAMole();
+    });
+  </script>
+</body>
+</html>
