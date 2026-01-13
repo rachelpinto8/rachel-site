@@ -1,0 +1,25 @@
+{
+  "name": "Rachel Pinto",
+  "short_name": "RP",
+  "description": "Bridging experimental biology with computational insight.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0b0b0d",
+  "theme_color": "#0b0b0d",
+  "icons": [
+    {
+      "src": "assets/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/IMG_7982.jpeg",
+      "sizes": "any",
+      "type": "image/jpeg",
+      "purpose": "any"
+    }
+  ]
+}
