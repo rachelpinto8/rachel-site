@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decision Wheel - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/web-app-manifest-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Decision Wheel - Random choice maker.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .wheel-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .wheel-header {
+      text-align: center;
+    }
+
+    .wheel-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .wheel-section {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      width: 100%;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 2rem 0;
+    }
+
+    canvas {
+      max-width: 100%;
+      filter: drop-shadow(0 8px 24px rgba(236, 72, 153, 0.2));
+    }
+
+    .spin-pointer {
+      position: absolute;
+      top: -10px;
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-top: 30px solid var(--accent);
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+    }
+
+    .input-section {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .wheel-input {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-primary);
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+
+    .wheel-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .add-btn {
+      padding: 0.75rem 1.5rem;
+      background: var(--accent);
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .add-btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .item-chip {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .remove-btn {
+      padding: 0.25rem 0.5rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+    }
+
+    .remove-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .spin-btn {
+      flex: 1;
+      padding: 1rem 2rem;
+      background: var(--accent);
+      border: none;
+      color: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .spin-btn:hover:not(:disabled) {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(236, 72, 153, 0.3);
+    }
+
+    .spin-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-back {
+      padding: 1rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .result-section {
+      background: var(--bg);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 2px solid var(--accent);
+      text-align: center;
+      display: none;
+      animation: slideIn 0.5s ease;
+    }
+
+    .result-section.show {
+      display: block;
+    }
+
+    .result-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-text {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .wheel-header h1 {
+        font-size: 2rem;
+      }
+
+      canvas {
+        width: 300px !important;
+        height: 300px !important;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+    <nav class="nav reveal">
+        <div class="nav-left">
+            <a class="brand-avatar" href="index.html" aria-label="Home">
+            <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+            </a>
+            <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+        </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container wheel-container">
+    <section class="wheel-header reveal">
+      <h1>🎡 Decision Wheel</h1>
+      <p style="color: var(--text-secondary);">Can't decide? Let the wheel choose!</p>
+    </section>
+
+    <div class="wheel-section reveal">
+      <div class="input-section">
+        <input type="text" class="wheel-input" id="itemInput" placeholder="Enter an option..." maxlength="30">
+        <button class="add-btn" id="addBtn">Add</button>
+      </div>
+
+      <div class="items-list" id="itemsList"></div>
+
+      <div class="canvas-wrapper">
+        <div class="spin-pointer"></div>
+        <canvas id="wheelCanvas" width="400" height="400"></canvas>
+      </div>
+
+      <div class="result-section" id="resultSection">
+        <div class="result-label">The wheel has decided:</div>
+        <div class="result-text" id="resultText">-</div>
+      </div>
+
+      <div class="controls">
+        <button class="spin-btn" id="spinBtn" disabled>Spin the Wheel!</button>
+        <a href="index.html" class="btn-back">Back Home</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    class DecisionWheel {
+      constructor() {
+        this.canvas = document.getElementById('wheelCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.items = JSON.parse(localStorage.getItem('wheelItems')) || [];
+        this.currentRotation = 0;
+        this.isSpinning = false;
+        this.colors = ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
+
+        this.itemInput = document.getElementById('itemInput');
+        this.addBtn = document.getElementById('addBtn');
+        this.spinBtn = document.getElementById('spinBtn');
+        this.itemsList = document.getElementById('itemsList');
+        this.resultSection = document.getElementById('resultSection');
+        this.resultText = document.getElementById('resultText');
+
+        this.setupEventListeners();
+        this.renderItemsList();
+        this.drawWheel();
+      }
+
+      setupEventListeners() {
+        this.addBtn.addEventListener('click', () => this.addItem());
+        this.itemInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') this.addItem();
+        });
+        this.spinBtn.addEventListener('click', () => this.spin());
+      }
+
+      addItem() {
+        const value = this.itemInput.value.trim();
+        if (value && !this.items.includes(value)) {
+          this.items.push(value);
+          this.itemInput.value = '';
+          this.saveItems();
+          this.renderItemsList();
+          this.drawWheel();
+        }
+      }
+
+      removeItem(index) {
+        this.items.splice(index, 1);
+        this.saveItems();
+        this.renderItemsList();
+        this.drawWheel();
+      }
+
+      saveItems() {
+        localStorage.setItem('wheelItems', JSON.stringify(this.items));
+      }
+
+      renderItemsList() {
+        this.itemsList.innerHTML = '';
+        this.items.forEach((item, index) => {
+          const chip = document.createElement('div');
+          chip.className = 'item-chip';
+          chip.innerHTML = `
+            <span>${item}</span>
+            <button class="remove-btn" onclick="wheel.removeItem(${index})">Remove</button>
+          `;
+          this.itemsList.appendChild(chip);
+        });
+
+        this.spinBtn.disabled = this.items.length < 2;
+      }
+
+      drawWheel() {
+        const ctx = this.ctx;
+        const canvas = this.canvas;
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = Math.min(centerX, centerY) - 10;
+
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (this.items.length === 0) {
+          // Draw empty wheel
+          ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim();
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-secondary').trim();
+          ctx.font = '16px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('Add items to start', centerX, centerY);
+          return;
+        }
+
+        const sliceAngle = (Math.PI * 2) / this.items.length;
+
+        // Draw slices
+        this.items.forEach((item, index) => {
+          const startAngle = index * sliceAngle + this.currentRotation;
+          const endAngle = startAngle + sliceAngle;
+
+          // Draw slice
+          ctx.fillStyle = this.colors[index % this.colors.length];
+          ctx.beginPath();
+          ctx.moveTo(centerX, centerY);
+          ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+          ctx.closePath();
+          ctx.fill();
+
+          // Draw border
+          ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+          ctx.lineWidth = 3;
+          ctx.stroke();
+
+          // Draw text
+          ctx.save();
+          ctx.translate(centerX, centerY);
+          ctx.rotate(startAngle + sliceAngle / 2);
+          ctx.textAlign = 'center';
+          ctx.fillStyle = 'white';
+          ctx.font = 'bold 14px Inter, sans-serif';
+          ctx.fillText(item, radius * 0.65, 5);
+          ctx.restore();
+        });
+
+        // Draw center circle
+        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim();
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 20, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        ctx.lineWidth = 4;
+        ctx.stroke();
+      }
+
+      spin() {
+        if (this.isSpinning || this.items.length < 2) return;
+
+        this.isSpinning = true;
+        this.spinBtn.disabled = true;
+        this.resultSection.classList.remove('show');
+
+        // Random spin duration and final rotation
+        const duration = 3000 + Math.random() * 2000;
+        const totalRotation = Math.PI * 2 * (5 + Math.random() * 5); // 5-10 full rotations
+        const startTime = Date.now();
+        const startRotation = this.currentRotation;
+
+        const animate = () => {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          
+          // Easing function for smooth deceleration
+          const eased = 1 - Math.pow(1 - progress, 3);
+          
+          this.currentRotation = startRotation + totalRotation * eased;
+          this.drawWheel();
+
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          } else {
+            this.finishSpin();
+          }
+        };
+
+        animate();
+      }
+
+      finishSpin() {
+        this.isSpinning = false;
+        this.spinBtn.disabled = false;
+
+        // Calculate winning segment
+        const sliceAngle = (Math.PI * 2) / this.items.length;
+        const normalizedRotation = this.currentRotation % (Math.PI * 2);
+        const pointerAngle = Math.PI / 2; // Pointer at top
+        const relativeAngle = (pointerAngle - normalizedRotation + Math.PI * 2) % (Math.PI * 2);
+        const winningIndex = Math.floor(relativeAngle / sliceAngle);
+
+        const winner = this.items[winningIndex];
+        this.resultText.textContent = winner;
+        this.resultSection.classList.add('show');
+      }
+    }
+
+    let wheel;
+    document.addEventListener('DOMContentLoaded', () => {
+      wheel = new DecisionWheel();
+    });
+  </script>
+</body>
+</html>

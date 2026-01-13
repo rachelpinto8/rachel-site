@@ -276,6 +276,17 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
+      <a href="wheel.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🎡</span>
+          <div class="secret-menu-text">
+            <h2>Decision Wheel</h2>
+            <p>Random choice maker</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
       <a href="https://open.spotify.com/playlist/7kwg9GeqBKT8Sq1PXFR5Gx?si=86ccacd218eb453a" target="_blank" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🎵</span>
