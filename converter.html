@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unit Converter - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Unit converter tool.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .converter-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .converter-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .converter-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-section {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .category-tabs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .category-tab {
+      padding: 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+    }
+
+    .category-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .conversion-group {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .input-group label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .input-wrapper {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .input-wrapper input {
+      flex: 1;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-primary);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Courier New', monospace;
+      font-weight: 600;
+    }
+
+    .input-wrapper input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+    }
+
+    .input-wrapper select {
+      padding: 1rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-primary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      min-width: 120px;
+    }
+
+    .input-wrapper select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .swap-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0.5rem;
+    }
+
+    .swap-btn button {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      color: var(--accent);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .swap-btn button:hover {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: white;
+      transform: rotate(180deg);
+    }
+
+    .result-display {
+      background: var(--bg);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 2px solid var(--accent);
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn-back {
+      flex: 1;
+      padding: 0.7rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .converter-header h1 {
+        font-size: 2rem;
+      }
+
+      .category-tabs {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .input-wrapper {
+        flex-direction: column;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav reveal">
+    <div class="nav-left">
+        <a class="brand-avatar" href="index.html" aria-label="Home">
+        <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+        </a>
+        <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container converter-container">
+    <section class="converter-header reveal">
+      <h1>📏 Unit Converter</h1>
+      <p style="color: var(--text-secondary);">Convert between different units</p>
+    </section>
+
+    <div class="tool-section reveal">
+      <div class="category-tabs">
+        <button class="category-tab active" data-category="length">Length</button>
+        <button class="category-tab" data-category="weight">Weight</button>
+        <button class="category-tab" data-category="temperature">Temperature</button>
+        <button class="category-tab" data-category="volume">Volume</button>
+      </div>
+
+      <div class="conversion-group">
+        <div class="input-group">
+          <label for="fromValue">From</label>
+          <div class="input-wrapper">
+            <input type="number" id="fromValue" placeholder="0" value="0">
+            <select id="fromUnit"></select>
+          </div>
+        </div>
+
+        <div class="swap-btn">
+          <button id="swapBtn" title="Swap units">⇅</button>
+        </div>
+
+        <div class="input-group">
+          <label for="toValue">To</label>
+          <div class="input-wrapper">
+            <input type="number" id="toValue" placeholder="0" readonly>
+            <select id="toUnit"></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-display" id="resultDisplay">
+        0 meters = 0 feet
+      </div>
+    </div>
+
+    <div class="controls reveal">
+      <a href="index.html" class="btn-back">Back Home</a>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    class UnitConverter {
+      constructor() {
+        this.conversions = {
+          length: {
+            meter: 1,
+            kilometer: 0.001,
+            centimeter: 100,
+            millimeter: 1000,
+            mile: 0.000621371,
+            yard: 1.09361,
+            foot: 3.28084,
+            inch: 39.3701
+          },
+          weight: {
+            kilogram: 1,
+            gram: 1000,
+            milligram: 1000000,
+            ton: 0.001,
+            pound: 2.20462,
+            ounce: 35.274
+          },
+          temperature: {
+            celsius: 'C',
+            fahrenheit: 'F',
+            kelvin: 'K'
+          },
+          volume: {
+            liter: 1,
+            milliliter: 1000,
+            gallon: 0.264172,
+            quart: 1.05669,
+            pint: 2.11338,
+            cup: 4.22675,
+            fluid_ounce: 33.814,
+            tablespoon: 67.628,
+            teaspoon: 202.884
+          }
+        };
+
+        this.currentCategory = 'length';
+        
+        this.fromValue = document.getElementById('fromValue');
+        this.toValue = document.getElementById('toValue');
+        this.fromUnit = document.getElementById('fromUnit');
+        this.toUnit = document.getElementById('toUnit');
+        this.resultDisplay = document.getElementById('resultDisplay');
+        this.swapBtn = document.getElementById('swapBtn');
+
+        this.setupListeners();
+        this.loadUnits();
+        this.convert();
+      }
+
+      setupListeners() {
+        document.querySelectorAll('.category-tab').forEach(tab => {
+          tab.addEventListener('click', (e) => {
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            e.target.classList.add('active');
+            this.currentCategory = e.target.dataset.category;
+            this.loadUnits();
+            this.convert();
+          });
+        });
+
+        this.fromValue.addEventListener('input', () => this.convert());
+        this.fromUnit.addEventListener('change', () => this.convert());
+        this.toUnit.addEventListener('change', () => this.convert());
+        
+        this.swapBtn.addEventListener('click', () => {
+          const tempUnit = this.fromUnit.value;
+          this.fromUnit.value = this.toUnit.value;
+          this.toUnit.value = tempUnit;
+          this.convert();
+        });
+      }
+
+      loadUnits() {
+        const units = Object.keys(this.conversions[this.currentCategory]);
+        
+        this.fromUnit.innerHTML = '';
+        this.toUnit.innerHTML = '';
+
+        units.forEach((unit, index) => {
+          const option1 = document.createElement('option');
+          option1.value = unit;
+          option1.textContent = this.formatUnitName(unit);
+          this.fromUnit.appendChild(option1);
+
+          const option2 = document.createElement('option');
+          option2.value = unit;
+          option2.textContent = this.formatUnitName(unit);
+          this.toUnit.appendChild(option2);
+        });
+
+        this.toUnit.selectedIndex = Math.min(1, units.length - 1);
+        this.fromValue.value = 1;
+      }
+
+      formatUnitName(unit) {
+        return unit.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase());
+      }
+
+      convert() {
+        const value = parseFloat(this.fromValue.value) || 0;
+        const from = this.fromUnit.value;
+        const to = this.toUnit.value;
+
+        let result;
+
+        if (this.currentCategory === 'temperature') {
+          result = this.convertTemperature(value, from, to);
+        } else {
+          const conversions = this.conversions[this.currentCategory];
+          const baseValue = value / conversions[from];
+          result = baseValue * conversions[to];
+        }
+
+        this.toValue.value = result.toFixed(4);
+        
+        this.resultDisplay.textContent = `${value} ${this.formatUnitName(from)} = ${result.toFixed(4)} ${this.formatUnitName(to)}`;
+      }
+
+      convertTemperature(value, from, to) {
+        // Convert to Celsius first
+        let celsius;
+        if (from === 'celsius') celsius = value;
+        else if (from === 'fahrenheit') celsius = (value - 32) * 5/9;
+        else if (from === 'kelvin') celsius = value - 273.15;
+
+        // Convert from Celsius to target
+        if (to === 'celsius') return celsius;
+        else if (to === 'fahrenheit') return (celsius * 9/5) + 32;
+        else if (to === 'kelvin') return celsius + 273.15;
+      }
+    }
+
+    let converter;
+    document.addEventListener('DOMContentLoaded', () => {
+      converter = new UnitConverter();
+    });
+  </script>
+</body>
+</html>

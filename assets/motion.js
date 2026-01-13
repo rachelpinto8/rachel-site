@@ -188,6 +188,94 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
+      <a href="flappy.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🐦</span>
+          <div class="secret-menu-text">
+            <h2>Flappy Bird</h2>
+            <p>Avoid the pipes</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="asteroids.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🚀</span>
+          <div class="secret-menu-text">
+            <h2>Asteroids</h2>
+            <p>Destroy space rocks</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="pwd.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🔐</span>
+          <div class="secret-menu-text">
+            <h2>Password Generator</h2>
+            <p>Create secure passwords</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="timer.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">⏱️</span>
+          <div class="secret-menu-text">
+            <h2>Timer & Stopwatch</h2>
+            <p>Quick timing tool</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="maze.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🏃</span>
+          <div class="secret-menu-text">
+            <h2>Maze Runner</h2>
+            <p>Find the exit</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="connect4.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🔴</span>
+          <div class="secret-menu-text">
+            <h2>Connect Four</h2>
+            <p>Get 4 in a row</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="converter.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">📏</span>
+          <div class="secret-menu-text">
+            <h2>Unit Converter</h2>
+            <p>Convert measurements</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="color.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🎨</span>
+          <div class="secret-menu-text">
+            <h2>Color Picker</h2>
+            <p>Choose & convert colors</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
       <a href="https://open.spotify.com/playlist/7kwg9GeqBKT8Sq1PXFR5Gx?si=86ccacd218eb453a" target="_blank" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🎵</span>

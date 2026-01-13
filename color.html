@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Color Picker - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Color picker tool.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .picker-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .picker-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .picker-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-section {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .color-preview {
+      width: 100%;
+      height: 200px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .picker-input {
+      width: 100%;
+      height: 60px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 2rem;
+    }
+
+    .color-values {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .color-value {
+      background: var(--bg);
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .value-label {
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .value-text {
+      font-family: 'Courier New', monospace;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .copy-icon {
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      background: var(--surface);
+      transition: all 0.3s ease;
+      font-size: 0.85rem;
+    }
+
+    .copy-icon:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    .copy-icon.copied {
+      background: #10b981;
+      color: white;
+    }
+
+    .slider-group {
+      display: grid;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .slider-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .slider-value {
+      font-family: 'Courier New', monospace;
+      color: var(--accent);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--border);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .preset-colors {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .preset-color {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      border: 2px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .preset-color:hover {
+      transform: scale(1.1);
+      border-color: var(--accent);
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-back {
+      flex: 1;
+      padding: 0.7rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .picker-header h1 {
+        font-size: 2rem;
+      }
+
+      .preset-colors {
+        grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+      <nav class="nav reveal">
+    <div class="nav-left">
+        <a class="brand-avatar" href="index.html" aria-label="Home">
+        <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+        </a>
+        <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container picker-container">
+    <section class="picker-header reveal">
+      <h1>🎨 Color Picker</h1>
+      <p style="color: var(--text-secondary);">Choose and convert colors</p>
+    </section>
+
+    <div class="tool-section reveal">
+      <div class="color-preview" id="colorPreview"></div>
+
+      <input type="color" id="colorPicker" class="picker-input" value="#ec4899">
+
+      <div class="slider-group">
+        <div class="slider-item">
+          <div class="slider-label">
+            <span>Red</span>
+            <span class="slider-value" id="redValue">236</span>
+          </div>
+          <input type="range" id="redSlider" min="0" max="255" value="236">
+        </div>
+
+        <div class="slider-item">
+          <div class="slider-label">
+            <span>Green</span>
+            <span class="slider-value" id="greenValue">72</span>
+          </div>
+          <input type="range" id="greenSlider" min="0" max="255" value="72">
+        </div>
+
+        <div class="slider-item">
+          <div class="slider-label">
+            <span>Blue</span>
+            <span class="slider-value" id="blueValue">153</span>
+          </div>
+          <input type="range" id="blueSlider" min="0" max="255" value="153">
+        </div>
+      </div>
+
+      <div class="color-values">
+        <div class="color-value">
+          <span class="value-label">HEX</span>
+          <div class="value-text">
+            <span id="hexValue">#ec4899</span>
+            <span class="copy-icon" data-format="hex">📋</span>
+          </div>
+        </div>
+
+        <div class="color-value">
+          <span class="value-label">RGB</span>
+          <div class="value-text">
+            <span id="rgbValue">rgb(236, 72, 153)</span>
+            <span class="copy-icon" data-format="rgb">📋</span>
+          </div>
+        </div>
+
+        <div class="color-value">
+          <span class="value-label">HSL</span>
+          <div class="value-text">
+            <span id="hslValue">hsl(330, 81%, 60%)</span>
+            <span class="copy-icon" data-format="hsl">📋</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="preset-colors" id="presetColors"></div>
+    </div>
+
+    <div class="controls reveal">
+      <a href="index.html" class="btn-back">Back Home</a>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    class ColorPicker {
+      constructor() {
+        this.presets = [
+          '#ec4899', '#ef4444', '#f59e0b', '#fbbf24', '#10b981', '#14b8a6',
+          '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#ec4899', '#f43f5e',
+          '#000000', '#18181b', '#52525b', '#a1a1aa', '#d4d4d8', '#ffffff'
+        ];
+
+        this.colorPreview = document.getElementById('colorPreview');
+        this.colorPicker = document.getElementById('colorPicker');
+        this.redSlider = document.getElementById('redSlider');
+        this.greenSlider = document.getElementById('greenSlider');
+        this.blueSlider = document.getElementById('blueSlider');
+        this.redValue = document.getElementById('redValue');
+        this.greenValue = document.getElementById('greenValue');
+        this.blueValue = document.getElementById('blueValue');
+        this.hexValue = document.getElementById('hexValue');
+        this.rgbValue = document.getElementById('rgbValue');
+        this.hslValue = document.getElementById('hslValue');
+        this.presetColors = document.getElementById('presetColors');
+
+        this.setupListeners();
+        this.renderPresets();
+        this.updateColor();
+      }
+
+      setupListeners() {
+        this.colorPicker.addEventListener('input', (e) => {
+          this.setColorFromHex(e.target.value);
+        });
+
+        this.redSlider.addEventListener('input', () => this.updateFromSliders());
+        this.greenSlider.addEventListener('input', () => this.updateFromSliders());
+        this.blueSlider.addEventListener('input', () => this.updateFromSliders());
+
+        document.querySelectorAll('.copy-icon').forEach(icon => {
+          icon.addEventListener('click', (e) => {
+            const format = e.target.dataset.format;
+            this.copyToClipboard(format, e.target);
+          });
+        });
+      }
+
+      renderPresets() {
+        this.presets.forEach(color => {
+          const preset = document.createElement('div');
+          preset.className = 'preset-color';
+          preset.style.background = color;
+          preset.addEventListener('click', () => this.setColorFromHex(color));
+          this.presetColors.appendChild(preset);
+        });
+      }
+
+      setColorFromHex(hex) {
+        const rgb = this.hexToRgb(hex);
+        this.redSlider.value = rgb.r;
+        this.greenSlider.value = rgb.g;
+        this.blueSlider.value = rgb.b;
+        this.updateColor();
+      }
+
+      updateFromSliders() {
+        this.updateColor();
+      }
+
+      updateColor() {
+        const r = parseInt(this.redSlider.value);
+        const g = parseInt(this.greenSlider.value);
+        const b = parseInt(this.blueSlider.value);
+
+        this.redValue.textContent = r;
+        this.greenValue.textContent = g;
+        this.blueValue.textContent = b;
+
+        const hex = this.rgbToHex(r, g, b);
+        const hsl = this.rgbToHsl(r, g, b);
+
+        this.colorPreview.style.background = hex;
+        this.colorPicker.value = hex;
+
+        this.hexValue.textContent = hex;
+        this.rgbValue.textContent = `rgb(${r}, ${g}, ${b})`;
+        this.hslValue.textContent = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+      }
+
+      rgbToHex(r, g, b) {
+        return '#' + [r, g, b].map(x => {
+          const hex = x.toString(16);
+          return hex.length === 1 ? '0' + hex : hex;
+        }).join('');
+      }
+
+      hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16)
+        } : { r: 0, g: 0, b: 0 };
+      }
+
+      rgbToHsl(r, g, b) {
+        r /= 255;
+        g /= 255;
+        b /= 255;
+
+        const max = Math.max(r, g, b);
+        const min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
+
+        if (max === min) {
+          h = s = 0;
+        } else {
+          const d = max - min;
+          s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+          switch (max) {
+            case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+            case g: h = ((b - r) / d + 2) / 6; break;
+            case b: h = ((r - g) / d + 4) / 6; break;
+          }
+        }
+
+        return {
+          h: Math.round(h * 360),
+          s: Math.round(s * 100),
+          l: Math.round(l * 100)
+        };
+      }
+
+      copyToClipboard(format, element) {
+        let text;
+        if (format === 'hex') text = this.hexValue.textContent;
+        else if (format === 'rgb') text = this.rgbValue.textContent;
+        else if (format === 'hsl') text = this.hslValue.textContent;
+
+        navigator.clipboard.writeText(text).then(() => {
+          element.textContent = '✓';
+          element.classList.add('copied');
+          setTimeout(() => {
+            element.textContent = '📋';
+            element.classList.remove('copied');
+          }, 2000);
+        });
+      }
+    }
+
+    let picker;
+    document.addEventListener('DOMContentLoaded', () => {
+      picker = new ColorPicker();
+    });
+  </script>
+</body>
+</html>

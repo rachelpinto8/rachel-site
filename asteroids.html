@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asteroids - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Asteroids game.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .game-header {
+      text-align: center;
+    }
+
+    .game-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      background: var(--bg);
+    }
+
+    .game-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .info-card {
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .info-label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .controls {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      width: 100%;
+      text-align: center;
+    }
+
+    .control-text {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .btn-back {
+      padding: 0.7rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .game-header h1 {
+        font-size: 2rem;
+      }
+
+      canvas {
+        min-height: 400px;
+      }
+
+      .game-info {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+    <nav class="nav reveal">
+    <div class="nav-left">
+        <a class="brand-avatar" href="index.html" aria-label="Home">
+        <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+        </a>
+        <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container game-container">
+    <section class="game-header reveal">
+      <h1>🚀 Asteroids</h1>
+      <p style="color: var(--text-secondary);">Destroy asteroids and survive!</p>
+    </section>
+
+    <div class="canvas-wrapper reveal">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <div class="game-info reveal">
+      <div class="info-card">
+        <div class="info-label">Score</div>
+        <div class="info-value" id="scoreDisplay">0</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Lives</div>
+        <div class="info-value" id="livesDisplay">3</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Level</div>
+        <div class="info-value" id="levelDisplay">1</div>
+      </div>
+    </div>
+
+    <div class="controls reveal">
+      <p class="control-text">
+        <strong>Arrow Keys</strong> to rotate and move<br>
+        <strong>Spacebar</strong> to shoot<br>
+        Destroy all asteroids to advance!
+      </p>
+      <a href="index.html" class="btn-back">Back Home</a>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    class Asteroids {
+      constructor() {
+        this.canvas = document.getElementById('gameCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.resizeCanvas();
+
+        this.gameState = 'menu'; // menu, playing, gameOver
+        this.score = 0;
+        this.lives = 3;
+        this.level = 1;
+
+        // Ship
+        this.ship = {
+          x: this.canvas.width / 2,
+          y: this.canvas.height / 2,
+          angle: 0,
+          velocity: { x: 0, y: 0 },
+          size: 15,
+          speed: 0.4,
+          friction: 0.99
+        };
+
+        this.keys = {};
+        this.asteroids = [];
+        this.bullets = [];
+        this.invulnerableTime = 0;
+
+        this.setupListeners();
+        this.gameLoop();
+      }
+
+      resizeCanvas() {
+        this.canvas.width = Math.min(this.canvas.offsetWidth, 600);
+        this.canvas.height = Math.min(window.innerHeight - 200, 600);
+      }
+
+      setupListeners() {
+        window.addEventListener('resize', () => this.resizeCanvas());
+        document.addEventListener('keydown', (e) => {
+          this.keys[e.key] = true;
+          if (e.code === 'Space') {
+            e.preventDefault();
+            if (this.gameState === 'menu') {
+              this.startGame();
+            } else if (this.gameState === 'playing') {
+              this.shoot();
+            } else if (this.gameState === 'gameOver') {
+              this.reset();
+            }
+          }
+        });
+        document.addEventListener('keyup', (e) => {
+          this.keys[e.key] = false;
+        });
+      }
+
+      startGame() {
+        this.gameState = 'playing';
+        this.asteroids = [];
+        this.createAsteroids(3 + this.level);
+      }
+
+      createAsteroids(count, x = null, y = null) {
+        for (let i = 0; i < count; i++) {
+          const asteroid = {
+            x: x !== null ? x : Math.random() * this.canvas.width,
+            y: y !== null ? y : Math.random() * this.canvas.height,
+            vx: (Math.random() - 0.5) * 4,
+            vy: (Math.random() - 0.5) * 4,
+            radius: 40,
+            size: 1
+          };
+          this.asteroids.push(asteroid);
+        }
+      }
+
+      shoot() {
+        const bullet = {
+          x: this.ship.x,
+          y: this.ship.y,
+          vx: Math.cos(this.ship.angle) * 7 + this.ship.velocity.x,
+          vy: Math.sin(this.ship.angle) * 7 + this.ship.velocity.y,
+          life: 80
+        };
+        this.bullets.push(bullet);
+      }
+
+      update() {
+        if (this.gameState !== 'playing') return;
+
+        // Update ship
+        if (this.keys['ArrowLeft']) this.ship.angle -= 0.2;
+        if (this.keys['ArrowRight']) this.ship.angle += 0.2;
+        if (this.keys['ArrowUp']) {
+          this.ship.velocity.x += Math.cos(this.ship.angle) * this.ship.speed;
+          this.ship.velocity.y += Math.sin(this.ship.angle) * this.ship.speed;
+        }
+
+        this.ship.velocity.x *= this.ship.friction;
+        this.ship.velocity.y *= this.ship.friction;
+
+        this.ship.x += this.ship.velocity.x;
+        this.ship.y += this.ship.velocity.y;
+
+        // Wrap around
+        if (this.ship.x < 0) this.ship.x = this.canvas.width;
+        if (this.ship.x > this.canvas.width) this.ship.x = 0;
+        if (this.ship.y < 0) this.ship.y = this.canvas.height;
+        if (this.ship.y > this.canvas.height) this.ship.y = 0;
+
+        // Update bullets
+        this.bullets = this.bullets.filter(b => {
+          b.x += b.vx;
+          b.y += b.vy;
+          b.life--;
+          return b.life > 0 && b.x > 0 && b.x < this.canvas.width && b.y > 0 && b.y < this.canvas.height;
+        });
+
+        // Update asteroids
+        this.asteroids.forEach(a => {
+          a.x += a.vx;
+          a.y += a.vy;
+
+          if (a.x < 0) a.x = this.canvas.width;
+          if (a.x > this.canvas.width) a.x = 0;
+          if (a.y < 0) a.y = this.canvas.height;
+          if (a.y > this.canvas.height) a.y = 0;
+        });
+
+        // Check collisions
+        this.bullets.forEach((bullet, bi) => {
+          this.asteroids.forEach((asteroid, ai) => {
+            const dx = bullet.x - asteroid.x;
+            const dy = bullet.y - asteroid.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < asteroid.radius) {
+              this.bullets.splice(bi, 1);
+              this.asteroids.splice(ai, 1);
+              this.score += 10 * asteroid.size;
+
+              if (asteroid.size < 3) {
+                this.createAsteroids(2, asteroid.x, asteroid.y);
+              }
+            }
+          });
+        });
+
+        // Ship collision
+        if (this.invulnerableTime === 0) {
+          this.asteroids.forEach(asteroid => {
+            const dx = this.ship.x - asteroid.x;
+            const dy = this.ship.y - asteroid.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < asteroid.radius + this.ship.size) {
+              this.lives--;
+              if (this.lives <= 0) {
+                this.gameState = 'gameOver';
+              } else {
+                this.ship.x = this.canvas.width / 2;
+                this.ship.y = this.canvas.height / 2;
+                this.ship.velocity = { x: 0, y: 0 };
+                this.invulnerableTime = 120;
+              }
+            }
+          });
+        }
+
+        this.invulnerableTime--;
+
+        // Next level
+        if (this.asteroids.length === 0) {
+          this.level++;
+          this.createAsteroids(3 + this.level);
+        }
+
+        document.getElementById('scoreDisplay').textContent = this.score;
+        document.getElementById('livesDisplay').textContent = this.lives;
+        document.getElementById('levelDisplay').textContent = this.level;
+      }
+
+      draw() {
+        // Cache colors for dynamic theming
+        const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+        const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+
+        this.ctx.fillStyle = bgColor;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Draw ship
+        if (this.invulnerableTime === 0 || Math.floor(this.invulnerableTime / 10) % 2 === 0) {
+          this.ctx.strokeStyle = accentColor;
+          this.ctx.lineWidth = 2;
+          this.ctx.save();
+          this.ctx.translate(this.ship.x, this.ship.y);
+          this.ctx.rotate(this.ship.angle);
+          this.ctx.beginPath();
+          this.ctx.moveTo(15, 0);
+          this.ctx.lineTo(-10, -10);
+          this.ctx.lineTo(-5, 0);
+          this.ctx.lineTo(-10, 10);
+          this.ctx.closePath();
+          this.ctx.stroke();
+          this.ctx.restore();
+        }
+
+        // Draw bullets
+        this.ctx.fillStyle = accentColor;
+        this.bullets.forEach(b => {
+          this.ctx.beginPath();
+          this.ctx.arc(b.x, b.y, 3, 0, Math.PI * 2);
+          this.ctx.fill();
+        });
+
+        // Draw asteroids
+        this.ctx.strokeStyle = accentColor;
+        this.ctx.lineWidth = 2;
+        this.asteroids.forEach(a => {
+          this.ctx.beginPath();
+          this.ctx.arc(a.x, a.y, a.radius, 0, Math.PI * 2);
+          this.ctx.stroke();
+        });
+
+        if (this.gameState === 'menu') {
+          this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+          this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+          this.ctx.fillStyle = accentColor;
+          this.ctx.font = 'bold 48px Inter, sans-serif';
+          this.ctx.textAlign = 'center';
+          this.ctx.fillText('Asteroids', this.canvas.width / 2, this.canvas.height / 2 - 60);
+          this.ctx.font = '24px Inter, sans-serif';
+          this.ctx.fillText('Press SPACE to Start', this.canvas.width / 2, this.canvas.height / 2 + 40);
+        }
+
+        if (this.gameState === 'gameOver') {
+          this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+          this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+          this.ctx.fillStyle = accentColor;
+          this.ctx.font = 'bold 48px Inter, sans-serif';
+          this.ctx.textAlign = 'center';
+          this.ctx.fillText('Game Over', this.canvas.width / 2, this.canvas.height / 2 - 60);
+          this.ctx.font = '24px Inter, sans-serif';
+          this.ctx.fillText(`Score: ${this.score}`, this.canvas.width / 2, this.canvas.height / 2 + 20);
+          this.ctx.fillText(`Level: ${this.level}`, this.canvas.width / 2, this.canvas.height / 2 + 60);
+          this.ctx.font = '18px Inter, sans-serif';
+          this.ctx.fillText('Press SPACE to Play Again', this.canvas.width / 2, this.canvas.height / 2 + 120);
+        }
+      }
+
+      reset() {
+        this.score = 0;
+        this.lives = 3;
+        this.level = 1;
+        this.startGame();
+      }
+
+      gameLoop() {
+        this.update();
+        this.draw();
+        requestAnimationFrame(() => this.gameLoop());
+      }
+    }
+
+    let game;
+    document.addEventListener('DOMContentLoaded', () => {
+      game = new Asteroids();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maze Runner - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Maze Runner game.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    .game-header {
+      text-align: center;
+    }
+
+    .game-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      background: var(--bg);
+    }
+
+    .game-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .info-card {
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .info-label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .controls {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      width: 100%;
+      text-align: center;
+    }
+
+    .control-text {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .btn-back {
+      padding: 0.7rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .game-header h1 {
+        font-size: 2rem;
+      }
+
+      canvas {
+        min-height: 400px;
+      }
+
+      .game-info {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav reveal">
+    <a class="brand-avatar" href="index.html" aria-label="Home">
+      <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+    </a>
+    <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container game-container">
+    <section class="game-header reveal">
+      <h1>🏃 Maze Runner</h1>
+      <p style="color: var(--text-secondary);">Find your way to the exit!</p>
+    </section>
+
+    <div class="canvas-wrapper reveal">
+      <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <div class="game-info reveal">
+      <div class="info-card">
+        <div class="info-label">Level</div>
+        <div class="info-value" id="levelDisplay">1</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Moves</div>
+        <div class="info-value" id="movesDisplay">0</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Best</div>
+        <div class="info-value" id="bestDisplay">-</div>
+      </div>
+    </div>
+
+    <div class="controls reveal">
+      <p class="control-text">
+        <strong>Arrow Keys or WASD</strong> to move<br>
+        <strong>R</strong> to restart level<br>
+        Find the pink exit and advance!
+      </p>
+      <a href="index.html" class="btn-back">Back Home</a>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    class MazeRunner {
+      constructor() {
+        this.canvas = document.getElementById('gameCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.resizeCanvas();
+
+        this.level = 1;
+        this.moves = 0;
+        this.cellSize = 30;
+        this.cols = 15;
+        this.rows = 15;
+
+        this.player = { x: 0, y: 0 };
+        this.exit = { x: this.cols - 1, y: this.rows - 1 };
+        
+        this.keys = {};
+        this.maze = [];
+        this.visited = [];
+
+        this.generateMaze();
+        this.setupListeners();
+        this.gameLoop();
+      }
+
+      resizeCanvas() {
+        this.canvas.width = 450;
+        this.canvas.height = 450;
+      }
+
+      setupListeners() {
+        window.addEventListener('resize', () => this.resizeCanvas());
+        document.addEventListener('keydown', (e) => {
+          if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'w', 'a', 's', 'd'].includes(e.key)) {
+            e.preventDefault();
+            this.move(e.key);
+          }
+          if (e.key === 'r' || e.key === 'R') {
+            this.resetLevel();
+          }
+        });
+      }
+
+      generateMaze() {
+        // Initialize grid with all walls
+        this.maze = Array(this.rows).fill(0).map(() => 
+          Array(this.cols).fill(0).map(() => ({
+            top: true, right: true, bottom: true, left: true, visited: false
+          }))
+        );
+
+        // Recursive backtracking maze generation
+        const stack = [];
+        let current = { x: 0, y: 0 };
+        this.maze[current.y][current.x].visited = true;
+
+        while (true) {
+          const neighbors = this.getUnvisitedNeighbors(current);
+          
+          if (neighbors.length > 0) {
+            const next = neighbors[Math.floor(Math.random() * neighbors.length)];
+            stack.push(current);
+            this.removeWall(current, next);
+            this.maze[next.y][next.x].visited = true;
+            current = next;
+          } else if (stack.length > 0) {
+            current = stack.pop();
+          } else {
+            break;
+          }
+        }
+
+        this.player = { x: 0, y: 0 };
+        this.moves = 0;
+        document.getElementById('movesDisplay').textContent = this.moves;
+      }
+
+      getUnvisitedNeighbors(cell) {
+        const neighbors = [];
+        const { x, y } = cell;
+
+        if (y > 0 && !this.maze[y - 1][x].visited) neighbors.push({ x, y: y - 1, dir: 'top' });
+        if (x < this.cols - 1 && !this.maze[y][x + 1].visited) neighbors.push({ x: x + 1, y, dir: 'right' });
+        if (y < this.rows - 1 && !this.maze[y + 1][x].visited) neighbors.push({ x, y: y + 1, dir: 'bottom' });
+        if (x > 0 && !this.maze[y][x - 1].visited) neighbors.push({ x: x - 1, y, dir: 'left' });
+
+        return neighbors;
+      }
+
+      removeWall(current, next) {
+        const dx = current.x - next.x;
+        const dy = current.y - next.y;
+
+        if (dx === 1) {
+          this.maze[current.y][current.x].left = false;
+          this.maze[next.y][next.x].right = false;
+        } else if (dx === -1) {
+          this.maze[current.y][current.x].right = false;
+          this.maze[next.y][next.x].left = false;
+        }
+
+        if (dy === 1) {
+          this.maze[current.y][current.x].top = false;
+          this.maze[next.y][next.x].bottom = false;
+        } else if (dy === -1) {
+          this.maze[current.y][current.x].bottom = false;
+          this.maze[next.y][next.x].top = false;
+        }
+      }
+
+      move(key) {
+        const oldX = this.player.x;
+        const oldY = this.player.y;
+        let moved = false;
+
+        if ((key === 'ArrowUp' || key === 'w') && !this.maze[this.player.y][this.player.x].top) {
+          this.player.y--;
+          moved = true;
+        }
+        if ((key === 'ArrowDown' || key === 's') && !this.maze[this.player.y][this.player.x].bottom) {
+          this.player.y++;
+          moved = true;
+        }
+        if ((key === 'ArrowLeft' || key === 'a') && !this.maze[this.player.y][this.player.x].left) {
+          this.player.x--;
+          moved = true;
+        }
+        if ((key === 'ArrowRight' || key === 'd') && !this.maze[this.player.y][this.player.x].right) {
+          this.player.x++;
+          moved = true;
+        }
+
+        if (moved) {
+          this.moves++;
+          document.getElementById('movesDisplay').textContent = this.moves;
+        }
+
+        // Check win
+        if (this.player.x === this.exit.x && this.player.y === this.exit.y) {
+          this.levelComplete();
+        }
+      }
+
+      levelComplete() {
+        const bestKey = `mazeBest${this.level}`;
+        const best = localStorage.getItem(bestKey);
+        
+        if (!best || this.moves < parseInt(best)) {
+          localStorage.setItem(bestKey, this.moves);
+        }
+
+        this.level++;
+        document.getElementById('levelDisplay').textContent = this.level;
+        
+        // Increase maze difficulty
+        this.cols = Math.min(15 + Math.floor(this.level / 3), 25);
+        this.rows = Math.min(15 + Math.floor(this.level / 3), 25);
+        this.cellSize = Math.min(450 / this.cols, 450 / this.rows);
+        
+        this.exit = { x: this.cols - 1, y: this.rows - 1 };
+        this.generateMaze();
+        this.updateBestDisplay();
+      }
+
+      resetLevel() {
+        this.generateMaze();
+      }
+
+      updateBestDisplay() {
+        const bestKey = `mazeBest${this.level}`;
+        const best = localStorage.getItem(bestKey);
+        document.getElementById('bestDisplay').textContent = best || '-';
+      }
+
+      draw() {
+        // Cache colors for dynamic theming
+        const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+        const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
+
+        this.ctx.fillStyle = bgColor;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Draw maze
+        this.ctx.strokeStyle = accentColor;
+        this.ctx.lineWidth = 2;
+
+        for (let y = 0; y < this.rows; y++) {
+          for (let x = 0; x < this.cols; x++) {
+            const cell = this.maze[y][x];
+            const px = x * this.cellSize;
+            const py = y * this.cellSize;
+
+            this.ctx.beginPath();
+            if (cell.top) {
+              this.ctx.moveTo(px, py);
+              this.ctx.lineTo(px + this.cellSize, py);
+            }
+            if (cell.right) {
+              this.ctx.moveTo(px + this.cellSize, py);
+              this.ctx.lineTo(px + this.cellSize, py + this.cellSize);
+            }
+            if (cell.bottom) {
+              this.ctx.moveTo(px, py + this.cellSize);
+              this.ctx.lineTo(px + this.cellSize, py + this.cellSize);
+            }
+            if (cell.left) {
+              this.ctx.moveTo(px, py);
+              this.ctx.lineTo(px, py + this.cellSize);
+            }
+            this.ctx.stroke();
+          }
+        }
+
+        // Draw exit
+        this.ctx.fillStyle = accentColor;
+        this.ctx.fillRect(
+          this.exit.x * this.cellSize + 2,
+          this.exit.y * this.cellSize + 2,
+          this.cellSize - 4,
+          this.cellSize - 4
+        );
+
+        // Draw player
+        this.ctx.fillStyle = '#10b981';
+        this.ctx.beginPath();
+        this.ctx.arc(
+          this.player.x * this.cellSize + this.cellSize / 2,
+          this.player.y * this.cellSize + this.cellSize / 2,
+          this.cellSize / 3,
+          0,
+          Math.PI * 2
+        );
+        this.ctx.fill();
+      }
+
+      gameLoop() {
+        this.draw();
+        requestAnimationFrame(() => this.gameLoop());
+      }
+    }
+
+    let game;
+    document.addEventListener('DOMContentLoaded', () => {
+      game = new MazeRunner();
+      game.updateBestDisplay();
+    });
+  </script>
+</body>
+</html>

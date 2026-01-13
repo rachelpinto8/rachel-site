@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connect Four - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Connect Four game.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      max-width: 550px;
+      margin: 0 auto;
+    }
+
+    .game-header {
+      text-align: center;
+    }
+
+    .game-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .game-board {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      display: inline-block;
+    }
+
+    .board-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 60px);
+      grid-template-rows: repeat(6, 60px);
+      gap: 8px;
+      background: var(--bg);
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .cell {
+      width: 60px;
+      height: 60px;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .cell:hover {
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    .cell.player1 {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .cell.player2 {
+      background: #fbbf24;
+      border-color: #fbbf24;
+    }
+
+    .cell.winning {
+      animation: pulse 0.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    .game-status {
+      background: var(--surface);
+      padding: 1.5rem 2rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      text-align: center;
+      width: 100%;
+    }
+
+    .status-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .current-player {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .player-indicator {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+    }
+
+    .player-indicator.player1 {
+      background: var(--accent);
+    }
+
+    .player-indicator.player2 {
+      background: #fbbf24;
+    }
+
+    .game-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .info-card {
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .info-label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .info-value.yellow {
+      color: #fbbf24;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      .game-header h1 {
+        font-size: 2rem;
+      }
+
+      .board-grid {
+        grid-template-columns: repeat(7, 45px);
+        grid-template-rows: repeat(6, 45px);
+        gap: 6px;
+      }
+
+      .cell {
+        width: 45px;
+        height: 45px;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+    <nav class="nav reveal">
+    <div class="nav-left">
+        <a class="brand-avatar" href="index.html" aria-label="Home">
+        <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+        </a>
+        <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container game-container">
+    <section class="game-header reveal">
+      <h1>🔴 Connect Four</h1>
+      <p style="color: var(--text-secondary);">Connect 4 in a row to win!</p>
+    </section>
+
+    <div class="game-status reveal">
+      <div class="status-text" id="statusText">
+        <span class="current-player">
+          <span class="player-indicator player1"></span>
+          Pink's Turn
+        </span>
+      </div>
+    </div>
+
+    <div class="game-board reveal">
+      <div class="board-grid" id="board"></div>
+    </div>
+
+    <div class="game-info reveal">
+      <div class="info-card">
+        <div class="info-label">Pink Wins</div>
+        <div class="info-value" id="player1Wins">0</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Yellow Wins</div>
+        <div class="info-value yellow" id="player2Wins">0</div>
+      </div>
+    </div>
+
+    <div class="controls reveal">
+      <button class="btn btn-primary" id="resetBtn">New Game</button>
+      <a href="index.html" class="btn">Back Home</a>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    class ConnectFour {
+      constructor() {
+        this.rows = 6;
+        this.cols = 7;
+        this.board = [];
+        this.currentPlayer = 1;
+        this.gameOver = false;
+        this.player1Wins = parseInt(localStorage.getItem('connect4P1Wins')) || 0;
+        this.player2Wins = parseInt(localStorage.getItem('connect4P2Wins')) || 0;
+
+        this.boardElement = document.getElementById('board');
+        this.statusText = document.getElementById('statusText');
+        this.resetBtn = document.getElementById('resetBtn');
+
+        this.initBoard();
+        this.render();
+        this.updateStats();
+
+        this.resetBtn.addEventListener('click', () => this.reset());
+      }
+
+      initBoard() {
+        this.board = Array(this.rows).fill(null).map(() => Array(this.cols).fill(0));
+        this.gameOver = false;
+        this.currentPlayer = 1;
+      }
+
+      render() {
+        this.boardElement.innerHTML = '';
+        
+        for (let row = 0; row < this.rows; row++) {
+          for (let col = 0; col < this.cols; col++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.dataset.row = row;
+            cell.dataset.col = col;
+
+            if (this.board[row][col] === 1) {
+              cell.classList.add('player1');
+            } else if (this.board[row][col] === 2) {
+              cell.classList.add('player2');
+            }
+
+            cell.addEventListener('click', () => this.dropPiece(col));
+            this.boardElement.appendChild(cell);
+          }
+        }
+      }
+
+      dropPiece(col) {
+        if (this.gameOver) return;
+
+        // Find the lowest empty row in this column
+        let row = -1;
+        for (let r = this.rows - 1; r >= 0; r--) {
+          if (this.board[r][col] === 0) {
+            row = r;
+            break;
+          }
+        }
+
+        if (row === -1) return; // Column full
+
+        this.board[row][col] = this.currentPlayer;
+        this.render();
+
+        if (this.checkWin(row, col)) {
+          this.gameOver = true;
+          this.highlightWinningCells();
+          
+          if (this.currentPlayer === 1) {
+            this.player1Wins++;
+            localStorage.setItem('connect4P1Wins', this.player1Wins);
+            this.statusText.innerHTML = '<span class="current-player"><span class="player-indicator player1"></span>Pink Wins! 🎉</span>';
+          } else {
+            this.player2Wins++;
+            localStorage.setItem('connect4P2Wins', this.player2Wins);
+            this.statusText.innerHTML = '<span class="current-player"><span class="player-indicator player2"></span>Yellow Wins! 🎉</span>';
+          }
+          this.updateStats();
+          return;
+        }
+
+        // Check for draw
+        if (this.board.every(row => row.every(cell => cell !== 0))) {
+          this.gameOver = true;
+          this.statusText.innerHTML = "It's a Draw!";
+          return;
+        }
+
+        this.currentPlayer = this.currentPlayer === 1 ? 2 : 1;
+        this.updateStatus();
+      }
+
+      checkWin(row, col) {
+        const player = this.board[row][col];
+        
+        // Check horizontal
+        if (this.checkDirection(row, col, 0, 1, player) || 
+            this.checkDirection(row, col, 0, -1, player)) return true;
+        
+        // Check vertical
+        if (this.checkDirection(row, col, 1, 0, player)) return true;
+        
+        // Check diagonal
+        if (this.checkDirection(row, col, 1, 1, player) || 
+            this.checkDirection(row, col, 1, -1, player) ||
+            this.checkDirection(row, col, -1, 1, player) ||
+            this.checkDirection(row, col, -1, -1, player)) return true;
+
+        return false;
+      }
+
+      checkDirection(row, col, dRow, dCol, player) {
+        let count = 1;
+        let r = row + dRow;
+        let c = col + dCol;
+
+        while (r >= 0 && r < this.rows && c >= 0 && c < this.cols && this.board[r][c] === player) {
+          count++;
+          r += dRow;
+          c += dCol;
+        }
+
+        r = row - dRow;
+        c = col - dCol;
+
+        while (r >= 0 && r < this.rows && c >= 0 && c < this.cols && this.board[r][c] === player) {
+          count++;
+          r -= dRow;
+          c -= dCol;
+        }
+
+        return count >= 4;
+      }
+
+      highlightWinningCells() {
+        const cells = this.boardElement.querySelectorAll(`.cell.player${this.currentPlayer}`);
+        cells.forEach(cell => {
+          const row = parseInt(cell.dataset.row);
+          const col = parseInt(cell.dataset.col);
+          
+          if (this.isWinningCell(row, col)) {
+            cell.classList.add('winning');
+          }
+        });
+      }
+
+      isWinningCell(row, col) {
+        const player = this.board[row][col];
+        const directions = [[0,1], [1,0], [1,1], [1,-1]];
+        
+        for (const [dRow, dCol] of directions) {
+          let count = 1;
+          let r = row + dRow;
+          let c = col + dCol;
+
+          while (r >= 0 && r < this.rows && c >= 0 && c < this.cols && this.board[r][c] === player) {
+            count++;
+            r += dRow;
+            c += dCol;
+          }
+
+          r = row - dRow;
+          c = col - dCol;
+
+          while (r >= 0 && r < this.rows && c >= 0 && c < this.cols && this.board[r][c] === player) {
+            count++;
+            r -= dRow;
+            c -= dCol;
+          }
+
+          if (count >= 4) return true;
+        }
+
+        return false;
+      }
+
+      updateStatus() {
+        const playerName = this.currentPlayer === 1 ? 'Pink' : 'Yellow';
+        const playerClass = this.currentPlayer === 1 ? 'player1' : 'player2';
+        this.statusText.innerHTML = `<span class="current-player"><span class="player-indicator ${playerClass}"></span>${playerName}'s Turn</span>`;
+      }
+
+      updateStats() {
+        document.getElementById('player1Wins').textContent = this.player1Wins;
+        document.getElementById('player2Wins').textContent = this.player2Wins;
+      }
+
+      reset() {
+        this.initBoard();
+        this.render();
+        this.updateStatus();
+      }
+    }
+
+    let game;
+    document.addEventListener('DOMContentLoaded', () => {
+      game = new ConnectFour();
+    });
+  </script>
+</body>
+</html>

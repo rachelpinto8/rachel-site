@@ -1,0 +1,621 @@
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timer & Stopwatch - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Timer and stopwatch tool.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .timer-container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .timer-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .timer-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-section {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .mode-tab {
+      padding: 1rem;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+    }
+
+    .mode-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .mode-tab:hover {
+      color: var(--text-primary);
+    }
+
+    .display {
+      background: var(--bg);
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .time-display {
+      font-family: 'Courier New', monospace;
+      font-size: 4rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+
+    .time-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .input-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .input-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .input-field label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .input-field input {
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-primary);
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      transition: all 0.3s ease;
+    }
+
+    .input-field input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn {
+      padding: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      grid-column: 1 / -1;
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-reset {
+      background: var(--bg);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-reset:hover {
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .lap-list {
+      background: var(--bg);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 2rem;
+    }
+
+    .lap-item {
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      font-family: 'Courier New', monospace;
+      color: var(--text-primary);
+    }
+
+    .lap-item:last-child {
+      border-bottom: none;
+    }
+
+    .lap-number {
+      color: var(--text-secondary);
+      font-weight: 600;
+      min-width: 60px;
+    }
+
+    .lap-time {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .empty-state {
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-secondary);
+    }
+
+    .btn-back {
+      padding: 0.7rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .timer-header h1 {
+        font-size: 2rem;
+      }
+
+      .time-display {
+        font-size: 3rem;
+      }
+
+      .input-group {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+    <nav class="nav reveal">
+    <div class="nav-left">
+        <a class="brand-avatar" href="index.html" aria-label="Home">
+        <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+        </a>
+        <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container timer-container">
+    <section class="timer-header reveal">
+      <h1>⏱️ Timer & Stopwatch</h1>
+      <p style="color: var(--text-secondary);">Quick timing tool</p>
+    </section>
+
+    <div class="tool-section reveal">
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="stopwatch">Stopwatch</button>
+        <button class="mode-tab" data-mode="timer">Timer</button>
+      </div>
+
+      <div class="display">
+        <div class="time-display" id="timeDisplay">00:00:00</div>
+        <div class="time-label" id="timeLabel">Stopwatch</div>
+      </div>
+
+      <!-- Stopwatch Mode -->
+      <div class="mode-content" id="stopwatch-mode">
+        <div class="controls">
+          <button class="btn btn-primary" id="startBtn">Start</button>
+          <button class="btn btn-secondary" id="lapBtn" disabled>Lap</button>
+          <button class="btn btn-reset" id="resetBtn">Reset</button>
+        </div>
+
+        <div class="lap-list" id="lapList">
+          <div class="empty-state">No laps yet</div>
+        </div>
+      </div>
+
+      <!-- Timer Mode -->
+      <div class="mode-content" id="timer-mode" style="display: none;">
+        <div class="input-group">
+          <div class="input-field">
+            <label for="timerHours">Hours</label>
+            <input type="number" id="timerHours" min="0" max="23" value="0">
+          </div>
+          <div class="input-field">
+            <label for="timerMinutes">Minutes</label>
+            <input type="number" id="timerMinutes" min="0" max="59" value="5">
+          </div>
+          <div class="input-field">
+            <label for="timerSeconds">Seconds</label>
+            <input type="number" id="timerSeconds" min="0" max="59" value="0">
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="btn btn-primary" id="startTimerBtn">Start</button>
+          <button class="btn btn-secondary" id="pauseTimerBtn" disabled>Pause</button>
+          <button class="btn btn-reset" id="resetTimerBtn">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;">
+      <a href="index.html" class="btn-back">Back Home</a>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    class TimerStopwatch {
+      constructor() {
+        this.mode = 'stopwatch';
+        this.running = false;
+        this.elapsed = 0;
+        this.startTime = null;
+        this.pausedTime = 0;
+        this.laps = [];
+
+        this.setupElements();
+        this.setupListeners();
+      }
+
+      setupElements() {
+        this.timeDisplay = document.getElementById('timeDisplay');
+        this.modeButtons = document.querySelectorAll('.mode-tab');
+        this.modeContents = document.querySelectorAll('.mode-content');
+
+        // Stopwatch
+        this.startBtn = document.getElementById('startBtn');
+        this.lapBtn = document.getElementById('lapBtn');
+        this.resetBtn = document.getElementById('resetBtn');
+        this.lapList = document.getElementById('lapList');
+
+        // Timer
+        this.timerHours = document.getElementById('timerHours');
+        this.timerMinutes = document.getElementById('timerMinutes');
+        this.timerSeconds = document.getElementById('timerSeconds');
+        this.startTimerBtn = document.getElementById('startTimerBtn');
+        this.pauseTimerBtn = document.getElementById('pauseTimerBtn');
+        this.resetTimerBtn = document.getElementById('resetTimerBtn');
+        this.timerRemaining = 0;
+      }
+
+      setupListeners() {
+        // Mode switching
+        this.modeButtons.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            this.switchMode(e.target.dataset.mode);
+          });
+        });
+
+        // Stopwatch controls
+        this.startBtn.addEventListener('click', () => this.toggleStopwatch());
+        this.lapBtn.addEventListener('click', () => this.recordLap());
+        this.resetBtn.addEventListener('click', () => this.resetStopwatch());
+
+        // Timer controls
+        this.startTimerBtn.addEventListener('click', () => this.startTimer());
+        this.pauseTimerBtn.addEventListener('click', () => this.pauseTimer());
+        this.resetTimerBtn.addEventListener('click', () => this.resetTimer());
+
+        this.animate();
+      }
+
+      switchMode(newMode) {
+        this.mode = newMode;
+        this.running = false;
+        this.elapsed = 0;
+        this.pausedTime = 0;
+        this.laps = [];
+        this.updateDisplay();
+
+        // Update UI
+        this.modeButtons.forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        this.modeContents.forEach(content => content.style.display = 'none');
+        document.getElementById(`${newMode}-mode`).style.display = 'block';
+
+        // Reset buttons
+        this.startBtn.textContent = 'Start';
+        this.lapBtn.disabled = true;
+        this.startTimerBtn.textContent = 'Start';
+        this.pauseTimerBtn.disabled = true;
+
+        // Update label
+        document.getElementById('timeLabel').textContent = newMode === 'stopwatch' ? 'Stopwatch' : 'Timer';
+      }
+
+      toggleStopwatch() {
+        if (this.running) {
+          this.running = false;
+          this.startBtn.textContent = 'Resume';
+          this.lapBtn.disabled = true;
+        } else {
+          if (this.elapsed === 0) {
+            this.startTime = Date.now();
+          } else {
+            this.startTime = Date.now() - this.pausedTime;
+          }
+          this.running = true;
+          this.startBtn.textContent = 'Pause';
+          this.lapBtn.disabled = false;
+        }
+      }
+
+      recordLap() {
+        const lapTime = this.formatTime(this.elapsed);
+        this.laps.push(lapTime);
+        this.renderLaps();
+      }
+
+      resetStopwatch() {
+        this.running = false;
+        this.elapsed = 0;
+        this.pausedTime = 0;
+        this.laps = [];
+        this.startTime = null;
+        this.startBtn.textContent = 'Start';
+        this.lapBtn.disabled = true;
+        this.updateDisplay();
+        this.renderLaps();
+      }
+
+      startTimer() {
+        const hours = parseInt(this.timerHours.value) || 0;
+        const minutes = parseInt(this.timerMinutes.value) || 0;
+        const seconds = parseInt(this.timerSeconds.value) || 0;
+
+        this.timerRemaining = hours * 3600 + minutes * 60 + seconds;
+
+        if (this.timerRemaining === 0) {
+          alert('Please set a time greater than 0');
+          return;
+        }
+
+        this.running = true;
+        this.startTime = Date.now();
+        this.startTimerBtn.disabled = true;
+        this.pauseTimerBtn.disabled = false;
+        this.timerHours.disabled = true;
+        this.timerMinutes.disabled = true;
+        this.timerSeconds.disabled = true;
+      }
+
+      pauseTimer() {
+        this.running = false;
+        this.pauseTimerBtn.disabled = true;
+        this.startTimerBtn.disabled = false;
+        this.startTimerBtn.textContent = 'Resume';
+      }
+
+      resetTimer() {
+        this.running = false;
+        this.timerRemaining = 0;
+        this.startTime = null;
+        this.startTimerBtn.disabled = false;
+        this.startTimerBtn.textContent = 'Start';
+        this.pauseTimerBtn.disabled = true;
+        this.timerHours.disabled = false;
+        this.timerMinutes.disabled = false;
+        this.timerSeconds.disabled = false;
+        this.updateDisplay();
+      }
+
+      animate() {
+        if (this.running) {
+          if (this.mode === 'stopwatch') {
+            this.elapsed = Date.now() - this.startTime + this.pausedTime;
+          } else {
+            const elapsed = Date.now() - this.startTime;
+            this.timerRemaining = Math.max(0, Math.floor((this.timerRemaining * 1000 - elapsed) / 1000));
+
+            if (this.timerRemaining === 0) {
+              this.running = false;
+              this.startTimerBtn.disabled = false;
+              this.pauseTimerBtn.disabled = true;
+              this.timerHours.disabled = false;
+              this.timerMinutes.disabled = false;
+              this.timerSeconds.disabled = false;
+              this.playNotification();
+            }
+          }
+        }
+
+        this.updateDisplay();
+        requestAnimationFrame(() => this.animate());
+      }
+
+      updateDisplay() {
+        const ms = this.mode === 'stopwatch' ? this.elapsed : this.timerRemaining * 1000;
+        this.timeDisplay.textContent = this.formatTime(Math.floor(ms / 1000));
+      }
+
+      formatTime(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      }
+
+      renderLaps() {
+        if (this.laps.length === 0) {
+          this.lapList.innerHTML = '<div class="empty-state">No laps yet</div>';
+          return;
+        }
+
+        this.lapList.innerHTML = this.laps.map((lap, i) => `
+          <div class="lap-item">
+            <span class="lap-number">Lap ${i + 1}</span>
+            <span class="lap-time">${lap}</span>
+          </div>
+        `).join('');
+      }
+
+      playNotification() {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+      }
+    }
+
+    let timer;
+    document.addEventListener('DOMContentLoaded', () => {
+      timer = new TimerStopwatch();
+    });
+  </script>
+</body>
+</html>
