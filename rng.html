@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Number Generator - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Random number generator tool.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .rng-container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .rng-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .rng-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-section {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-primary);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .btn-generate {
+      padding: 0.9rem;
+      border: none;
+      background: var(--accent);
+      color: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
+      width: 100%;
+    }
+
+    .btn-generate:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .result-display {
+      background: var(--bg);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 2px solid var(--accent);
+      text-align: center;
+      margin-top: 2rem;
+      display: none;
+    }
+
+    .result-display.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .result-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-value {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .history {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: var(--bg);
+      border-radius: 12px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .history h3 {
+      margin: 0 0 1rem 0;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .history-item {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      padding: 0.75rem;
+      background: var(--surface);
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      border-left: 3px solid var(--accent);
+      padding-left: 1rem;
+    }
+
+    .history-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .btn-clear {
+      padding: 0.6rem 1.2rem;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+    .btn-clear:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .btn-back {
+      padding: 0.7rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-align: center;
+      flex: 1;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .info-text {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .rng-header h1 {
+        font-size: 2rem;
+      }
+
+      .input-row {
+        grid-template-columns: 1fr;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+    <nav class="nav reveal">
+        <div class="nav-left">
+            <a class="brand-avatar" href="index.html" aria-label="Home">
+            <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+            </a>
+            <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+        </div>  
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container rng-container">
+    <section class="rng-header reveal">
+      <h1>Random Number Generator</h1>
+      <p style="color: var(--text-secondary);">Generate random numbers in any range</p>
+    </section>
+
+    <div class="tool-section reveal">
+      <div class="form-group">
+        <label class="form-label">Minimum Value</label>
+        <input type="number" id="minInput" class="form-input" value="1" placeholder="Enter minimum">
+        <p class="info-text">The smallest number in your range</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Maximum Value</label>
+        <input type="number" id="maxInput" class="form-input" value="100" placeholder="Enter maximum">
+        <p class="info-text">The largest number in your range</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">How Many Numbers?</label>
+        <input type="number" id="countInput" class="form-input" value="1" min="1" max="100" placeholder="Quantity">
+        <p class="info-text">Generate multiple numbers at once</p>
+      </div>
+
+      <button class="btn-generate" id="generateBtn">Generate</button>
+
+      <div class="result-display" id="resultDisplay">
+        <div class="result-label">Your Random Number(s)</div>
+        <div class="result-value" id="resultValue">0</div>
+      </div>
+
+      <div class="history" id="historyContainer" style="display: none;">
+        <h3>Generation History</h3>
+        <div id="historyList"></div>
+        <button class="btn-clear" id="clearHistoryBtn">Clear History</button>
+      </div>
+    </div>
+
+    <div class="controls reveal">
+      <a href="index.html" class="btn-back">Back Home</a>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    const minInput = document.getElementById('minInput');
+    const maxInput = document.getElementById('maxInput');
+    const countInput = document.getElementById('countInput');
+    const generateBtn = document.getElementById('generateBtn');
+    const resultDisplay = document.getElementById('resultDisplay');
+    const resultValue = document.getElementById('resultValue');
+    const historyContainer = document.getElementById('historyContainer');
+    const historyList = document.getElementById('historyList');
+    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+    let history = [];
+
+    function generateNumbers() {
+      const min = parseInt(minInput.value) || 0;
+      const max = parseInt(maxInput.value) || 100;
+      const count = parseInt(countInput.value) || 1;
+
+      if (min > max) {
+        alert('Minimum must be less than maximum!');
+        return;
+      }
+
+      if (count < 1 || count > 100) {
+        alert('Please enter a quantity between 1 and 100!');
+        return;
+      }
+
+      const numbers = [];
+      for (let i = 0; i < count; i++) {
+        const num = Math.floor(Math.random() * (max - min + 1)) + min;
+        numbers.push(num);
+      }
+
+      const result = count === 1 ? numbers[0] : numbers.join(', ');
+      resultValue.textContent = result;
+      resultDisplay.classList.add('show');
+
+      const historyEntry = `${min}-${max} (${count}): ${result}`;
+      history.unshift(historyEntry);
+      if (history.length > 20) history.pop();
+      updateHistory();
+    }
+
+    function updateHistory() {
+      historyContainer.style.display = 'block';
+      historyList.innerHTML = history
+        .map(entry => `<div class="history-item">${entry}</div>`)
+        .join('');
+    }
+
+    generateBtn.addEventListener('click', generateNumbers);
+    clearHistoryBtn.addEventListener('click', () => {
+      history = [];
+      historyContainer.style.display = 'none';
+      historyList.innerHTML = '';
+    });
+
+    [minInput, maxInput, countInput].forEach(input => {
+      input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') generateNumbers();
+      });
+    });
+  </script>
+</body>
+</html>

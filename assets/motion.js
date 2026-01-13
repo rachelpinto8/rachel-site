@@ -122,6 +122,50 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
+      <a href="hangman.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">📝</span>
+          <div class="secret-menu-text">
+            <h2>Hangman</h2>
+            <p>Guess the word</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="pong.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🏓</span>
+          <div class="secret-menu-text">
+            <h2>Pong</h2>
+            <p>Play vs computer</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="rng.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🎲</span>
+          <div class="secret-menu-text">
+            <h2>Random Number Generator</h2>
+            <p>Generate any range</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="coin.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🪙</span>
+          <div class="secret-menu-text">
+            <h2>Coin Flipper</h2>
+            <p>Heads or tails?</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
       <a href="https://open.spotify.com/playlist/7kwg9GeqBKT8Sq1PXFR5Gx?si=86ccacd218eb453a" target="_blank" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🎵</span>

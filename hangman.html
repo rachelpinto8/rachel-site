@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hangman - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Play Hangman game.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .hangman-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .hangman-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .hangman-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .game-area {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-box {
+      text-align: center;
+      padding: 1rem;
+      background: var(--bg);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .word-display {
+      text-align: center;
+      margin: 2rem 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 0.5rem;
+      color: var(--text-primary);
+      font-family: monospace;
+    }
+
+    .guessed-letters {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: var(--bg);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .guessed-label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .letters-list {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      word-break: break-word;
+      line-height: 1.6;
+      min-height: 2rem;
+    }
+
+    .keyboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(35px, 1fr));
+      gap: 0.4rem;
+      margin: 1.5rem 0;
+    }
+
+    .letter-btn {
+      padding: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-primary);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .letter-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: rgba(236, 72, 153, 0.1);
+    }
+
+    .letter-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .letter-btn.correct {
+      border-color: var(--accent);
+      background: rgba(236, 72, 153, 0.2);
+    }
+
+    .letter-btn.wrong {
+      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .message {
+      text-align: center;
+      padding: 1rem;
+      background: rgba(236, 72, 153, 0.1);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      color: var(--accent);
+      font-weight: 600;
+      margin: 1rem 0;
+      display: none;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-new {
+      padding: 0.9rem 2rem;
+      border: none;
+      background: var(--accent);
+      color: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .btn-new:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .btn-back {
+      padding: 0.7rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .hangman-header h1 {
+        font-size: 2rem;
+      }
+
+      .word-display {
+        font-size: 2rem;
+      }
+
+      .keyboard {
+        grid-template-columns: repeat(auto-fit, minmax(32px, 1fr));
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      .btn-new, .btn-back {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+    <nav class="nav reveal">
+        <div class="nav-left">
+            <a class="brand-avatar" href="index.html" aria-label="Home">
+            <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+            </a>
+            <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+        </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container hangman-container">
+    <section class="hangman-header reveal">
+      <h1>Hangman</h1>
+      <p style="color: var(--text-secondary);">Guess the word before you run out of tries!</p>
+    </section>
+
+    <div class="game-area reveal">
+      <div class="stats">
+        <div class="stat-box">
+          <div class="stat-label">Tries Left</div>
+          <div class="stat-value" id="triesLeft">6</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Wins</div>
+          <div class="stat-value" id="wins">0</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Losses</div>
+          <div class="stat-value" id="losses">0</div>
+        </div>
+      </div>
+
+      <div class="word-display" id="wordDisplay"></div>
+
+      <div class="guessed-letters">
+        <div class="guessed-label">Guessed Letters:</div>
+        <div class="letters-list" id="lettersList"></div>
+      </div>
+
+      <div class="keyboard" id="keyboard"></div>
+
+      <div class="message" id="message"></div>
+
+      <div class="controls reveal">
+        <button class="btn-new" id="newGameBtn">New Game</button>
+        <a href="index.html" class="btn-back">Back Home</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    const words = [
+      'javascript', 'hangman', 'programming', 'developer', 'computer', 'website',
+      'algorithm', 'database', 'function', 'variable', 'constant', 'boolean',
+      'pokemon', 'adventure', 'mystery', 'puzzle', 'challenge', 'victory',
+      'coffee', 'chocolate', 'strawberry', 'elephant', 'butterfly', 'rainbow'
+    ];
+
+    class Hangman {
+      constructor() {
+        this.word = '';
+        this.guessed = new Set();
+        this.triesLeft = 6;
+        this.wins = 0;
+        this.losses = 0;
+        this.gameActive = true;
+
+        this.wordDisplay = document.getElementById('wordDisplay');
+        this.keyboard = document.getElementById('keyboard');
+        this.lettersList = document.getElementById('lettersList');
+        this.triesDisplay = document.getElementById('triesLeft');
+        this.winsDisplay = document.getElementById('wins');
+        this.lossesDisplay = document.getElementById('losses');
+        this.newGameBtn = document.getElementById('newGameBtn');
+        this.message = document.getElementById('message');
+
+        this.newGameBtn.addEventListener('click', () => this.start());
+        this.start();
+      }
+
+      start() {
+        this.word = words[Math.floor(Math.random() * words.length)];
+        this.guessed = new Set();
+        this.triesLeft = 6;
+        this.gameActive = true;
+        this.message.classList.remove('show');
+        this.render();
+        this.createKeyboard();
+      }
+
+      createKeyboard() {
+        this.keyboard.innerHTML = '';
+        const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
+        letters.forEach(letter => {
+          const btn = document.createElement('button');
+          btn.textContent = letter.toUpperCase();
+          btn.className = 'letter-btn';
+          btn.addEventListener('click', () => this.guessLetter(letter, btn));
+          this.keyboard.appendChild(btn);
+        });
+      }
+
+      guessLetter(letter, btn) {
+        if (this.guessed.has(letter) || !this.gameActive) return;
+
+        this.guessed.add(letter);
+        btn.disabled = true;
+
+        if (this.word.includes(letter)) {
+          btn.classList.add('correct');
+          if (this.isWon()) {
+            this.endGame(true);
+          }
+        } else {
+          btn.classList.add('wrong');
+          this.triesLeft--;
+          if (this.triesLeft === 0) {
+            this.endGame(false);
+          }
+        }
+
+        this.render();
+      }
+
+      isWon() {
+        return this.word.split('').every(letter => this.guessed.has(letter));
+      }
+
+      endGame(won) {
+        this.gameActive = false;
+        if (won) {
+          this.wins++;
+          this.message.textContent = '🎉 You won! The word was: ' + this.word;
+        } else {
+          this.losses++;
+          this.message.textContent = '💔 Game Over! The word was: ' + this.word;
+        }
+        this.message.classList.add('show');
+        this.winsDisplay.textContent = this.wins;
+        this.lossesDisplay.textContent = this.losses;
+      }
+
+      render() {
+        const display = this.word
+          .split('')
+          .map(letter => this.guessed.has(letter) ? letter : '_')
+          .join(' ');
+        this.wordDisplay.textContent = display;
+        this.triesDisplay.textContent = this.triesLeft;
+        this.lettersList.textContent = Array.from(this.guessed).sort().join(', ') || 'None yet';
+      }
+    }
+
+    let game;
+    document.addEventListener('DOMContentLoaded', () => {
+      game = new Hangman();
+    });
+  </script>
+</body>
+</html>
