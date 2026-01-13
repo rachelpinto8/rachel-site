@@ -1,3 +1,10 @@
+// Easter Egg: Press \ to open Tic Tac Toe game
+document.addEventListener('keydown', (e) => {
+  if (e.key === '\\' || e.code === 'Backslash') {
+    window.location.href = 'game.html';
+  }
+});
+
 const reveals = document.querySelectorAll(".reveal");
 
 const observer = new IntersectionObserver(
@@ -17,6 +24,7 @@ reveals.forEach(el => observer.observe(el));
 // Dark/Light mode toggle with fade animation
 const theme = localStorage.getItem('theme') || 'dark';
 document.documentElement.setAttribute('data-theme', theme);
+updateStatusBar(theme);
 
 const themeToggle = document.querySelector('.theme-toggle');
 if (themeToggle) {
@@ -31,11 +39,19 @@ if (themeToggle) {
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
       updateThemeIcon();
+      updateStatusBar(newTheme);
       document.body.style.opacity = '1';
     }, 150);
   });
   
   updateThemeIcon();
+}
+
+function updateStatusBar(themeMode) {
+  const statusBarMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+  if (statusBarMeta) {
+    statusBarMeta.setAttribute('content', themeMode === 'dark' ? 'black-translucent' : 'black');
+  }
 }
 
 function updateThemeIcon() {
