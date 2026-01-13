@@ -53,13 +53,18 @@ document.body.style.transition = 'opacity 0.3s ease';
 
 // Modal functionality
 function initializeModals() {
-  const focusItems = document.querySelectorAll('.focus-item[data-modal]');
+  const clickableItems = document.querySelectorAll('[data-modal]');
   const modalOverlay = document.querySelector('.modal-overlay');
   
   if (!modalOverlay) return;
 
-  focusItems.forEach(item => {
-    item.addEventListener('click', () => {
+  clickableItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      // Prevent default if it's a link
+      if (item.tagName === 'A') {
+        e.preventDefault();
+      }
+      
       const modalId = item.getAttribute('data-modal');
       const modalContent = document.getElementById(modalId);
       
