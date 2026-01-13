@@ -962,21 +962,8 @@ body.lock-scroll { overflow: hidden; }
     font-size: 2rem;
   }
 
-  .secret-menu-item h2 {
-    font-size: 1.2rem;
-  }
-
   .secret-menu-arrow {
     align-self: flex-end;
     margin-left: 0;
   }
-}
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  transform: translateY(10px) scale(0.97);
-  opacity: 0;
-  transition: transform 0.25s ease, opacity 0.25s ease;
-}
-.modal-overlay.active .modal-content {
-  transform: translateY(0) scale(1);
-  opacity: 1;
 }
