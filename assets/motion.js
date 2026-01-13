@@ -431,6 +431,13 @@ function updateStatusBar(themeMode) {
   if (statusBarMeta) {
     statusBarMeta.setAttribute('content', themeMode === 'dark' ? 'black-translucent' : 'black');
   }
+  
+  // Update theme-color meta tag to match current theme
+  const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeColorMeta) {
+    const themeColor = themeMode === 'dark' ? '#0b0b0d' : '#f8f8f9';
+    themeColorMeta.setAttribute('content', themeColor);
+  }
 }
 
 function updateThemeIcon() {
