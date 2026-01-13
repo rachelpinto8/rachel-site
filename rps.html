@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rock Paper Scissors - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .rps-container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .rps-header {
+      margin-bottom: 3rem;
+    }
+
+    .rps-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .score-display {
+      display: flex;
+      justify-content: space-around;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    .score-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .score-item p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .score-item strong {
+      font-size: 2rem;
+      color: var(--accent);
+    }
+
+    .game-area {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .result-message {
+      font-size: 1.3rem;
+      margin-bottom: 2rem;
+      min-height: 30px;
+      font-weight: 600;
+    }
+
+    .result-message.win {
+      color: #10b981;
+    }
+
+    .result-message.lose {
+      color: #ef4444;
+    }
+
+    .result-message.tie {
+      color: var(--accent);
+    }
+
+    .choices-display {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+      min-height: 120px;
+    }
+
+    .choice-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .choice-emoji {
+      font-size: 4rem;
+      opacity: 0.5;
+    }
+
+    .choice-emoji.active {
+      opacity: 1;
+      animation: bounce 0.5s ease;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .choice-label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .vs {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .rps-btn {
+      padding: 1rem;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      color: var(--text-primary);
+      border-radius: 12px;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
+    }
+
+    .rps-btn:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .rps-btn:active {
+      transform: translateY(0);
+    }
+
+    .reset-btn {
+      padding: 0.7rem 1.5rem;
+      border: none;
+      background: var(--accent);
+      color: white;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      font-weight: 500;
+    }
+
+    .reset-btn:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .button-group {
+        gap: 0.75rem;
+      }
+
+      .rps-btn {
+        font-size: 1.5rem;
+        padding: 0.75rem;
+      }
+
+      .choices-display {
+        gap: 1rem;
+      }
+
+      .choice-emoji {
+        font-size: 3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav reveal">
+    <div class="nav-left">
+      <a class="brand-avatar" href="index.html" aria-label="Home">
+        <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+      </a>
+      <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container rps-container">
+    <section class="rps-header reveal">
+      <h1>Rock Paper Scissors</h1>
+      <p style="color: var(--text-secondary);">Can you beat the computer?</p>
+    </section>
+
+    <section class="score-display reveal">
+      <div class="score-item">
+        <p>You</p>
+        <strong id="playerScore">0</strong>
+      </div>
+      <div class="score-item">
+        <p>Computer</p>
+        <strong id="computerScore">0</strong>
+      </div>
+    </section>
+
+    <section class="game-area reveal">
+      <div class="result-message" id="resultMessage"></div>
+
+      <div class="choices-display">
+        <div class="choice-box">
+          <div class="choice-emoji" id="playerChoice">❓</div>
+          <div class="choice-label">Your Pick</div>
+        </div>
+        <div class="vs">vs</div>
+        <div class="choice-box">
+          <div class="choice-emoji" id="computerChoice">❓</div>
+          <div class="choice-label">Computer</div>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button class="rps-btn" data-choice="rock">🪨</button>
+        <button class="rps-btn" data-choice="paper">📄</button>
+        <button class="rps-btn" data-choice="scissors">✂️</button>
+      </div>
+
+      <button class="reset-btn" id="resetBtn">Reset Score</button>
+    </section>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    let playerScore = 0;
+    let computerScore = 0;
+
+    const choices = {
+      rock: '🪨',
+      paper: '📄',
+      scissors: '✂️'
+    };
+
+    const buttons = document.querySelectorAll('.rps-btn');
+    const resultMessage = document.getElementById('resultMessage');
+    const playerChoiceDisplay = document.getElementById('playerChoice');
+    const computerChoiceDisplay = document.getElementById('computerChoice');
+    const playerScoreDisplay = document.getElementById('playerScore');
+    const computerScoreDisplay = document.getElementById('computerScore');
+    const resetBtn = document.getElementById('resetBtn');
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const playerChoice = btn.dataset.choice;
+        const computerChoice = getComputerChoice();
+        const result = determineWinner(playerChoice, computerChoice);
+
+        playerChoiceDisplay.textContent = choices[playerChoice];
+        playerChoiceDisplay.classList.add('active');
+
+        computerChoiceDisplay.textContent = choices[computerChoice];
+        computerChoiceDisplay.classList.add('active');
+
+        setTimeout(() => {
+          playerChoiceDisplay.classList.remove('active');
+          computerChoiceDisplay.classList.remove('active');
+        }, 500);
+
+        if (result === 'win') {
+          playerScore++;
+          resultMessage.textContent = 'You won! 🎉';
+          resultMessage.className = 'result-message win';
+        } else if (result === 'lose') {
+          computerScore++;
+          resultMessage.textContent = 'Computer won! 💻';
+          resultMessage.className = 'result-message lose';
+        } else {
+          resultMessage.textContent = "It's a tie! 🤝";
+          resultMessage.className = 'result-message tie';
+        }
+
+        playerScoreDisplay.textContent = playerScore;
+        computerScoreDisplay.textContent = computerScore;
+      });
+    });
+
+    resetBtn.addEventListener('click', () => {
+      playerScore = 0;
+      computerScore = 0;
+      playerScoreDisplay.textContent = '0';
+      computerScoreDisplay.textContent = '0';
+      resultMessage.textContent = '';
+      playerChoiceDisplay.textContent = '❓';
+      computerChoiceDisplay.textContent = '❓';
+    });
+
+    function getComputerChoice() {
+      const choices = ['rock', 'paper', 'scissors'];
+      return choices[Math.floor(Math.random() * 3)];
+    }
+
+    function determineWinner(player, computer) {
+      if (player === computer) return 'tie';
+      if (player === 'rock' && computer === 'scissors') return 'win';
+      if (player === 'paper' && computer === 'rock') return 'win';
+      if (player === 'scissors' && computer === 'paper') return 'win';
+      return 'lose';
+    }
+  </script>
+</body>
+</html>

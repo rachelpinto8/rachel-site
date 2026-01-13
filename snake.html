@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snake - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Play Snake game.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .snake-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .snake-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .snake-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .game-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-box {
+      text-align: center;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .game-board-wrapper {
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .game-board {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      aspect-ratio: 1;
+      display: grid;
+      grid-template-columns: repeat(20, 1fr);
+      grid-template-rows: repeat(20, 1fr);
+      gap: 1px;
+    }
+
+    .cell {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .cell.snake {
+      background: var(--accent);
+      box-shadow: inset 0 0 0 1px var(--accent);
+    }
+
+    .cell.snake.head {
+      background: #ff1493;
+      box-shadow: inset 0 0 4px rgba(255, 20, 147, 0.5);
+    }
+
+    .cell.food {
+      background: #fbbf24;
+      border-radius: 50%;
+      animation: pulse 0.6s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.8); opacity: 0.8; }
+      50% { transform: scale(1); opacity: 1; }
+    }
+
+    .instructions {
+      background: var(--bg);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .instructions h3 {
+      margin-top: 0;
+      color: var(--text-primary);
+    }
+
+    .instructions p {
+      color: var(--text-secondary);
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+    }
+
+    .controls-game {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn-start, .btn-pause {
+      padding: 0.9rem;
+      border: none;
+      background: var(--accent);
+      color: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
+    }
+
+    .btn-start:hover, .btn-pause:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .btn-start:disabled, .btn-pause:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .mobile-controls {
+      display: none;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .mobile-controls.show {
+      display: grid;
+    }
+
+    .direction-btn {
+      padding: 1rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-primary);
+      border-radius: 8px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+
+    .direction-btn:active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .direction-btn:hover {
+      border-color: var(--accent);
+    }
+
+    .direction-btn.up { grid-column: 2; }
+    .direction-btn.left { grid-column: 1; }
+    .direction-btn.down { grid-column: 2; }
+    .direction-btn.right { grid-column: 3; }
+
+    .game-over-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(11, 11, 13, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .game-over-modal.show {
+      display: flex;
+    }
+
+    .game-over-content {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      text-align: center;
+      max-width: 90%;
+    }
+
+    .game-over-content h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--accent);
+    }
+
+    .game-over-content p {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    .game-over-score {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .game-over-content button {
+      padding: 0.8rem 2rem;
+      border: none;
+      background: var(--accent);
+      color: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .game-over-content button:hover {
+      opacity: 0.9;
+    }
+
+    .btn-back {
+      padding: 0.7rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @media (max-width: 768px) {
+      .snake-header h1 {
+        font-size: 2rem;
+      }
+
+      .mobile-controls {
+        display: grid;
+      }
+
+      .game-board {
+        grid-template-columns: repeat(15, 1fr);
+        grid-template-rows: repeat(15, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav reveal">
+    <a class="brand-avatar" href="index.html" aria-label="Home">
+      <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+    </a>
+    <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container snake-container">
+    <section class="snake-header reveal">
+      <h1>Snake</h1>
+      <p style="color: var(--text-secondary);">Classic arcade game - eat food and grow!</p>
+    </section>
+
+    <div class="game-stats reveal">
+      <div class="stat-box">
+        <div class="stat-label">Score</div>
+        <div class="stat-value" id="score">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Length</div>
+        <div class="stat-value" id="length">1</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Best</div>
+        <div class="stat-value" id="best">0</div>
+      </div>
+    </div>
+
+    <div class="instructions reveal">
+      <h3>How to Play</h3>
+      <p>Use arrow keys to move the snake. Eat the yellow food to grow and score points. Don't hit the walls or yourself!</p>
+    </div>
+
+    <div class="game-board-wrapper reveal">
+      <div class="game-board" id="gameBoard" role="grid" aria-label="Snake game board">
+        <!-- Cells will be generated here -->
+      </div>
+    </div>
+
+    <div class="mobile-controls" id="mobileControls">
+      <button class="direction-btn up" id="upBtn" aria-label="Move up">▲</button>
+      <button class="direction-btn left" id="leftBtn" aria-label="Move left">◀</button>
+      <button class="direction-btn down" id="downBtn" aria-label="Move down">▼</button>
+      <button class="direction-btn right" id="rightBtn" aria-label="Move right">▶</button>
+    </div>
+
+    <div class="controls-game reveal">
+      <button class="btn-start" id="startBtn">Start Game</button>
+      <button class="btn-pause" id="pauseBtn" style="display: none;">Pause</button>
+      <a href="index.html" class="btn-back">Back Home</a>
+    </div>
+  </main>
+
+  <div class="game-over-modal" id="gameOverModal">
+    <div class="game-over-content">
+      <h2>Game Over!</h2>
+      <p id="gameOverMessage">You hit a wall or yourself</p>
+      <div class="game-over-score">Final Score: <span id="gameOverScore">0</span></div>
+      <button onclick="document.getElementById('gameOverModal').classList.remove('show'); game.startGame();">Play Again</button>
+    </div>
+  </div>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    class SnakeGame {
+      constructor() {
+        this.gridSize = 20;
+        this.cellSize = 1;
+        this.snake = [{ x: 10, y: 10 }];
+        this.food = this.generateFood();
+        this.direction = { x: 1, y: 0 };
+        this.nextDirection = { x: 1, y: 0 };
+        this.score = 0;
+        this.best = localStorage.getItem('snake-best') || 0;
+        this.gameActive = false;
+        this.gamePaused = false;
+        this.gameSpeed = 100;
+
+        this.board = document.getElementById('gameBoard');
+        this.scoreDisplay = document.getElementById('score');
+        this.lengthDisplay = document.getElementById('length');
+        this.bestDisplay = document.getElementById('best');
+        this.startBtn = document.getElementById('startBtn');
+        this.pauseBtn = document.getElementById('pauseBtn');
+        this.gameOverModal = document.getElementById('gameOverModal');
+
+        this.generateBoard();
+        this.bestDisplay.textContent = this.best;
+        this.setupControls();
+      }
+
+      generateBoard() {
+        this.board.innerHTML = '';
+        for (let i = 0; i < this.gridSize * this.gridSize; i++) {
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+          cell.id = `cell-${i}`;
+          this.board.appendChild(cell);
+        }
+      }
+
+      generateFood() {
+        let newFood;
+        do {
+          newFood = {
+            x: Math.floor(Math.random() * this.gridSize),
+            y: Math.floor(Math.random() * this.gridSize)
+          };
+        } while (this.snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
+        return newFood;
+      }
+
+      render() {
+        this.generateBoard();
+
+        // Draw snake
+        this.snake.forEach((segment, idx) => {
+          const cellId = segment.y * this.gridSize + segment.x;
+          const cell = document.getElementById(`cell-${cellId}`);
+          if (cell) {
+            if (idx === 0) {
+              cell.classList.add('snake', 'head');
+            } else {
+              cell.classList.add('snake');
+            }
+          }
+        });
+
+        // Draw food
+        const foodCellId = this.food.y * this.gridSize + this.food.x;
+        const foodCell = document.getElementById(`cell-${foodCellId}`);
+        if (foodCell) {
+          foodCell.classList.add('food');
+        }
+
+        this.scoreDisplay.textContent = this.score;
+        this.lengthDisplay.textContent = this.snake.length;
+      }
+
+      update() {
+        if (!this.gameActive || this.gamePaused) return;
+
+        this.direction = this.nextDirection;
+
+        const head = { ...this.snake[0] };
+        head.x += this.direction.x;
+        head.y += this.direction.y;
+
+        // Check wall collision
+        if (head.x < 0 || head.x >= this.gridSize || head.y < 0 || head.y >= this.gridSize) {
+          this.endGame();
+          return;
+        }
+
+        // Check self collision
+        if (this.snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+          this.endGame();
+          return;
+        }
+
+        this.snake.unshift(head);
+
+        // Check food collision
+        if (head.x === this.food.x && head.y === this.food.y) {
+          this.score += 10;
+          this.food = this.generateFood();
+        } else {
+          this.snake.pop();
+        }
+
+        this.render();
+      }
+
+      startGame() {
+        this.snake = [{ x: 10, y: 10 }];
+        this.food = this.generateFood();
+        this.direction = { x: 1, y: 0 };
+        this.nextDirection = { x: 1, y: 0 };
+        this.score = 0;
+        this.gamePaused = false;
+        this.gameActive = true;
+        this.startBtn.style.display = 'none';
+        this.pauseBtn.style.display = 'block';
+        this.pauseBtn.textContent = 'Pause';
+        this.gameOverModal.classList.remove('show');
+        this.render();
+      }
+
+      togglePause() {
+        this.gamePaused = !this.gamePaused;
+        this.pauseBtn.textContent = this.gamePaused ? 'Resume' : 'Pause';
+      }
+
+      endGame() {
+        this.gameActive = false;
+        this.startBtn.style.display = 'block';
+        this.pauseBtn.style.display = 'none';
+
+        if (this.score > this.best) {
+          this.best = this.score;
+          localStorage.setItem('snake-best', this.best);
+          this.bestDisplay.textContent = this.best;
+        }
+
+        document.getElementById('gameOverScore').textContent = this.score;
+        this.gameOverModal.classList.add('show');
+      }
+
+      setupControls() {
+        document.addEventListener('keydown', (e) => {
+          if (!this.gameActive) return;
+
+          const key = e.key.toLowerCase();
+          if (key === 'arrowup' || key === 'w') {
+            if (this.direction.y === 0) this.nextDirection = { x: 0, y: -1 };
+            e.preventDefault();
+          } else if (key === 'arrowdown' || key === 's') {
+            if (this.direction.y === 0) this.nextDirection = { x: 0, y: 1 };
+            e.preventDefault();
+          } else if (key === 'arrowleft' || key === 'a') {
+            if (this.direction.x === 0) this.nextDirection = { x: -1, y: 0 };
+            e.preventDefault();
+          } else if (key === 'arrowright' || key === 'd') {
+            if (this.direction.x === 0) this.nextDirection = { x: 1, y: 0 };
+            e.preventDefault();
+          } else if (key === ' ') {
+            this.togglePause();
+            e.preventDefault();
+          }
+        });
+
+        // Mobile controls
+        document.getElementById('upBtn').addEventListener('click', () => {
+          if (this.gameActive && this.direction.y === 0) this.nextDirection = { x: 0, y: -1 };
+        });
+        document.getElementById('downBtn').addEventListener('click', () => {
+          if (this.gameActive && this.direction.y === 0) this.nextDirection = { x: 0, y: 1 };
+        });
+        document.getElementById('leftBtn').addEventListener('click', () => {
+          if (this.gameActive && this.direction.x === 0) this.nextDirection = { x: -1, y: 0 };
+        });
+        document.getElementById('rightBtn').addEventListener('click', () => {
+          if (this.gameActive && this.direction.x === 0) this.nextDirection = { x: 1, y: 0 };
+        });
+
+        this.startBtn.addEventListener('click', () => this.startGame());
+        this.pauseBtn.addEventListener('click', () => this.togglePause());
+
+        setInterval(() => this.update(), this.gameSpeed);
+      }
+    }
+
+    let game;
+    document.addEventListener('DOMContentLoaded', () => {
+      game = new SnakeGame();
+    });
+  </script>
+</body>
+</html>

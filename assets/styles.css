@@ -719,6 +719,241 @@ body.lock-scroll { overflow: hidden; }
   max-width: 600px;
   max-height: 80vh;
   overflow-y: auto;
+}
+
+/* Secret Menu Styles */
+@keyframes slideInSecret {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutSecret {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+.secret-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg);
+  z-index: 2000;
+  display: none;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.secret-menu.active {
+  display: flex;
+  opacity: 1;
+  animation: slideInSecret 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.secret-menu.closing {
+  animation: slideOutSecret 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.secret-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+
+.secret-menu-header h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.secret-menu-close {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+  border-radius: 12px;
+  font-size: 1.75rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.secret-menu-close:hover {
+  border-color: var(--accent);
+  background: rgba(236, 72, 153, 0.1);
+  color: var(--accent);
+}
+
+.secret-menu-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 3rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.secret-menu-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.secret-menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.secret-menu-item:hover {
+  border-color: var(--accent);
+  background: rgba(236, 72, 153, 0.05);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(236, 72, 153, 0.12);
+}
+
+.secret-menu-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.secret-menu-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.secret-menu-icon {
+  font-size: 2.5rem;
+  display: inline-block;
+  width: fit-content;
+}
+
+.secret-menu-item h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+.secret-menu-item:hover h2 {
+  color: var(--accent);
+}
+
+.secret-menu-item p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+.secret-menu-arrow {
+  color: var(--accent);
+  font-size: 1.5rem;
+  margin-left: 1.5rem;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.secret-menu-item:hover .secret-menu-arrow {
+  transform: translateX(4px);
+}
+
+.secret-menu-footer {
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.secret-menu-footer kbd {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.8rem;
+  margin: 0 0.35rem;
+}
+
+@media (max-width: 768px) {
+  .secret-menu-header {
+    padding: 1.5rem;
+  }
+
+  .secret-menu-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .secret-menu-body {
+    padding: 2rem 1.5rem;
+  }
+
+  .secret-menu-options {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .secret-menu-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.75rem;
+  }
+
+  .secret-menu-item:hover {
+    transform: translateY(-2px);
+  }
+
+  .secret-menu-icon {
+    font-size: 2rem;
+  }
+
+  .secret-menu-item h2 {
+    font-size: 1.2rem;
+  }
+
+  .secret-menu-arrow {
+    align-self: flex-end;
+    margin-left: 0;
+  }
+}
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   transform: translateY(10px) scale(0.97);
   opacity: 0;

@@ -1,9 +1,218 @@
-// Easter Egg: Press \ to open Tic Tac Toe game
-document.addEventListener('keydown', (e) => {
-  if (e.key === '\\' || e.code === 'Backslash') {
-    window.location.href = 'game.html';
+// Easter Egg: Secret Menu
+let secretMenuLoaded = false;
+
+function initializeSecretMenu() {
+  if (secretMenuLoaded) return;
+  
+  const secretMenuHTML = `<div id="secret-menu" class="secret-menu">
+  <div class="secret-menu-header">
+    <h1>Secret Menu</h1>
+    <button class="secret-menu-close" aria-label="Close menu">&times;</button>
+  </div>
+  
+  <div class="secret-menu-body">
+    <div class="secret-menu-options">
+      <a href="game.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🎮</span>
+          <div class="secret-menu-text">
+            <h2>Tic Tac Toe</h2>
+            <p>Classic game</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="rps.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🪨</span>
+          <div class="secret-menu-text">
+            <h2>Rock Paper Scissors</h2>
+            <p>Beat the computer</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="memory.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🧠</span>
+          <div class="secret-menu-text">
+            <h2>Memory Game</h2>
+            <p>Match the pairs</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="messages.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">💬</span>
+          <div class="secret-menu-text">
+            <h2>Messages</h2>
+            <p>Some thoughts for you</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="appreciation.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">💝</span>
+          <div class="secret-menu-text">
+            <h2>Appreciation</h2>
+            <p>A special thank you</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="guess.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🔢</span>
+          <div class="secret-menu-text">
+            <h2>Number Guesser</h2>
+            <p>Guess my number</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="dice.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🎲</span>
+          <div class="secret-menu-text">
+            <h2>Dice Roller</h2>
+            <p>Roll the dice</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="2048.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">2️⃣</span>
+          <div class="secret-menu-text">
+            <h2>2048</h2>
+            <p>Combine tiles to win</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="simon.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🎯</span>
+          <div class="secret-menu-text">
+            <h2>Simon Says</h2>
+            <p>Remember the sequence</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="snake.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🐍</span>
+          <div class="secret-menu-text">
+            <h2>Snake</h2>
+            <p>Classic arcade game</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="https://open.spotify.com/playlist/7kwg9GeqBKT8Sq1PXFR5Gx?si=86ccacd218eb453a" target="_blank" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🎵</span>
+          <div class="secret-menu-text">
+            <h2>Our Playlist</h2>
+            <p>Listen together on Spotify</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
+      <a href="https://www.instagram.com/beanandsushi1111/" target="_blank" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">📸</span>
+          <div class="secret-menu-text">
+            <h2>Our Instagram</h2>
+            <p>Check out our photos</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+    </div>
+  </div>
+  
+  <div class="secret-menu-footer">
+    <p>Press <kbd>\\</kbd> or <kbd>ESC</kbd> to close</p>
+  </div>
+</div>`;
+
+  // Insert menu into body
+  document.body.insertAdjacentHTML('beforeend', secretMenuHTML);
+  
+  setupSecretMenuListeners();
+  secretMenuLoaded = true;
+}
+
+function setupSecretMenuListeners() {
+  const secretMenu = document.getElementById('secret-menu');
+  
+  if (!secretMenu) {
+    console.error('Secret menu element not found');
+    return;
   }
-});
+  
+  const closeBtn = secretMenu.querySelector('.secret-menu-close');
+  
+  // Close menu with animation
+  function closeSecretMenu() {
+    secretMenu.classList.add('closing');
+    setTimeout(() => {
+      secretMenu.classList.remove('active', 'closing');
+    }, 300);
+  }
+  
+  // Open/Close with backslash key
+  document.addEventListener('keydown', (e) => {
+    // Check for backslash key
+    if ((e.key === '\\' || e.code === 'Backslash') && e.shiftKey === false) {
+      e.preventDefault();
+      if (secretMenu.classList.contains('active')) {
+        closeSecretMenu();
+      } else {
+        secretMenu.classList.add('active');
+      }
+    }
+    // Close with ESC
+    if (e.key === 'Escape' && secretMenu.classList.contains('active')) {
+      e.preventDefault();
+      closeSecretMenu();
+    }
+  });
+  
+  // Close button click
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeSecretMenu);
+  }
+  
+  // Close when clicking on the menu background (outside content)
+  secretMenu.addEventListener('click', (e) => {
+    if (e.target === secretMenu) {
+      closeSecretMenu();
+    }
+  });
+}
+
+// Initialize secret menu on page load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeSecretMenu);
+} else {
+  initializeSecretMenu();
+}
 
 const reveals = document.querySelectorAll(".reveal");
 

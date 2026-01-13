@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Memory Game - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .memory-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .memory-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .memory-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .memory-stats {
+      display: flex;
+      justify-content: space-around;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-item p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .stat-item strong {
+      font-size: 1.75rem;
+      color: var(--accent);
+      display: block;
+    }
+
+    .memory-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+
+    .memory-card {
+      aspect-ratio: 1;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      border-radius: 12px;
+      font-size: 2.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+
+    .memory-card:hover {
+      border-color: var(--accent);
+    }
+
+    .memory-card.flipped {
+      border-color: var(--accent);
+      background: rgba(236, 72, 153, 0.1);
+    }
+
+    .memory-card.matched {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .memory-card.matched:hover {
+      border-color: var(--border);
+    }
+
+    .completion-message {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(236, 72, 153, 0.1);
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      margin-bottom: 2rem;
+      display: none;
+    }
+
+    .completion-message.show {
+      display: block;
+      animation: slideInSecret 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .completion-message h2 {
+      color: var(--accent);
+      margin: 0 0 0.5rem 0;
+      font-size: 1.5rem;
+    }
+
+    .completion-message p {
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .memory-controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn-reset {
+      padding: 0.7rem 1.5rem;
+      border: none;
+      background: var(--accent);
+      color: white;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      font-weight: 500;
+    }
+
+    .btn-reset:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .memory-board {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        padding: 1rem;
+      }
+
+      .memory-card {
+        font-size: 1.75rem;
+      }
+
+      .memory-stats {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav reveal">
+    <div class="nav-left">
+        <a class="brand-avatar" href="index.html" aria-label="Home">
+        <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+        </a>
+        <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container memory-container">
+    <section class="memory-header reveal">
+      <h1>Memory Game</h1>
+      <p style="color: var(--text-secondary);">Match all the pairs!</p>
+    </section>
+
+    <section class="memory-stats reveal">
+      <div class="stat-item">
+        <p>Moves</p>
+        <strong id="movesCount">0</strong>
+      </div>
+      <div class="stat-item">
+        <p>Matched</p>
+        <strong id="matchedCount">0/8</strong>
+      </div>
+    </section>
+
+    <div class="completion-message" id="completionMessage">
+      <h2>You Won! 🎉</h2>
+      <p id="completionText"></p>
+    </div>
+
+    <section class="memory-board reveal" id="memoryBoard"></section>
+
+    <div class="memory-controls reveal">
+      <button class="btn-reset" id="resetBtn">New Game</button>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    const emojis = ['🎮', '🎨', '🎭', '🎪', '🎯', '🎲', '🎸', '🎬'];
+    let cards = [];
+    let flipped = [];
+    let matched = [];
+    let moves = 0;
+    let isProcessing = false;
+
+    const board = document.getElementById('memoryBoard');
+    const movesDisplay = document.getElementById('movesCount');
+    const matchedDisplay = document.getElementById('matchedCount');
+    const resetBtn = document.getElementById('resetBtn');
+    const completionMessage = document.getElementById('completionMessage');
+    const completionText = document.getElementById('completionText');
+
+    function initializeGame() {
+      cards = [];
+      flipped = [];
+      matched = [];
+      moves = 0;
+      isProcessing = false;
+
+      // Create card pairs
+      const deck = [...emojis, ...emojis];
+      deck.sort(() => Math.random() - 0.5);
+      cards = deck;
+
+      movesDisplay.textContent = '0';
+      matchedDisplay.textContent = '0/8';
+      completionMessage.classList.remove('show');
+      board.innerHTML = '';
+
+      cards.forEach((emoji, index) => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.textContent = '?';
+        card.dataset.index = index;
+        card.addEventListener('click', () => flipCard(index, card));
+        board.appendChild(card);
+      });
+    }
+
+    function flipCard(index, cardElement) {
+      if (isProcessing || flipped.includes(index) || matched.includes(index)) return;
+
+      cardElement.textContent = cards[index];
+      cardElement.classList.add('flipped');
+      flipped.push(index);
+
+      if (flipped.length === 2) {
+        isProcessing = true;
+        setTimeout(() => {
+          checkMatch();
+          isProcessing = false;
+        }, 600);
+      }
+    }
+
+    function checkMatch() {
+      const [first, second] = flipped;
+      moves++;
+      movesDisplay.textContent = moves;
+
+      if (cards[first] === cards[second]) {
+        matched.push(first, second);
+        matchedDisplay.textContent = `${matched.length / 2}/8`;
+
+        if (matched.length === 16) {
+          setTimeout(() => {
+            completionText.textContent = `You completed the game in ${moves} moves!`;
+            completionMessage.classList.add('show');
+          }, 300);
+        }
+      } else {
+        document.querySelector(`[data-index="${first}"]`).textContent = '?';
+        document.querySelector(`[data-index="${second}"]`).textContent = '?';
+        document.querySelector(`[data-index="${first}"]`).classList.remove('flipped');
+        document.querySelector(`[data-index="${second}"]`).classList.remove('flipped');
+      }
+
+      flipped = [];
+    }
+
+    resetBtn.addEventListener('click', initializeGame);
+
+    initializeGame();
+  </script>
+</body>
+</html>

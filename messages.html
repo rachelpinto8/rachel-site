@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Messages - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Personal messages for Rachel.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .messages-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .message-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .message-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(236, 72, 153, 0.12);
+    }
+
+    .message-card p {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .message-signature {
+      margin-top: 1rem;
+      color: var(--accent);
+      font-weight: 500;
+      font-style: italic;
+    }
+
+    .messages-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .messages-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .messages-header p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav reveal">
+    <div class="nav-left">
+        <a class="brand-avatar" href="index.html" aria-label="Home">
+        <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+        </a>
+        <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container messages-container">
+    <section class="messages-header reveal">
+      <h1>Messages for You 💬</h1>
+      <p>Just some thoughts I wanted to share with you</p>
+    </section>
+
+    <section class="message-card reveal">
+      <p>You inspire me every single day. The way you approach challenges with curiosity and determination is incredible. I really like how passionate you are about your work in biology and bioinformatics—it's one of the things I admire most about you.</p>
+      <div class="message-signature">— Rahul</div>
+    </section>
+
+    <section class="message-card reveal">
+      <p>Thank you for being patient with me while I built this site. Your feedback, ideas, and support made it so much better. Creating this for you has been one of the most rewarding things I've done. I'm really glad I could help bring your portfolio to life.</p>
+      <div class="message-signature">— Rahul</div>
+    </section>
+
+    <section class="message-card reveal">
+      <p>The way you handle difficult situations with grace and optimism is something special. Your resilience, kindness, and the way you celebrate other people's wins—it's all beautiful. I really like being around you, and I hope you know how much you mean to me.</p>
+      <div class="message-signature">— Rahul</div>
+    </section>
+
+    <section class="message-card reveal">
+      <p>Keep pushing toward your dreams. You're going to do amazing things in your field, and I'm excited to watch you grow and succeed. I'm here for you every step of the way. Thank you for letting me be part of your journey.</p>
+      <div class="message-signature">— Rahul</div>
+    </section>
+
+    <section class="message-card reveal">
+      <p>This project was a labor of appreciation. Every animation, every detail, every line of code—I thought of you while building it. I hope every time you see this site, you remember that someone really believes in you and thinks you're extraordinary.</p>
+      <div class="message-signature">— Rahul</div>
+    </section>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+</body>
+</html>

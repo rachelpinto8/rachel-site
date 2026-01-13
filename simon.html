@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simon Says - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="apple-touch-icon" href="assets/IMG_7982.jpeg">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Play Simon Says memory game.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .simon-container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .simon-header {
+      margin-bottom: 2rem;
+    }
+
+    .simon-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .game-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .info-box {
+      text-align: center;
+    }
+
+    .info-label {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .game-area {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .simon-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .simon-button {
+      aspect-ratio: 1;
+      border: none;
+      border-radius: 12px;
+      font-size: 3rem;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      background: var(--bg);
+      border: 3px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .simon-button:hover {
+      transform: scale(0.98);
+    }
+
+    .simon-button.active {
+      transform: scale(0.95);
+      box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+    }
+
+    .simon-button[data-color="red"] { border-color: #ef4444; }
+    .simon-button[data-color="red"].active { background: #ef4444; }
+
+    .simon-button[data-color="blue"] { border-color: #3b82f6; }
+    .simon-button[data-color="blue"].active { background: #3b82f6; }
+
+    .simon-button[data-color="green"] { border-color: #10b981; }
+    .simon-button[data-color="green"].active { background: #10b981; }
+
+    .simon-button[data-color="yellow"] { border-color: #f59e0b; }
+    .simon-button[data-color="yellow"].active { background: #f59e0b; }
+
+    .message {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      min-height: 1.5rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-start, .btn-reset {
+      padding: 0.9rem 2rem;
+      border: none;
+      background: var(--accent);
+      color: white;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
+    }
+
+    .btn-start:hover, .btn-reset:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .btn-start:disabled, .btn-reset:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-back {
+      padding: 0.7rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .instructions {
+      background: var(--bg);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+
+    .instructions h3 {
+      margin-top: 0;
+      color: var(--text-primary);
+    }
+
+    .instructions ol {
+      color: var(--text-secondary);
+      margin: 0;
+      padding-left: 1.5rem;
+    }
+
+    .instructions li {
+      margin: 0.5rem 0;
+    }
+
+    .game-over {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(236, 72, 153, 0.1);
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      display: none;
+    }
+
+    .game-over.show {
+      display: block;
+    }
+
+    .game-over h2 {
+      color: var(--accent);
+      margin-top: 0;
+    }
+
+    .game-over p {
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 768px) {
+      .simon-header h1 {
+        font-size: 2rem;
+      }
+
+      .simon-grid {
+        gap: 1rem;
+      }
+
+      .simon-button {
+        font-size: 2rem;
+      }
+
+      .game-info {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      .btn-start, .btn-reset {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav reveal">
+    <a class="brand-avatar" href="index.html" aria-label="Home">
+      <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+    </a>
+    <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container simon-container">
+    <section class="simon-header reveal">
+      <h1>Simon Says</h1>
+      <p style="color: var(--text-secondary);">Remember and repeat the sequence!</p>
+    </section>
+
+    <div class="game-info reveal">
+      <div class="info-box">
+        <div class="info-label">Level</div>
+        <div class="info-value" id="level">0</div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">Streak</div>
+        <div class="info-value" id="streak">0</div>
+      </div>
+      <div class="info-box">
+        <div class="info-label">Best</div>
+        <div class="info-value" id="best">0</div>
+      </div>
+    </div>
+
+    <div class="instructions reveal">
+      <h3>How to Play</h3>
+      <ol>
+        <li>Click "Start Game" to begin</li>
+        <li>Watch the sequence of colored buttons light up</li>
+        <li>Repeat the sequence by clicking the buttons</li>
+        <li>Each round adds one more color to the sequence</li>
+        <li>Get it wrong and it's game over!</li>
+      </ol>
+    </div>
+
+    <div class="game-area reveal">
+      <div class="message" id="message">Ready to play?</div>
+
+      <div class="simon-grid">
+        <button class="simon-button" data-color="red" aria-label="Red button">🔴</button>
+        <button class="simon-button" data-color="blue" aria-label="Blue button">🔵</button>
+        <button class="simon-button" data-color="green" aria-label="Green button">🟢</button>
+        <button class="simon-button" data-color="yellow" aria-label="Yellow button">🟡</button>
+      </div>
+
+      <div class="game-over" id="gameOver">
+        <h2>Game Over!</h2>
+        <p id="gameOverMessage"></p>
+      </div>
+
+      <div class="controls">
+        <button class="btn-start" id="startBtn">Start Game</button>
+        <button class="btn-reset" id="resetBtn" style="display: none;">Reset</button>
+        <a href="index.html" class="btn-back">Back Home</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    class SimonGame {
+      constructor() {
+        this.sequence = [];
+        this.playerSequence = [];
+        this.level = 0;
+        this.best = localStorage.getItem('simon-best') || 0;
+        this.gameActive = false;
+
+        this.buttons = document.querySelectorAll('.simon-button');
+        this.message = document.getElementById('message');
+        this.levelDisplay = document.getElementById('level');
+        this.streakDisplay = document.getElementById('streak');
+        this.bestDisplay = document.getElementById('best');
+        this.startBtn = document.getElementById('startBtn');
+        this.resetBtn = document.getElementById('resetBtn');
+        this.gameOver = document.getElementById('gameOver');
+
+        this.bestDisplay.textContent = this.best;
+        this.setupListeners();
+      }
+
+      setupListeners() {
+        this.startBtn.addEventListener('click', () => this.start());
+        this.resetBtn.addEventListener('click', () => this.reset());
+
+        this.buttons.forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            if (this.gameActive) {
+              this.playerClick(e.target.closest('.simon-button').dataset.color);
+            }
+          });
+        });
+      }
+
+      start() {
+        this.reset();
+        this.nextRound();
+      }
+
+      reset() {
+        this.sequence = [];
+        this.playerSequence = [];
+        this.level = 0;
+        this.gameActive = false;
+        this.startBtn.style.display = 'block';
+        this.resetBtn.style.display = 'none';
+        this.gameOver.classList.remove('show');
+        this.message.textContent = 'Ready to play?';
+        this.levelDisplay.textContent = '0';
+        this.streakDisplay.textContent = '0';
+      }
+
+      nextRound() {
+        this.level++;
+        this.playerSequence = [];
+        this.levelDisplay.textContent = this.level;
+        this.message.textContent = 'Watch the sequence...';
+
+        const colors = ['red', 'blue', 'green', 'yellow'];
+        const newColor = colors[Math.floor(Math.random() * colors.length)];
+        this.sequence.push(newColor);
+
+        this.startBtn.style.display = 'none';
+        this.resetBtn.style.display = 'inline-block';
+        this.gameActive = false;
+
+        setTimeout(() => this.playSequence(), 500);
+      }
+
+      playSequence() {
+        let delay = 500;
+        this.sequence.forEach((color, idx) => {
+          setTimeout(() => this.flashButton(color), delay);
+          delay += 600;
+        });
+
+        setTimeout(() => {
+          this.gameActive = true;
+          this.message.textContent = 'Your turn!';
+        }, delay);
+      }
+
+      flashButton(color) {
+        const btn = document.querySelector(`[data-color="${color}"]`);
+        btn.classList.add('active');
+        setTimeout(() => btn.classList.remove('active'), 300);
+      }
+
+      playerClick(color) {
+        this.flashButton(color);
+        this.playerSequence.push(color);
+
+        const idx = this.playerSequence.length - 1;
+
+        if (this.playerSequence[idx] !== this.sequence[idx]) {
+          this.endGame();
+          return;
+        }
+
+        if (this.playerSequence.length === this.sequence.length) {
+          this.gameActive = false;
+          this.message.textContent = 'Great! Next round...';
+          setTimeout(() => this.nextRound(), 1500);
+        }
+      }
+
+      endGame() {
+        this.gameActive = false;
+        this.startBtn.style.display = 'block';
+        this.resetBtn.style.display = 'none';
+
+        if (this.level > this.best) {
+          this.best = this.level;
+          localStorage.setItem('simon-best', this.best);
+          this.bestDisplay.textContent = this.best;
+        }
+
+        document.getElementById('gameOverMessage').textContent =
+          `You reached level ${this.level}! Best: ${this.best}`;
+        this.gameOver.classList.add('show');
+        this.message.textContent = 'Game Over!';
+      }
+    }
+
+    let game;
+    document.addEventListener('DOMContentLoaded', () => {
+      game = new SimonGame();
+    });
+  </script>
+</body>
+</html>
