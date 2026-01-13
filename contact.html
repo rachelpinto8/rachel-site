@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - Rachel Pinto</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <nav class="nav reveal">
+    <div class="nav-left">
+      RP
+      <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero reveal">
+      <h1>Contact Me</h1>
+      <p class="hero-body">
+        Feel free to reach out through any of the following channels. I'm always interested in discussing bioinformatics research, data science opportunities, or collaborations.
+      </p>
+      <div class="focus reveal">
+        <div class="focus-item" data-modal="email-modal">
+          <h3>Email</h3>
+          <p>Get in touch via email</p>
+        </div>
+        <div class="focus-item" data-modal="phone-modal">
+          <h3>Phone</h3>
+          <p>Call or text me</p>
+        </div>
+        <div class="focus-item" data-modal="linkedin-modal">
+          <h3>LinkedIn</h3>
+          <p>Connect on LinkedIn</p>
+        </div>
+
+        <!-- Hidden modal content -->
+        <div id="email-modal" style="display: none;">
+          <h2>Email</h2>
+          <p>Email is the best way to reach me for inquiries about research, opportunities, or collaborations.</p>
+          <p><strong>Address:</strong> <a href="mailto:rachelpinto8@outlook.com">rachelpinto8@outlook.com</a></p>
+          <p>I typically respond within 24-48 hours.</p>
+        </div>
+
+        <div id="phone-modal" style="display: none;">
+          <h2>Phone</h2>
+          <p>Feel free to call or text me for time-sensitive matters.</p>
+          <p><strong>Phone:</strong> (224)-409-2598</p>
+        </div>
+
+        <div id="linkedin-modal" style="display: none;">
+          <h2>LinkedIn</h2>
+          <p>Connect with me on LinkedIn to stay updated with my professional journey and research interests.</p>
+          <p><strong>Profile:</strong> <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">linkedin.com/in/rachelpinto8</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+  <div class="modal-overlay"></div>
+  <script src="assets/motion.js"></script>
+</body>
+</html>

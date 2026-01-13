@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Me - Rachel Pinto</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <nav class="nav reveal">
+    <div class="nav-left">
+      RP
+      <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero reveal">
+      <h1>About Me</h1>
+      <p class="hero-body">
+        I'm a Neurobiology & Physiology student at Purdue University with a minor in Bioinformatics and a certificate in Applications in Data Science. I'm passionate about bridging experimental biology with computational methods to solve complex problems in biomedical research.
+      </p>
+    </section>
+
+    <section class="focus reveal">
+      <div class="focus-item" data-modal="education-modal">
+        <h3>Education</h3>
+        <p>B.S. in Neurobiology and Physiology at Purdue University</p>
+      </div>
+
+      <div class="focus-item" data-modal="interests-modal">
+        <h3>Interests</h3>
+        <p>Bioinformatics research and pharmaceutical data science</p>
+      </div>
+
+      <div class="focus-item" data-modal="goals-modal">
+        <h3>Future Goals</h3>
+        <p>M.S. in Bioinformatics beginning Fall 2026</p>
+      </div>
+
+      <!-- Hidden modal content -->
+      <div id="education-modal" style="display: none;">
+        <h2>Education</h2>
+        <p><strong>Purdue University</strong></p>
+        <p>B.S. in Neurobiology and Physiology</p>
+        <p><strong>Expected Graduation:</strong> May 2026</p>
+        <p><strong>Minor:</strong> Bioinformatics</p>
+        <p><strong>Certificate:</strong> Applications in Data Science</p>
+      </div>
+
+      <div id="interests-modal" style="display: none;">
+        <h2>Interests</h2>
+        <p>I'm passionate about connecting experimental biology with computational approaches:</p>
+        <ul>
+          <li>Bioinformatics research and antibody sequence analysis</li>
+          <li>Pharmaceutical data science and AI-driven drug discovery</li>
+          <li>Computational methods in structural biology</li>
+          <li>Translating wet-lab research into data insights</li>
+        </ul>
+      </div>
+
+      <div id="goals-modal" style="display: none;">
+        <h2>Future Goals</h2>
+        <p>I'm pursuing an M.S. in Bioinformatics beginning Fall 2026 to deepen my expertise in computational methods for biological research and biomedical applications.</p>
+        <p>My goal is to become a leader at the intersection of experimental biology and computational science, driving innovation in drug discovery and personalized medicine.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+  <div class="modal-overlay"></div>
+  <script src="assets/motion.js"></script>
+</body>
+</html>

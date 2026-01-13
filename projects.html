@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects - Rachel Pinto</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <nav class="nav reveal">
+    <div class="nav-left">
+      RP
+      <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero reveal">
+      <h1>Projects</h1>
+    </section>
+
+    <section class="focus reveal">
+      <div class="focus-item" data-modal="chickadee-modal">
+        <h3>Song Transposition in Carolina Chickadees</h3>
+        <p>Purdue University | Behavioral Acoustics</p>
+      </div>
+      <div class="focus-item" data-modal="cml-modal">
+        <h3>Effect of Mutations in CML Treatment</h3>
+        <p>Purdue University | Structural Biology</p>
+      </div>
+
+      <!-- Hidden modal content -->
+      <div id="chickadee-modal" style="display: none;">
+        <h2>Song Transposition in Carolina Chickadees</h2>
+        <p><strong>Purdue University</strong></p>
+        <p>Analyzed regional differences in bird vocalization patterns using advanced acoustic analysis.</p>
+        <ul>
+          <li>Utilized Praat software for acoustic signal processing</li>
+          <li>Created visualizations of acoustic data in Excel</li>
+          <li>Identified patterns in chirping behavior across regions</li>
+          <li>Wrote research paper on ecological and behavioral implications of song transposition</li>
+        </ul>
+      </div>
+
+      <div id="cml-modal" style="display: none;">
+        <h2>Effect of Mutations in CML Treatment</h2>
+        <p><strong>Purdue University</strong></p>
+        <p>Examined the impact of mutations in Abl Kinase on Gleevec resistance in Chronic Myeloid Leukemia.</p>
+        <ul>
+          <li>Worked in a team of four on structural biology research</li>
+          <li>Studied H396P and T315I mutations in drug resistance</li>
+          <li>Utilized computational methods using PyMOL for structure visualization</li>
+          <li>Combined experimental and computational approaches to understand mechanisms</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+  <div class="modal-overlay"></div>
+  <script src="assets/motion.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experience - Rachel Pinto</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <nav class="nav reveal">
+    <div class="nav-left">
+      RP
+      <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="hero reveal">
+      <h1>Experience</h1>
+    </section>
+
+    <section class="focus reveal">
+      <div class="focus-item" data-modal="ai-strategy-modal">
+        <h3>AI Strategy Intern</h3>
+        <p>Indiana Biosciences Research Institute | Summer 2025</p>
+      </div>
+      <div class="focus-item" data-modal="bioinformatics-modal">
+        <h3>Bioinformatics Researcher</h3>
+        <p>The Data Mine (Elanco) | Current</p>
+      </div>
+      <div class="focus-item" data-modal="teaching-modal">
+        <h3>Teaching Intern</h3>
+        <p>Purdue University | Ongoing</p>
+      </div>
+      <div class="focus-item" data-modal="data-science-modal">
+        <h3>Data Science Researcher</h3>
+        <p>The Data Mine (AstraZeneca) | 2025</p>
+      </div>
+
+      <!-- Hidden modal content -->
+      <div id="ai-strategy-modal" style="display: none;">
+        <h2>AI Strategy Intern</h2>
+        <p><strong>Indiana Biosciences Research Institute</strong><br/>Indianapolis, IN | May 2025 – Aug 2025</p>
+        <p>Conducted competitive landscape research on AI platforms supporting preclinical drug discovery and identified unmet research needs.</p>
+        <ul>
+          <li>Evaluated opportunities for AI-driven insights across early-stage R&D</li>
+          <li>Delivered strategic roadmap to leadership with partnership opportunities</li>
+          <li>Classified AI solutions by data leverage type and research stage</li>
+          <li>Presented findings directly to the CEO and executive leadership</li>
+        </ul>
+      </div>
+
+      <div id="bioinformatics-modal" style="display: none;">
+        <h2>Bioinformatics Researcher</h2>
+        <p><strong>The Data Mine (Elanco & Purdue University)</strong><br/>Aug 2025 – Present</p>
+        <p>Analyzing feline immunoglobulin V genes using advanced sequence analysis tools.</p>
+        <ul>
+          <li>Identifying conserved and variable regions across multiple breeds</li>
+          <li>Classifying antibody regions (CDRs vs. framework)</li>
+          <li>Assessing variability in amino acid sequences across heavy and light chains</li>
+          <li>Hands-on experience with BLAST and computational methods</li>
+        </ul>
+      </div>
+
+      <div id="teaching-modal" style="display: none;">
+        <h2>Teaching Intern</h2>
+        <p><strong>Purdue University</strong><br/>BIOL232 & BIOL242 Labs | Aug 2024 – Present</p>
+        <p>Supported instruction in Cell Structure & Function and Genetics & Molecular Biology, assisting 70+ students over multiple semesters.</p>
+        <ul>
+          <li>Guiding experiments in microscopy, protein analysis, PCR, gel electrophoresis</li>
+          <li>Conducting DNA extraction and bacterial transformation</li>
+          <li>Reinforcing concepts in cell biology, signaling, inheritance, and gene regulation</li>
+          <li>Evaluating lab reports and providing constructive feedback</li>
+        </ul>
+      </div>
+
+      <div id="data-science-modal" style="display: none;">
+        <h2>Data Science Researcher</h2>
+        <p><strong>The Data Mine (AstraZeneca & Purdue University)</strong><br/>Jan 2025 – May 2025</p>
+        <p>Collaborated with AstraZeneca employees to design and implement digital tools for workflow optimization.</p>
+        <ul>
+          <li>Designed digital tools using Tulip and Power BI</li>
+          <li>Analyzed and visualized data to support app functionality</li>
+          <li>Improved decision-making processes in pharmaceutical setting</li>
+          <li>Applied Agile and Lean frameworks to develop and deploy applications</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+  <div class="modal-overlay"></div>
+  <script src="assets/motion.js"></script>
+</body>
+</html>     

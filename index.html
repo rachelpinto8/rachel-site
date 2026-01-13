@@ -1,315 +1,110 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Rachel Pinto | Portfolio</title>
-    <link rel="stylesheet" href="assets/styles.css">
-    <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="/assets/IMG_7982.jpeg">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rachel Pinto</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
 </head>
 <body>
-    <div class="spotlight-overlay" id="spotlight"></div>
-    <div class="container">
-        <header class="animate-init">
-            <div class="header-top-row">
-                <h1>Rachel Pinto</h1>
-                <button class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle Theme">
-                    <svg id="sun-icon" class="theme-icon" viewBox="0 0 24 24" style="display:none;">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <svg id="moon-icon" class="theme-icon" viewBox="0 0 24 24">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
-            </div>
-            <div class="subtitle">Neurobiology • Bioinformatics • Data Science</div>
-            <div class="contact-bar">
-                <button class="pill profile-btn" onclick="openModal('profileContent')">View Profile</button>
-                <a href="mailto:rachelpinto8@outlook.com" class="pill">Email</a>
-                <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank" class="pill">LinkedIn</a>
-            </div>
-        </header>
-        <div id="profileContent" class="details-content">
-            <div class="profile-layout">
-                <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto" class="profile-img">
-                <div>
-                    <h2>About Me</h2>
-                    <h3 style="margin-bottom: 0.5rem;">Connecting Biology & Code</h3>
-                    <p>
-                        I am a Neurobiology and Physiology student at Purdue University, minoring in Bioinformatics. 
-                        My passion lies in bridging the gap between wet lab experimentation and dry lab computational analysis.
-                    </p>
-                    <br>
-                    <p>
-                        With experience in AI strategy for drug discovery, antibody sequence analysis, and pharmaceutical data science, 
-                        I am dedicated to solving complex biological problems using modern data-driven approaches.
-                    </p>
-                </div>
-            </div>
-        </div>
 
-        <div class="section-title animate-init">Education</div>
-        <div class="grid">
-            <div class="card animate-init" onclick="openModal('edu1')">
-                <div>
-                    <div class="card-role">B.S. Neurobiology & Physiology</div>
-                    <div class="card-company">Purdue University</div>
-                </div>
-                <div class="card-footer">
-                    <span class="card-date">Exp. May 2026</span>
-                    <span class="card-icon">→</span>
-                </div>
-                <div id="edu1" class="details-content">
-                    <h2>Purdue University</h2>
-                    <h3>B.S. Neurobiology & Physiology</h3>
-                    <p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong>Minor:</strong> Bioinformatics <br> <strong>Certificate:</strong> Applications in Data Science</p>
-                    <ul>
-                        <li>Intend to pursue M.S. in Bioinformatics beginning Fall 2026.</li>
-                        <li>West Lafayette, IN</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="section-title animate-init">Experience</div>
-        <div class="grid">
-            <div class="card animate-init" onclick="openModal('exp1')">
-                <div>
-                    <div class="card-role">AI Strategy Intern</div>
-                    <div class="card-company">Indiana Biosciences Research Institute</div>
-                </div>
-                <div class="card-footer">
-                    <span class="card-date">May 2025 – Aug 2025</span>
-                    <span class="card-icon">→</span>
-                </div>
-                <div id="exp1" class="details-content">
-                    <h2>AI Strategy Intern</h2>
-                    <h3>Indiana Biosciences Research Institute</h3>
-                    <ul>
-                        <li>Conducted competitive landscape research on AI platforms supporting preclinical drug discovery.</li>
-                        <li>Identified unmet research needs and evaluated opportunities for AI-driven insights across early-stage R&D.</li>
-                        <li>Delivered a strategic roadmap to leadership outlining external partnership opportunities and AI solution classifications.</li>
-                        <li>Presented findings directly to the CEO and executive leadership as part of a final strategy proposal.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card animate-init" onclick="openModal('exp2')">
-                <div>
-                    <div class="card-role">Bioinformatics Researcher</div>
-                    <div class="card-company">The Data Mine (Elanco)</div>
-                </div>
-                <div class="card-footer">
-                    <span class="card-date">Aug 2025 – Present</span>
-                    <span class="card-icon">→</span>
-                </div>
-                <div id="exp2" class="details-content">
-                    <h2>Bioinformatics Researcher</h2>
-                    <h3>The Data Mine (Elanco & Purdue)</h3>
-                    <ul>
-                        <li>Analyzing feline immunoglobulin V genes using sequence alignment tools to identify conserved and variable regions across multiple breeds.</li>
-                        <li>Classifying antibody regions (CDRs vs. framework) and assessing variability in amino acid sequences across heavy and light chains.</li>
-                        <li>Gaining hands-on experience with BLAST and computational methods for antibody sequence analysis.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card animate-init" onclick="openModal('exp3')">
-                <div>
-                    <div class="card-role">Teaching Intern</div>
-                    <div class="card-company">Purdue (BIOL232 & 242)</div>
-                </div>
-                <div class="card-footer">
-                    <span class="card-date">Aug 2024 – Present</span>
-                    <span class="card-icon">→</span>
-                </div>
-                <div id="exp3" class="details-content">
-                    <h2>Teaching Intern</h2>
-                    <h3>Purdue University Labs</h3>
-                    <ul>
-                        <li>Supported instruction in BIOL232: Cell Structure & Function and BIOL242: Genetics & Molecular Biology (70+ students).</li>
-                        <li>Guiding experiments in microscopy, protein analysis, PCR, gel electrophoresis, DNA extraction, and bacterial transformation.</li>
-                        <li>Reinforced concepts in cell biology, signaling, inheritance, and gene regulation.</li>
-                        <li>Evaluated lab reports and provided feedback to strengthen comprehension.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card animate-init" onclick="openModal('exp4')">
-                <div>
-                    <div class="card-role">Data Science Researcher</div>
-                    <div class="card-company">The Data Mine (AstraZeneca)</div>
-                </div>
-                <div class="card-footer">
-                    <span class="card-date">Jan 2025 – May 2025</span>
-                    <span class="card-icon">→</span>
-                </div>
-                <div id="exp4" class="details-content">
-                    <h2>Data Science Researcher</h2>
-                    <h3>The Data Mine (AstraZeneca & Purdue)</h3>
-                    <ul>
-                        <li>Collaborated with AstraZeneca employees to design and implement digital tools using Tulip and Power BI.</li>
-                        <li>Analyzed and visualized data to support app functionality and improve decision-making processes.</li>
-                        <li>Applied Agile and Lean frameworks to develop and deploy applications in a pharmaceutical setting.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-title animate-init">Projects</div>
-        <div class="grid">
-            
-            <div class="card animate-init" onclick="openModal('proj1')">
-                <div>
-                    <div class="card-role">Song Transposition</div>
-                    <div class="card-company">Carolina Chickadees Research</div>
-                </div>
-                <div class="card-footer">
-                    <span class="card-date">Undergraduate Research</span>
-                    <span class="card-icon">→</span>
-                </div>
-                <div id="proj1" class="details-content">
-                    <h2>Song Transposition</h2>
-                    <h3>Carolina Chickadees Research</h3>
-                    <ul>
-                        <li>Analyzed regional differences in bird vocalization patterns using Praat software and Excel.</li>
-                        <li>Created visualizations of acoustic data to identify patterns in chirping behavior.</li>
-                        <li>Wrote research paper focusing on the ecological and behavioral implications of song transposition.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card animate-init" onclick="openModal('proj2')">
-                <div>
-                    <div class="card-role">CML Mutation Analysis</div>
-                    <div class="card-company">Chronic Myeloid Leukemia</div>
-                </div>
-                <div class="card-footer">
-                    <span class="card-date">Biochemistry Lab Project</span>
-                    <span class="card-icon">→</span>
-                </div>
-                <div id="proj2" class="details-content">
-                    <h2>Effect of Mutations in CML</h2>
-                    <h3>Purdue University</h3>
-                    <ul>
-                        <li>Worked in a team of four to examine the impact of H396P and T315I mutations in Abl Kinase for Gleevec resistance.</li>
-                        <li>Utilized experimental and computational methods (PyMOL) to understand the mechanisms behind drug resistance.</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-title animate-init">Skills</div>
-        <div class="skills-container animate-init">
-            <div style="margin-bottom: 1.5rem;">
-                <h4 style="color:var(--accent); margin-bottom:0.5rem; text-transform:uppercase; font-size:0.8rem; letter-spacing:1px;">Laboratory (Wet Lab)</h4>
-                <div>
-                    <span class="skill-tag">Uv-Vis</span>
-                    <span class="skill-tag">Flow Cytometry</span>
-                    <span class="skill-tag">BSA-Quantification</span>
-                    <span class="skill-tag">Assay Development</span>
-                    <span class="skill-tag">Culture Media Prep</span>
-                    <span class="skill-tag">Gram Staining</span>
-                    <span class="skill-tag">Serial Dilutions</span>
-                    <span class="skill-tag">Gel Electrophoresis</span>
-                    <span class="skill-tag">PCR</span>
-                    <span class="skill-tag">Microscopy</span>
-                    <span class="skill-tag">DNA Extraction</span>
-                    <span class="skill-tag">Ultrafiltration</span>
-                </div>
-            </div>
-            <div>
-                <h4 style="color:var(--accent); margin-bottom:0.5rem; text-transform:uppercase; font-size:0.8rem; letter-spacing:1px;">Software (Dry Lab)</h4>
-                <div>
-                    <span class="skill-tag">Python</span>
-                    <span class="skill-tag">R</span>
-                    <span class="skill-tag">SQL</span>
-                    <span class="skill-tag">Bash</span>
-                    <span class="skill-tag">PyMOL</span>
-                    <span class="skill-tag">Tulip</span>
-                    <span class="skill-tag">Power BI</span>
-                    <span class="skill-tag">Praat Software</span>
-                    <span class="skill-tag">ImageJ</span>
-                    <span class="skill-tag">Data Analysis</span>
-                </div>
-            </div>
-        </div>
-
+  <!-- NAV -->
+  <nav class="nav reveal">
+    <div class="nav-left">
+      RP
+      <button class="theme-toggle" aria-label="Toggle dark mode"></button>
     </div>
-
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-        <div class="modal-card">
-            <button class="close-btn" onclick="closeModal(event)">×</button>
-            <div id="modalBody">
-                </div>
-        </div>
+    <div class="nav-right">
+      <a href="/">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
     </div>
+  </nav>
 
-    <script>
-        const htmlElement = document.documentElement;
-        const sunIcon = document.getElementById('sun-icon');
-        const moonIcon = document.getElementById('moon-icon');
+  <!-- HERO -->
+  <main class="container">
 
-        const savedTheme = localStorage.getItem('theme') || 'dark';
-        htmlElement.setAttribute('data-theme', savedTheme);
-        updateIcons(savedTheme);
+    <section class="hero reveal">
+      <span class="hero-eyebrow">Neurobiology • Bioinformatics • Data Science</span>
 
-        function toggleTheme() {
-            const currentTheme = htmlElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            htmlElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateIcons(newTheme);
-        }
+      <h1>
+        Bridging experimental biology<br />
+        with computational insight.
+      </h1>
 
-        function updateIcons(theme) {
-            if (theme === 'dark') {
-                sunIcon.style.display = 'none';
-                moonIcon.style.display = 'block';
-            } else {
-                sunIcon.style.display = 'block';
-                moonIcon.style.display = 'none';
-            }
-        }
+      <p class="hero-body">
+        I’m Rachel Pinto, a Neurobiology & Physiology student at Purdue University
+        with experience in bioinformatics research, AI strategy, and pharmaceutical
+        data science.
+      </p>
 
-        // --- 2. SPOTLIGHT EFFECT ---
-        document.addEventListener('mousemove', (e) => {
-            document.body.style.setProperty('--mouse-x', `${e.clientX}px`);
-            document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
-        });
+      <div class="hero-actions">
+        <a href="projects.html" class="btn-primary">View Projects</a>
+        <a href="about.html" class="btn-secondary">About Me</a>
+      </div>
+    </section>
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const elements = document.querySelectorAll('.animate-init');
-            elements.forEach((el, index) => {
-                el.style.animation = `fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) ${index * 0.1}s forwards`;
-            });
-        });
+    <!-- FOCUS AREAS -->
+    <section class="focus reveal">
+      <div class="focus-item">
+        <h3>Neurobiology</h3>
+        <p>Wet-lab experimentation, cellular signaling, and molecular mechanisms.</p>
+      </div>
 
-        const modalOverlay = document.getElementById('modalOverlay');
-        const modalBody = document.getElementById('modalBody');
+      <div class="focus-item">
+        <h3>Bioinformatics</h3>
+        <p>Sequence alignment, antibody analysis, and computational biology.</p>
+      </div>
 
-        function openModal(contentId) {
-            const content = document.getElementById(contentId).innerHTML;
-            modalBody.innerHTML = content;
-            modalOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+      <div class="focus-item">
+        <h3>Data Science</h3>
+        <p>Python, R, SQL, and data-driven decision making in pharma.</p>
+      </div>
+    </section>
 
-        function closeModal(e) {
-            if (e.target === modalOverlay || e.target.classList.contains('close-btn')) {
-                modalOverlay.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        }
-    </script>
+    <!-- FEATURED EXPERIENCE -->
+    <section class="featured reveal">
+      <h2>Selected Experience</h2>
+
+      <div class="featured-list">
+        <a href="experience.html" class="featured-item">
+          <span class="featured-role">AI Strategy Intern</span>
+          <span class="featured-org">Indiana Biosciences Research Institute</span>
+          <span class="featured-meta">Summer 2025</span>
+        </a>
+
+        <a href="experience.html" class="featured-item">
+          <span class="featured-role">Bioinformatics Researcher</span>
+          <span class="featured-org">The Data Mine (Elanco)</span>
+          <span class="featured-meta">2025 – Present</span>
+        </a>
+
+        <a href="experience.html" class="featured-item">
+          <span class="featured-role">Teaching Intern</span>
+          <span class="featured-org">Purdue University</span>
+          <span class="featured-meta">2024 – Present</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+  <script src="assets/motion.js"></script>
 </body>
 </html>
