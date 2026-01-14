@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pong - Rachel Pinto</title>
 
-  <!-- Favicon & PWA Icons -->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
@@ -18,13 +17,11 @@
   <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
   <meta name="description" content="Play Pong game.">
 
-  <!-- Theme initialization to prevent flash -->
   <script>
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
   </script>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -174,7 +171,6 @@
   </style>
 </head>
 <body>
-  <!-- NAV -->
   <nav class="nav reveal">
         <div class="nav-left">
             <a class="brand-avatar" href="index.html" aria-label="Home">
@@ -332,23 +328,19 @@
           return;
         }
         
-        // Move player
         if (this.player.direction === -1 && this.player.y > 0) {
           this.player.y -= this.paddleSpeed;
         } else if (this.player.direction === 1 && this.player.y + this.paddleHeight < this.height) {
           this.player.y += this.paddleSpeed;
         }
         
-        // Move ball
         this.ball.x += this.ball.dx;
         this.ball.y += this.ball.dy;
         
-        // Ball collision with top/bottom
         if (this.ball.y - this.ballSize < 0 || this.ball.y + this.ballSize > this.height) {
           this.ball.dy = -this.ball.dy;
         }
         
-        // Ball collision with paddles
         if (
           this.ball.x - this.ballSize < this.player.x + this.paddleWidth &&
           this.ball.y > this.player.y &&
@@ -367,7 +359,6 @@
           this.ball.x = this.computer.x - this.ballSize;
         }
         
-        // Computer AI
         const computerCenter = this.computer.y + this.paddleHeight / 2;
         if (computerCenter < this.ball.y - 35) {
           this.computer.y += this.paddleSpeed * 0.7;
@@ -375,7 +366,6 @@
           this.computer.y -= this.paddleSpeed * 0.7;
         }
         
-        // Scoring
         if (this.ball.x < 0) {
           this.computer.score++;
           this.ball = { x: 300, y: 200, dx: 5, dy: 5 };
@@ -384,7 +374,6 @@
           this.ball = { x: 300, y: 200, dx: -5, dy: 5 };
         }
         
-        // Win condition
         if (this.player.score >= 10 || this.computer.score >= 10) {
           this.gameActive = false;
           if (this.player.score > this.computer.score && this.player.score > this.bestScore) {
@@ -402,16 +391,13 @@
       },
       
       draw() {
-        // Get current theme colors
         const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
         const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
         const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
         
-        // Clear
         ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, this.width, this.height);
         
-        // Center line
         ctx.strokeStyle = borderColor;
         ctx.setLineDash([5, 5]);
         ctx.beginPath();
@@ -420,18 +406,15 @@
         ctx.stroke();
         ctx.setLineDash([]);
         
-        // Ball
         ctx.fillStyle = accentColor;
         ctx.beginPath();
         ctx.arc(this.ball.x, this.ball.y, this.ballSize, 0, Math.PI * 2);
         ctx.fill();
         
-        // Paddles
         ctx.fillStyle = accentColor;
         ctx.fillRect(this.player.x, this.player.y, this.paddleWidth, this.paddleHeight);
         ctx.fillRect(this.computer.x, this.computer.y, this.paddleWidth, this.paddleHeight);
         
-        // Scores
         document.getElementById('playerScore').textContent = this.player.score;
         document.getElementById('computerScore').textContent = this.computer.score;
       }

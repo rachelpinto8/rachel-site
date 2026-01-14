@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Minesweeper - Rachel Pinto</title>
 
-  <!-- Favicon & PWA Icons -->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
@@ -18,13 +17,11 @@
   <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
   <meta name="description" content="Minesweeper game.">
 
-  <!-- Theme initialization to prevent flash -->
   <script>
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
   </script>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -297,7 +294,6 @@
   </style>
 </head>
 <body>
-  <!-- NAV -->
   <nav class="nav reveal">
     <div class="nav-left">
         <a class="brand-avatar" href="index.html" aria-label="Home">
@@ -451,7 +447,6 @@
           const row = Math.floor(Math.random() * this.rows);
           const col = Math.floor(Math.random() * this.cols);
 
-          // Don't place mine on first click or adjacent cells
           if (this.board[row][col] === -1) continue;
           if (Math.abs(row - excludeRow) <= 1 && Math.abs(col - excludeCol) <= 1) continue;
 
@@ -539,7 +534,6 @@
 
         this.updateCell(row, col);
 
-        // If empty cell, reveal adjacent cells
         if (this.board[row][col] === 0) {
           for (let dr = -1; dr <= 1; dr++) {
             for (let dc = -1; dc <= 1; dc++) {
@@ -598,7 +592,6 @@
         this.gameWon = won;
         if (this.timerInterval) clearInterval(this.timerInterval);
 
-        // Reveal all mines
         for (let row = 0; row < this.rows; row++) {
           for (let col = 0; col < this.cols; col++) {
             if (this.board[row][col] === -1) {

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Breakout - Rachel Pinto</title>
 
-  <!-- Favicon & PWA Icons -->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
@@ -18,13 +17,11 @@
   <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
   <meta name="description" content="Play Breakout game.">
 
-  <!-- Theme initialization to prevent flash -->
   <script>
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
   </script>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -176,7 +173,6 @@
   </style>
 </head>
 <body>
-  <!-- NAV -->
    <nav class="nav reveal">
     <div class="nav-left">
         <a class="brand-avatar" href="index.html" aria-label="Home">
@@ -317,8 +313,7 @@
         
         this.ball.x += this.ball.dx;
         this.ball.y += this.ball.dy;
-        
-        // Wall collision
+
         if (this.ball.x - this.ballRadius < 0 || this.ball.x + this.ballRadius > canvas.width) {
           this.ball.dx = -this.ball.dx;
         }
@@ -326,7 +321,6 @@
           this.ball.dy = -this.ball.dy;
         }
         
-        // Paddle collision
         if (
           this.ball.y + this.ballRadius > this.paddle.y &&
           this.ball.x > this.paddle.x &&
@@ -336,7 +330,6 @@
           this.ball.y = this.paddle.y - this.ballRadius;
         }
         
-        // Brick collision
         for (let brick of this.bricks) {
           if (brick.status === 1) {
             if (
@@ -353,7 +346,6 @@
           }
         }
         
-        // Game over
         if (this.ball.y > canvas.height) {
           this.gameActive = false;
           if (this.score > this.best) {
@@ -364,8 +356,7 @@
           document.getElementById('startBtn').disabled = false;
           document.getElementById('startBtn').textContent = 'Play Again';
         }
-        
-        // Win condition
+
         if (this.bricks.every(b => b.status === 0)) {
           this.gameActive = false;
           document.getElementById('startBtn').disabled = false;
@@ -377,25 +368,20 @@
       },
       
       draw() {
-        // Get current theme colors
         const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
         const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
         const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
         
-        // Clear
         ctx.fillStyle = bgColor;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        // Ball
         ctx.fillStyle = accentColor;
         ctx.beginPath();
         ctx.arc(this.ball.x, this.ball.y, this.ballRadius, 0, Math.PI * 2);
         ctx.fill();
         
-        // Paddle
         ctx.fillRect(this.paddle.x, this.paddle.y, this.paddleWidth, this.paddleHeight);
         
-        // Bricks
         for (let brick of this.bricks) {
           if (brick.status === 1) {
             ctx.fillStyle = accentColor;

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Connect Four - Rachel Pinto</title>
 
-  <!-- Favicon & PWA Icons -->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
@@ -17,14 +16,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
   <meta name="description" content="Connect Four game.">
-
-  <!-- Theme initialization to prevent flash -->
   <script>
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
   </script>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -250,8 +246,7 @@
   </style>
 </head>
 <body>
-  <!-- NAV -->
-    <nav class="nav reveal">
+  <nav class="nav reveal">
     <div class="nav-left">
         <a class="brand-avatar" href="index.html" aria-label="Home">
         <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
@@ -375,7 +370,6 @@
       dropPiece(col) {
         if (this.gameOver) return;
 
-        // Find the lowest empty row in this column
         let row = -1;
         for (let r = this.rows - 1; r >= 0; r--) {
           if (this.board[r][col] === 0) {
@@ -384,18 +378,16 @@
           }
         }
 
-        if (row === -1) return; // Column full
+        if (row === -1) return;
 
         this.board[row][col] = this.currentPlayer;
         this.render();
-        
-        // Add animation only to the newly dropped piece
+
         setTimeout(() => {
           const cellIndex = row * this.cols + col;
           const cellElement = this.boardElement.children[cellIndex];
           if (cellElement) {
             cellElement.classList.add('dropping');
-            // Remove the class after animation completes
             setTimeout(() => {
               cellElement.classList.remove('dropping');
             }, 600);
@@ -419,7 +411,6 @@
           return;
         }
 
-        // Check for draw
         if (this.board.every(row => row.every(cell => cell !== 0))) {
           this.gameOver = true;
           this.statusText.innerHTML = "It's a Draw!";
@@ -433,14 +424,11 @@
       checkWin(row, col) {
         const player = this.board[row][col];
         
-        // Check horizontal
         if (this.checkDirection(row, col, 0, 1, player) || 
             this.checkDirection(row, col, 0, -1, player)) return true;
-        
-        // Check vertical
+
         if (this.checkDirection(row, col, 1, 0, player)) return true;
-        
-        // Check diagonal
+
         if (this.checkDirection(row, col, 1, 1, player) || 
             this.checkDirection(row, col, 1, -1, player) ||
             this.checkDirection(row, col, -1, 1, player) ||

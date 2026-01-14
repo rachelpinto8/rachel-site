@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Unit Converter - Rachel Pinto</title>
 
-  <!-- Favicon & PWA Icons -->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
@@ -18,13 +17,11 @@
   <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
   <meta name="description" content="Unit converter tool.">
 
-  <!-- Theme initialization to prevent flash -->
   <script>
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
   </script>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -224,7 +221,6 @@
   </style>
 </head>
 <body>
-  <!-- NAV -->
   <nav class="nav reveal">
     <div class="nav-left">
         <a class="brand-avatar" href="index.html" aria-label="Home">
@@ -430,13 +426,11 @@
       }
 
       convertTemperature(value, from, to) {
-        // Convert to Celsius first
         let celsius;
         if (from === 'celsius') celsius = value;
         else if (from === 'fahrenheit') celsius = (value - 32) * 5/9;
         else if (from === 'kelvin') celsius = value - 273.15;
 
-        // Convert from Celsius to target
         if (to === 'celsius') return celsius;
         else if (to === 'fahrenheit') return (celsius * 9/5) + 32;
         else if (to === 'kelvin') return celsius + 273.15;

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flappy Bird - Rachel Pinto</title>
 
-  <!-- Favicon & PWA Icons -->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
@@ -18,13 +17,11 @@
   <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
   <meta name="description" content="Flappy Bird game.">
 
-  <!-- Theme initialization to prevent flash -->
   <script>
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
   </script>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -142,8 +139,7 @@
   </style>
 </head>
 <body>
-  <!-- NAV -->
-    <nav class="nav reveal">
+  <nav class="nav reveal">
     <div class="nav-left">
         <a class="brand-avatar" href="index.html" aria-label="Home">
         <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
@@ -216,11 +212,10 @@
         this.ctx = this.canvas.getContext('2d');
         this.resizeCanvas();
 
-        this.gameState = 'menu'; // menu, playing, gameOver
+        this.gameState = 'menu';
         this.score = 0;
         this.best = localStorage.getItem('flappyBest') || 0;
 
-        // Bird
         this.bird = {
           x: this.canvas.width * 0.2,
           y: this.canvas.height * 0.5,
@@ -232,7 +227,6 @@
           maxFall: 12
         };
 
-        // Pipes
         this.pipes = [];
         this.pipeGap = 160;
         this.pipeWidth = 60;
@@ -273,11 +267,9 @@
       update() {
         if (this.gameState !== 'playing') return;
 
-        // Update bird
         this.bird.velocity = Math.min(this.bird.velocity + this.bird.gravity, this.bird.maxFall);
         this.bird.y += this.bird.velocity;
 
-        // Generate pipes
         if (this.pipes.length === 0 || this.pipes[this.pipes.length - 1].x < this.canvas.width - this.pipeSpacing) {
           const gapStart = Math.random() * (this.canvas.height - this.pipeGap - 100) + 50;
           this.pipes.push({
@@ -288,25 +280,21 @@
           });
         }
 
-        // Update pipes
         this.pipes = this.pipes.filter(pipe => pipe.x + this.pipeWidth > 0);
         this.pipes.forEach(pipe => {
           pipe.x -= 3.5;
 
-          // Check scoring
           if (!pipe.scored && pipe.x + this.pipeWidth < this.bird.x && pipe.x + this.pipeWidth > this.bird.x - 10) {
             this.score++;
             pipe.scored = true;
             document.getElementById('scoreDisplay').textContent = this.score;
           }
 
-          // Check collision
           if (this.checkCollision(pipe)) {
             this.gameOver();
           }
         });
 
-        // Check bounds
         if (this.bird.y < 0 || this.bird.y + this.bird.height > this.canvas.height) {
           this.gameOver();
         }
@@ -321,7 +309,6 @@
       }
 
       draw() {
-        // Cache colors for dynamic theming
         const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
         const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
         const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
@@ -329,33 +316,26 @@
         this.ctx.fillStyle = bgColor;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Draw pipes (draw first so bird appears on top)
         this.pipes.forEach(pipe => {
-          // Top pipe
-          this.ctx.fillStyle = '#10b981'; // Green color for pipes
+          this.ctx.fillStyle = '#10b981';
           this.ctx.fillRect(pipe.x, 0, this.pipeWidth, pipe.gapStart);
-          
-          // Add pipe border
+
           this.ctx.strokeStyle = '#059669';
           this.ctx.lineWidth = 2;
           this.ctx.strokeRect(pipe.x, 0, this.pipeWidth, pipe.gapStart);
-          
-          // Bottom pipe
+
           this.ctx.fillStyle = '#10b981';
           this.ctx.fillRect(pipe.x, pipe.gapEnd, this.pipeWidth, this.canvas.height - pipe.gapEnd);
-          
-          // Add pipe border
+
           this.ctx.strokeStyle = '#059669';
           this.ctx.strokeRect(pipe.x, pipe.gapEnd, this.pipeWidth, this.canvas.height - pipe.gapEnd);
         });
 
-        // Draw bird (on top of pipes)
         this.ctx.fillStyle = accentColor;
         this.ctx.beginPath();
         this.ctx.arc(this.bird.x + this.bird.width / 2, this.bird.y + this.bird.height / 2, this.bird.width / 2, 0, Math.PI * 2);
         this.ctx.fill();
 
-        // Draw UI
         if (this.gameState === 'menu') {
           this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
           this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);

@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Snake - Rachel Pinto</title>
 
-  <!-- Favicon & PWA Icons -->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
@@ -18,13 +17,11 @@
   <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
   <meta name="description" content="Play Snake game.">
 
-  <!-- Theme initialization to prevent flash -->
   <script>
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
   </script>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -306,7 +303,6 @@
   </style>
 </head>
 <body>
-  <!-- NAV -->
   <nav class="nav reveal">
     <div class="nav-left">
         <a class="brand-avatar" href="index.html" aria-label="Home">
@@ -361,7 +357,6 @@
 
     <div class="game-board-wrapper reveal">
       <div class="game-board" id="gameBoard" role="grid" aria-label="Snake game board">
-        <!-- Cells will be generated here -->
       </div>
     </div>
 
@@ -449,7 +444,6 @@
       render() {
         this.generateBoard();
 
-        // Draw snake
         this.snake.forEach((segment, idx) => {
           const cellId = segment.y * this.gridSize + segment.x;
           const cell = document.getElementById(`cell-${cellId}`);
@@ -462,7 +456,6 @@
           }
         });
 
-        // Draw food
         const foodCellId = this.food.y * this.gridSize + this.food.x;
         const foodCell = document.getElementById(`cell-${foodCellId}`);
         if (foodCell) {
@@ -482,13 +475,11 @@
         head.x += this.direction.x;
         head.y += this.direction.y;
 
-        // Check wall collision
         if (head.x < 0 || head.x >= this.gridSize || head.y < 0 || head.y >= this.gridSize) {
           this.endGame();
           return;
         }
 
-        // Check self collision
         if (this.snake.some(segment => segment.x === head.x && segment.y === head.y)) {
           this.endGame();
           return;
@@ -496,7 +487,6 @@
 
         this.snake.unshift(head);
 
-        // Check food collision
         if (head.x === this.food.x && head.y === this.food.y) {
           this.score += 10;
           this.food = this.generateFood();
@@ -565,7 +555,6 @@
           }
         });
 
-        // Mobile controls
         document.getElementById('upBtn').addEventListener('click', () => {
           if (this.gameActive && this.direction.y === 0) this.nextDirection = { x: 0, y: -1 };
         });

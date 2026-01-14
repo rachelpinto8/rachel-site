@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Maze Runner - Rachel Pinto</title>
 
-  <!-- Favicon & PWA Icons -->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
@@ -18,13 +17,11 @@
   <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
   <meta name="description" content="Maze Runner game.">
 
-  <!-- Theme initialization to prevent flash -->
   <script>
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
   </script>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -142,7 +139,6 @@
   </style>
 </head>
 <body>
-  <!-- NAV -->
     <nav class="nav reveal">
     <div class="nav-left">
         <a class="brand-avatar" href="index.html" aria-label="Home">
@@ -259,14 +255,12 @@
       }
 
       generateMaze() {
-        // Initialize grid with all walls
         this.maze = Array(this.rows).fill(0).map(() => 
           Array(this.cols).fill(0).map(() => ({
             top: true, right: true, bottom: true, left: true, visited: false
           }))
         );
 
-        // Recursive backtracking maze generation
         const stack = [];
         let current = { x: 0, y: 0 };
         this.maze[current.y][current.x].visited = true;
@@ -353,7 +347,6 @@
           document.getElementById('movesDisplay').textContent = this.moves;
         }
 
-        // Check win
         if (this.player.x === this.exit.x && this.player.y === this.exit.y) {
           this.levelComplete();
         }
@@ -369,8 +362,7 @@
 
         this.level++;
         document.getElementById('levelDisplay').textContent = this.level;
-        
-        // Increase maze difficulty
+
         this.cols = Math.min(15 + Math.floor(this.level / 3), 25);
         this.rows = Math.min(15 + Math.floor(this.level / 3), 25);
         this.cellSize = Math.min(450 / this.cols, 450 / this.rows);
@@ -391,7 +383,6 @@
       }
 
       draw() {
-        // Cache colors for dynamic theming
         const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
         const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
         const borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border').trim();
@@ -399,7 +390,6 @@
         this.ctx.fillStyle = bgColor;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Draw maze
         this.ctx.strokeStyle = accentColor;
         this.ctx.lineWidth = 2;
 
@@ -430,7 +420,6 @@
           }
         }
 
-        // Draw exit
         this.ctx.fillStyle = accentColor;
         this.ctx.fillRect(
           this.exit.x * this.cellSize + 2,
@@ -439,11 +428,9 @@
           this.cellSize - 4
         );
 
-        // Smooth player animation
         this.animatedPlayer.x += (this.player.x - this.animatedPlayer.x) * this.animationSpeed;
         this.animatedPlayer.y += (this.player.y - this.animatedPlayer.y) * this.animationSpeed;
 
-        // Draw player
         this.ctx.fillStyle = '#10b981';
         this.ctx.beginPath();
         this.ctx.arc(

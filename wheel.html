@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Decision Wheel - Rachel Pinto</title>
 
-  <!-- Favicon & PWA Icons -->
   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
@@ -18,13 +17,11 @@
   <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
   <meta name="description" content="Decision Wheel - Random choice maker.">
 
-  <!-- Theme initialization to prevent flash -->
   <script>
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
   </script>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -257,8 +254,7 @@
   </style>
 </head>
 <body>
-  <!-- NAV -->
-    <nav class="nav reveal">
+  <nav class="nav reveal">
         <div class="nav-left">
             <a class="brand-avatar" href="index.html" aria-label="Home">
             <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
@@ -397,12 +393,9 @@
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
         const radius = Math.min(centerX, centerY) - 10;
-
-        // Clear canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         if (this.items.length === 0) {
-          // Draw empty wheel
           ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim();
           ctx.beginPath();
           ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
@@ -421,12 +414,10 @@
 
         const sliceAngle = (Math.PI * 2) / this.items.length;
 
-        // Draw slices
         this.items.forEach((item, index) => {
           const startAngle = index * sliceAngle + this.currentRotation;
           const endAngle = startAngle + sliceAngle;
 
-          // Draw slice
           ctx.fillStyle = this.colors[index % this.colors.length];
           ctx.beginPath();
           ctx.moveTo(centerX, centerY);
@@ -434,12 +425,10 @@
           ctx.closePath();
           ctx.fill();
 
-          // Draw border
           ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
           ctx.lineWidth = 3;
           ctx.stroke();
 
-          // Draw text
           ctx.save();
           ctx.translate(centerX, centerY);
           ctx.rotate(startAngle + sliceAngle / 2);
@@ -450,7 +439,6 @@
           ctx.restore();
         });
 
-        // Draw center circle
         ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--surface').trim();
         ctx.beginPath();
         ctx.arc(centerX, centerY, 20, 0, Math.PI * 2);
@@ -467,7 +455,6 @@
         this.spinBtn.disabled = true;
         this.resultSection.classList.remove('show');
 
-        // Random spin duration and final rotation
         const duration = 3000 + Math.random() * 2000;
         const totalRotation = Math.PI * 2 * (5 + Math.random() * 5); // 5-10 full rotations
         const startTime = Date.now();
@@ -477,7 +464,6 @@
           const elapsed = Date.now() - startTime;
           const progress = Math.min(elapsed / duration, 1);
           
-          // Easing function for smooth deceleration
           const eased = 1 - Math.pow(1 - progress, 3);
           
           this.currentRotation = startRotation + totalRotation * eased;
@@ -497,10 +483,9 @@
         this.isSpinning = false;
         this.spinBtn.disabled = false;
 
-        // Calculate winning segment
         const sliceAngle = (Math.PI * 2) / this.items.length;
         const normalizedRotation = this.currentRotation % (Math.PI * 2);
-        const pointerAngle = Math.PI / 2; // Pointer at top
+        const pointerAngle = Math.PI / 2; 
         const relativeAngle = (pointerAngle - normalizedRotation + Math.PI * 2) % (Math.PI * 2);
         const winningIndex = Math.floor(relativeAngle / sliceAngle);
 
