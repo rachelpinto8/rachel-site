@@ -266,7 +266,7 @@
 
   <main class="container rng-container">
     <section class="rng-header reveal">
-      <h1>Random Number Generator</h1>
+      <h1>🎰 Random Number Generator</h1>
       <p style="color: var(--text-secondary);">Generate random numbers in any range</p>
     </section>
 
@@ -304,6 +304,7 @@
     </div>
 
     <div class="controls reveal">
+      <button class="btn-reset" id="resetBtn">New Game</button>
       <a href="index.html" class="btn-back">Back Home</a>
     </div>
   </main>
@@ -327,6 +328,7 @@
     const historyContainer = document.getElementById('historyContainer');
     const historyList = document.getElementById('historyList');
     const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+    const resetBtn = document.getElementById('resetBtn');
 
     let history = [];
 
@@ -370,6 +372,17 @@
 
     generateBtn.addEventListener('click', generateNumbers);
     clearHistoryBtn.addEventListener('click', () => {
+      history = [];
+      historyContainer.style.display = 'none';
+      historyList.innerHTML = '';
+    });
+
+    resetBtn.addEventListener('click', () => {
+      minInput.value = 1;
+      maxInput.value = 100;
+      countInput.value = 1;
+      resultValue.textContent = '0';
+      resultDisplay.classList.remove('show');
       history = [];
       historyContainer.style.display = 'none';
       historyList.innerHTML = '';
