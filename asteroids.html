@@ -276,15 +276,15 @@
         this.createAsteroids(3 + this.level);
       }
 
-      createAsteroids(count, x = null, y = null) {
+      createAsteroids(count, x = null, y = null, size = 1) {
         for (let i = 0; i < count; i++) {
           const asteroid = {
             x: x !== null ? x : Math.random() * this.canvas.width,
             y: y !== null ? y : Math.random() * this.canvas.height,
             vx: (Math.random() - 0.5) * 4,
             vy: (Math.random() - 0.5) * 4,
-            radius: 40,
-            size: 1
+            radius: size === 1 ? 40 : size === 2 ? 20 : 10,
+            size: size
           };
           this.asteroids.push(asteroid);
         }
@@ -356,7 +356,7 @@
               this.score += 10 * asteroid.size;
 
               if (asteroid.size < 3) {
-                this.createAsteroids(2, asteroid.x, asteroid.y);
+                this.createAsteroids(2, asteroid.x, asteroid.y, asteroid.size + 1);
               }
             }
           });
