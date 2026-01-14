@@ -254,6 +254,17 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
+      <a href="minesweeper.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">💣</span>
+          <div class="secret-menu-text">
+            <h2>Minesweeper</h2>
+            <p>Find all the mines</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
       <a href="converter.html" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">📏</span>
