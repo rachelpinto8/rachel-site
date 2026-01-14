@@ -1,4 +1,3 @@
-// Tic Tac Toe Game Logic
 let gameBoard = ['', '', '', '', '', '', '', '', ''];
 let currentPlayer = 'X';
 let gameActive = true;
@@ -85,7 +84,6 @@ function resetGame() {
   });
 }
 
-// Initialize game on page load
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initializeGame);
 } else {

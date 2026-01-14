@@ -1,12 +1,28 @@
-// Easter Egg: Secret Menu
 let secretMenuLoaded = false;
 
 function initializeSecretMenu() {
   if (secretMenuLoaded) return;
   
-  const secretMenuHTML = `<div id="secret-menu" class="secret-menu">
+  const secretMenuHTML = `
+  <style>
+  .secret-menu-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 3rem 2rem;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    width: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .secret-menu-body::-webkit-scrollbar {
+    display: none;
+  }
+  </style>
+  <div id="secret-menu" class="secret-menu">
   <div class="secret-menu-header">
-    <h1>Secret Menu</h1>
+    <h1>🫘🍣</h1>
     <button class="secret-menu-close" aria-label="Close menu">&times;</button>
   </div>
   
@@ -338,7 +354,6 @@ function initializeSecretMenu() {
   </div>
 </div>`;
 
-  // Insert menu into body
   document.body.insertAdjacentHTML('beforeend', secretMenuHTML);
   
   setupSecretMenuListeners();
@@ -355,17 +370,14 @@ function setupSecretMenuListeners() {
   
   const closeBtn = secretMenu.querySelector('.secret-menu-close');
   
-  // Close menu with animation
   function closeSecretMenu() {
     secretMenu.classList.add('closing');
     setTimeout(() => {
       secretMenu.classList.remove('active', 'closing');
     }, 300);
   }
-  
-  // Open/Close with backslash key
+
   document.addEventListener('keydown', (e) => {
-    // Check for backslash key
     if ((e.key === '\\' || e.code === 'Backslash') && e.shiftKey === false) {
       e.preventDefault();
       if (secretMenu.classList.contains('active')) {
@@ -374,19 +386,16 @@ function setupSecretMenuListeners() {
         secretMenu.classList.add('active');
       }
     }
-    // Close with ESC
     if (e.key === 'Escape' && secretMenu.classList.contains('active')) {
       e.preventDefault();
       closeSecretMenu();
     }
   });
   
-  // Close button click
   if (closeBtn) {
     closeBtn.addEventListener('click', closeSecretMenu);
   }
   
-  // Close when clicking on the menu background (outside content)
   secretMenu.addEventListener('click', (e) => {
     if (e.target === secretMenu) {
       closeSecretMenu();
@@ -394,20 +403,16 @@ function setupSecretMenuListeners() {
   });
 }
 
-// Initialize secret menu on page load
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initializeSecretMenu);
 } else {
   initializeSecretMenu();
 }
 
-// Initialization complete
 
-// Only use intersection observer for reveal animations on desktop
 const isMobile = window.matchMedia('(max-width: 768px)').matches;
-let observer; // Global observer for re-use in navigation
+let observer;
 
-// helper: ensure scroll is always enabled on desktop
 if (!isMobile) {
   document.body.classList.remove('lock-scroll');
   document.documentElement.style.overflowY = 'auto';
@@ -428,13 +433,11 @@ if (!isMobile) {
 
   reveals.forEach(el => observer.observe(el));
 
-  // safety: if any reveal still hidden after 600ms, show it so scroll never feels blocked
   setTimeout(() => {
     reveals.forEach(el => el.classList.add('visible'));
   }, 600);
 }
 
-// Dark/Light mode toggle with fade animation
 const theme = localStorage.getItem('theme') || 'dark';
 document.documentElement.setAttribute('data-theme', theme);
 updateStatusBar(theme);
@@ -445,7 +448,6 @@ if (themeToggle) {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
     
-    // Add fade animation
     document.body.style.opacity = '0.7';
     
     setTimeout(() => {
@@ -466,7 +468,6 @@ function updateStatusBar(themeMode) {
     statusBarMeta.setAttribute('content', themeMode === 'dark' ? 'black-translucent' : 'black');
   }
   
-  // Update theme-color meta tag to match current theme
   const themeColorMeta = document.querySelector('meta[name="theme-color"]');
   if (themeColorMeta) {
     const themeColor = themeMode === 'dark' ? '#0b0b0d' : '#f8f8f9';
@@ -484,10 +485,8 @@ function updateThemeIcon() {
   }
 }
 
-// Body opacity transition
 document.body.style.transition = 'opacity 0.3s ease';
 
-// Modal functionality
 function initializeModals() {
   const clickableItems = document.querySelectorAll('[data-modal]');
   const modalOverlay = document.querySelector('.modal-overlay');
@@ -496,7 +495,6 @@ function initializeModals() {
 
   clickableItems.forEach(item => {
     item.addEventListener('click', (e) => {
-      // Prevent default if it's a link
       if (item.tagName === 'A') {
         e.preventDefault();
       }
@@ -537,32 +535,27 @@ function closeModal() {
   }
 }
 
-// Close modal on Escape key
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeModal();
   }
 });
 
-// Initialize modals when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initializeModals);
 } else {
   initializeModals();
 }
 
-// Smooth page navigation with fade transitions
 function setupPageNavigation() {
   const container = document.querySelector('.container');
   if (!container) return;
 
-  // Only target nav-right links for page navigation (skip the logo and theme toggle)
   const navLinks = document.querySelectorAll('.nav-right a');
 
   navLinks.forEach(link => {
     const href = link.getAttribute('href');
     
-    // Only handle internal .html pages: index.html, about.html, experience.html, projects.html, contact.html
     const validPages = ['/', 'index.html', 'about.html', 'experience.html', 'projects.html', 'contact.html'];
     const isValidPage = validPages.some(page => href === page || href.endsWith(page));
     
@@ -571,19 +564,15 @@ function setupPageNavigation() {
     link.addEventListener('click', async (e) => {
       e.preventDefault();
       
-      // Normalize href for consistency
       let targetPage = href;
       if (targetPage === '/') targetPage = 'index.html';
       
       try {
-        // Fade out current content
         container.style.transition = 'opacity 0.25s ease';
         container.style.opacity = '0';
         
-        // Wait for fade
         await new Promise(resolve => setTimeout(resolve, 250));
         
-        // Fetch new page
         const response = await fetch(targetPage);
         if (!response.ok) throw new Error('Failed to load page');
         
@@ -591,18 +580,14 @@ function setupPageNavigation() {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         
-        // Extract and update main content only
         const newContent = doc.querySelector('.container');
         if (newContent) {
           container.innerHTML = newContent.innerHTML;
           
-          // Update page title
           document.title = doc.title;
           
-          // Re-initialize modals for new content
           initializeModals();
           
-          // Re-initialize reveals for animations on desktop
           const isMobile = window.matchMedia('(max-width: 768px)').matches;
           if (!isMobile && observer) {
             const reveals = container.querySelectorAll('.reveal');
@@ -612,18 +597,14 @@ function setupPageNavigation() {
             });
           }
           
-          // Fade in new content
           container.style.opacity = '1';
           
-          // Update browser URL
           window.history.pushState({ page: targetPage }, '', targetPage);
           
-          // Scroll to top
           window.scrollTo(0, 0);
         }
       } catch (error) {
         console.error('Navigation error:', error);
-        // Fallback to normal navigation if fetch fails
         window.location.href = targetPage;
       }
     });
