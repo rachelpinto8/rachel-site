@@ -401,25 +401,37 @@ if (document.readyState === 'loading') {
   initializeSecretMenu();
 }
 
+// Initialization complete
+
 // Only use intersection observer for reveal animations on desktop
 const isMobile = window.matchMedia('(max-width: 768px)').matches;
+let observer; // Global observer for re-use in navigation
 
+// helper: ensure scroll is always enabled on desktop
 if (!isMobile) {
-  const reveals = document.querySelectorAll(".reveal");
+  document.body.classList.remove('lock-scroll');
+  document.documentElement.style.overflowY = 'auto';
 
-  const observer = new IntersectionObserver(
+  const reveals = document.querySelectorAll('.reveal');
+
+  observer = new IntersectionObserver(
     entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("visible");
+          entry.target.classList.add('visible');
           observer.unobserve(entry.target);
         }
       });
     },
-    { threshold: 0.15 }
+    { threshold: 0.08, rootMargin: '0px 0px -5% 0px' }
   );
 
   reveals.forEach(el => observer.observe(el));
+
+  // safety: if any reveal still hidden after 600ms, show it so scroll never feels blocked
+  setTimeout(() => {
+    reveals.forEach(el => el.classList.add('visible'));
+  }, 600);
 }
 
 // Dark/Light mode toggle with fade animation
@@ -537,6 +549,91 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initializeModals);
 } else {
   initializeModals();
+}
+
+// Smooth page navigation with fade transitions
+function setupPageNavigation() {
+  const container = document.querySelector('.container');
+  if (!container) return;
+
+  // Only target nav-right links for page navigation (skip the logo and theme toggle)
+  const navLinks = document.querySelectorAll('.nav-right a');
+
+  navLinks.forEach(link => {
+    const href = link.getAttribute('href');
+    
+    // Only handle internal .html pages: index.html, about.html, experience.html, projects.html, contact.html
+    const validPages = ['/', 'index.html', 'about.html', 'experience.html', 'projects.html', 'contact.html'];
+    const isValidPage = validPages.some(page => href === page || href.endsWith(page));
+    
+    if (!isValidPage) return;
+
+    link.addEventListener('click', async (e) => {
+      e.preventDefault();
+      
+      // Normalize href for consistency
+      let targetPage = href;
+      if (targetPage === '/') targetPage = 'index.html';
+      
+      try {
+        // Fade out current content
+        container.style.transition = 'opacity 0.25s ease';
+        container.style.opacity = '0';
+        
+        // Wait for fade
+        await new Promise(resolve => setTimeout(resolve, 250));
+        
+        // Fetch new page
+        const response = await fetch(targetPage);
+        if (!response.ok) throw new Error('Failed to load page');
+        
+        const html = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Extract and update main content only
+        const newContent = doc.querySelector('.container');
+        if (newContent) {
+          container.innerHTML = newContent.innerHTML;
+          
+          // Update page title
+          document.title = doc.title;
+          
+          // Re-initialize modals for new content
+          initializeModals();
+          
+          // Re-initialize reveals for animations on desktop
+          const isMobile = window.matchMedia('(max-width: 768px)').matches;
+          if (!isMobile && observer) {
+            const reveals = container.querySelectorAll('.reveal');
+            reveals.forEach(el => {
+              el.classList.remove('visible');
+              observer.observe(el);
+            });
+          }
+          
+          // Fade in new content
+          container.style.opacity = '1';
+          
+          // Update browser URL
+          window.history.pushState({ page: targetPage }, '', targetPage);
+          
+          // Scroll to top
+          window.scrollTo(0, 0);
+        }
+      } catch (error) {
+        console.error('Navigation error:', error);
+        // Fallback to normal navigation if fetch fails
+        window.location.href = targetPage;
+      }
+    });
+  });
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupPageNavigation);
+} else {
+  setupPageNavigation();
 }
 const menuToggle = document.querySelector('.menu-toggle');
 const navMenu = document.querySelector('.nav-menu');
