@@ -265,6 +265,17 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
+      <a href="flow.html" class="secret-menu-item">
+        <div class="secret-menu-item-content">
+          <span class="secret-menu-icon">🌊</span>
+          <div class="secret-menu-text">
+            <h2>Flow</h2>
+            <p>Connect matching colors</p>
+          </div>
+        </div>
+        <span class="secret-menu-arrow">→</span>
+      </a>
+      
       <a href="converter.html" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">📏</span>

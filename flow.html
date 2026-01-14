@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flow - Rachel Pinto</title>
+
+  <!-- Favicon & PWA Icons -->
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/web-app-manifest-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rachel Pinto">
+  <meta name="description" content="Flow - Connect matching colors.">
+
+  <!-- Theme initialization to prevent flash -->
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .game-header {
+      text-align: center;
+    }
+
+    .game-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .game-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .info-card {
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .info-label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .board-wrapper {
+      background: var(--surface);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .board {
+      display: inline-grid;
+      gap: 4px;
+      background: var(--bg);
+      padding: 4px;
+      border-radius: 8px;
+      touch-action: none;
+    }
+
+    .cell {
+      width: 50px;
+      height: 50px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+      user-select: none;
+    }
+
+    .cell.endpoint {
+      border-width: 4px;
+    }
+
+    .cell.filled {
+      border-color: transparent;
+    }
+
+    .cell.path {
+      border-color: transparent;
+    }
+
+    .dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      position: absolute;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .completion-message {
+      background: var(--bg);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 2px solid #10b981;
+      text-align: center;
+      display: none;
+      animation: slideIn 0.5s ease;
+    }
+
+    .completion-message.show {
+      display: block;
+    }
+
+    .message-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #10b981;
+      margin-bottom: 0.5rem;
+    }
+
+    .message-subtext {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .btn-action {
+      flex: 1;
+      padding: 1rem 2rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-primary);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-action:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .btn-action.primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .btn-action.primary:hover {
+      opacity: 0.9;
+      color: white;
+    }
+
+    .btn-back {
+      padding: 1rem 1.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .game-header h1 {
+        font-size: 2rem;
+      }
+
+      .cell {
+        width: 40px;
+        height: 40px;
+      }
+
+      .dot {
+        width: 16px;
+        height: 16px;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav reveal">
+    <div class="nav-left">
+      <a class="brand-avatar" href="index.html" aria-label="Home">
+        <img src="assets/IMG_7982.jpeg" alt="Rachel Pinto headshot" />
+      </a>
+      <button class="theme-toggle" aria-label="Toggle dark mode"></button>
+    </div>
+    <div class="nav-right">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <button class="menu-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="experience.html">Experience</a>
+      <a href="projects.html">Projects</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </nav>
+
+  <main class="container game-container">
+    <section class="game-header reveal">
+      <h1>🌊 Flow</h1>
+      <p style="color: var(--text-secondary);">Connect matching colors to fill the board!</p>
+    </section>
+
+    <div class="game-info reveal">
+      <div class="info-card">
+        <div class="info-label">Level</div>
+        <div class="info-value" id="levelDisplay">1</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Progress</div>
+        <div class="info-value" id="progressDisplay">0%</div>
+      </div>
+      <div class="info-card">
+        <div class="info-label">Flows</div>
+        <div class="info-value" id="flowsDisplay">0/0</div>
+      </div>
+    </div>
+
+    <div class="board-wrapper reveal">
+      <div class="board" id="board"></div>
+    </div>
+
+    <div class="completion-message" id="completionMessage">
+      <div class="message-text">🎉 Level Complete!</div>
+      <div class="message-subtext">All colors connected!</div>
+    </div>
+
+    <div class="controls reveal">
+      <button class="btn-action" id="clearBtn">Clear</button>
+      <button class="btn-action primary" id="nextBtn" style="display: none;">Next Level</button>
+      <a href="index.html" class="btn-back">Back Home</a>
+    </div>
+  </main>
+
+  <footer class="footer reveal">
+    <p>© 2026 Rachel Pinto</p>
+    <div class="footer-links">
+      <a href="mailto:rachelpinto8@outlook.com">Email</a>
+      <a href="https://www.linkedin.com/in/rachelpinto8" target="_blank">LinkedIn</a>
+    </div>
+  </footer>
+
+  <script src="assets/motion.js"></script>
+  <script>
+    class FlowGame {
+      constructor() {
+        this.level = 1;
+        this.size = 5; // Start with 5x5
+        this.board = [];
+        this.endpoints = [];
+        this.paths = [];
+        this.currentPath = null;
+        this.isDragging = false;
+
+        this.colors = [
+          '#ef4444', // red
+          '#3b82f6', // blue
+          '#10b981', // green
+          '#f59e0b', // orange
+          '#8b5cf6', // purple
+          '#ec4899', // pink
+          '#06b6d4', // cyan
+          '#eab308'  // yellow
+        ];
+
+        this.boardElement = document.getElementById('board');
+        this.levelDisplay = document.getElementById('levelDisplay');
+        this.progressDisplay = document.getElementById('progressDisplay');
+        this.flowsDisplay = document.getElementById('flowsDisplay');
+        this.completionMessage = document.getElementById('completionMessage');
+
+        this.setupEventListeners();
+        this.generateLevel();
+      }
+
+      setupEventListeners() {
+        document.getElementById('clearBtn').addEventListener('click', () => this.clearPaths());
+        document.getElementById('nextBtn').addEventListener('click', () => {
+          this.level++;
+          this.generateLevel();
+        });
+
+        // Mouse events
+        this.boardElement.addEventListener('mousedown', (e) => this.handleStart(e));
+        this.boardElement.addEventListener('mousemove', (e) => this.handleMove(e));
+        this.boardElement.addEventListener('mouseup', () => this.handleEnd());
+        this.boardElement.addEventListener('mouseleave', () => this.handleEnd());
+
+        // Touch events
+        this.boardElement.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          this.handleStart(e.touches[0]);
+        });
+        this.boardElement.addEventListener('touchmove', (e) => {
+          e.preventDefault();
+          this.handleMove(e.touches[0]);
+        });
+        this.boardElement.addEventListener('touchend', () => this.handleEnd());
+      }
+
+      generateLevel() {
+        // Increase size every 3 levels
+        this.size = Math.min(5 + Math.floor((this.level - 1) / 3), 8);
+        
+        // Increase number of colors
+        const numColors = Math.min(2 + Math.floor((this.level - 1) / 2), this.colors.length);
+
+        this.board = Array(this.size).fill(null).map(() => Array(this.size).fill(null));
+        this.endpoints = [];
+        this.paths = Array(numColors).fill(null).map(() => []);
+
+        // Place color endpoints
+        for (let i = 0; i < numColors; i++) {
+          let placed = 0;
+          while (placed < 2) {
+            const row = Math.floor(Math.random() * this.size);
+            const col = Math.floor(Math.random() * this.size);
+            
+            if (this.board[row][col] === null) {
+              this.board[row][col] = { type: 'endpoint', color: i };
+              this.endpoints.push({ row, col, color: i });
+              placed++;
+            }
+          }
+        }
+
+        this.levelDisplay.textContent = this.level;
+        this.completionMessage.classList.remove('show');
+        document.getElementById('nextBtn').style.display = 'none';
+        this.renderBoard();
+        this.updateProgress();
+      }
+
+      renderBoard() {
+        this.boardElement.style.gridTemplateColumns = `repeat(${this.size}, 50px)`;
+        this.boardElement.innerHTML = '';
+
+        for (let row = 0; row < this.size; row++) {
+          for (let col = 0; col < this.size; col++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.dataset.row = row;
+            cell.dataset.col = col;
+
+            const cellData = this.board[row][col];
+            
+            if (cellData && cellData.type === 'endpoint') {
+              cell.classList.add('endpoint');
+              const dot = document.createElement('div');
+              dot.className = 'dot';
+              dot.style.backgroundColor = this.colors[cellData.color];
+              cell.appendChild(dot);
+              cell.style.backgroundColor = `${this.colors[cellData.color]}40`;
+            } else if (cellData && cellData.type === 'path') {
+              cell.classList.add('path', 'filled');
+              cell.style.backgroundColor = this.colors[cellData.color];
+            }
+
+            this.boardElement.appendChild(cell);
+          }
+        }
+      }
+
+      handleStart(e) {
+        const cell = e.target.closest('.cell');
+        if (!cell) return;
+
+        const row = parseInt(cell.dataset.row);
+        const col = parseInt(cell.dataset.col);
+        const cellData = this.board[row][col];
+
+        if (cellData && cellData.type === 'endpoint') {
+          this.isDragging = true;
+          this.currentPath = {
+            color: cellData.color,
+            cells: [{ row, col }]
+          };
+          
+          // Clear existing path for this color
+          this.clearPathForColor(cellData.color);
+        } else if (cellData && cellData.type === 'path') {
+          // Start from existing path
+          this.isDragging = true;
+          const pathIndex = this.paths.findIndex(p => p && p.cells.some(c => c.row === row && c.col === col));
+          if (pathIndex !== -1) {
+            const path = this.paths[pathIndex];
+            const cellIndex = path.cells.findIndex(c => c.row === row && c.col === col);
+            this.currentPath = {
+              color: path.color,
+              cells: path.cells.slice(0, cellIndex + 1)
+            };
+            this.clearPathForColor(path.color);
+            this.paths[pathIndex] = this.currentPath;
+            this.renderBoard();
+          }
+        }
+      }
+
+      handleMove(e) {
+        if (!this.isDragging || !this.currentPath) return;
+
+        const cell = document.elementFromPoint(e.clientX, e.clientY)?.closest('.cell');
+        if (!cell) return;
+
+        const row = parseInt(cell.dataset.row);
+        const col = parseInt(cell.dataset.col);
+        const lastCell = this.currentPath.cells[this.currentPath.cells.length - 1];
+
+        // Check if adjacent
+        const isAdjacent = Math.abs(row - lastCell.row) + Math.abs(col - lastCell.col) === 1;
+        if (!isAdjacent) return;
+
+        const cellData = this.board[row][col];
+
+        // Check if this is the matching endpoint
+        if (cellData && cellData.type === 'endpoint' && cellData.color === this.currentPath.color) {
+          this.currentPath.cells.push({ row, col });
+          this.paths[this.currentPath.color] = this.currentPath;
+          this.isDragging = false;
+          this.currentPath = null;
+          this.renderBoard();
+          this.updateProgress();
+          return;
+        }
+
+        // Check if cell is empty or part of current path
+        if (cellData === null || (cellData.type === 'path' && cellData.color === this.currentPath.color)) {
+          // Don't backtrack immediately
+          if (this.currentPath.cells.length > 1) {
+            const secondLast = this.currentPath.cells[this.currentPath.cells.length - 2];
+            if (secondLast.row === row && secondLast.col === col) {
+              this.currentPath.cells.pop();
+              this.board[lastCell.row][lastCell.col] = null;
+              this.renderBoard();
+              return;
+            }
+          }
+
+          this.currentPath.cells.push({ row, col });
+          this.board[row][col] = { type: 'path', color: this.currentPath.color };
+          this.renderBoard();
+        }
+      }
+
+      handleEnd() {
+        if (this.currentPath && this.isDragging) {
+          // Check if path reached endpoint
+          const lastCell = this.currentPath.cells[this.currentPath.cells.length - 1];
+          const cellData = this.board[lastCell.row][lastCell.col];
+          
+          if (!(cellData && cellData.type === 'endpoint')) {
+            // Invalid path, clear it
+            this.clearPathForColor(this.currentPath.color);
+          }
+        }
+        
+        this.isDragging = false;
+        this.currentPath = null;
+      }
+
+      clearPathForColor(color) {
+        if (this.paths[color]) {
+          this.paths[color].cells.forEach(cell => {
+            const cellData = this.board[cell.row][cell.col];
+            if (cellData && cellData.type === 'path') {
+              this.board[cell.row][cell.col] = null;
+            }
+          });
+          this.paths[color] = null;
+        }
+        this.renderBoard();
+        this.updateProgress();
+      }
+
+      clearPaths() {
+        this.paths = Array(this.paths.length).fill(null);
+        for (let row = 0; row < this.size; row++) {
+          for (let col = 0; col < this.size; col++) {
+            const cellData = this.board[row][col];
+            if (cellData && cellData.type === 'path') {
+              this.board[row][col] = null;
+            }
+          }
+        }
+        this.renderBoard();
+        this.updateProgress();
+      }
+
+      updateProgress() {
+        const totalCells = this.size * this.size;
+        const endpointCells = this.endpoints.length;
+        const filledCells = this.board.flat().filter(c => c !== null).length;
+        const progress = Math.floor(((filledCells - endpointCells) / (totalCells - endpointCells)) * 100);
+        
+        this.progressDisplay.textContent = `${Math.max(0, progress)}%`;
+
+        const completedFlows = this.paths.filter(p => p !== null).length;
+        const totalFlows = this.paths.length;
+        this.flowsDisplay.textContent = `${completedFlows}/${totalFlows}`;
+
+        // Check if level complete
+        if (progress === 100 && completedFlows === totalFlows) {
+          this.completionMessage.classList.add('show');
+          document.getElementById('nextBtn').style.display = 'block';
+        }
+      }
+    }
+
+    let game;
+    document.addEventListener('DOMContentLoaded', () => {
+      game = new FlowGame();
+    });
+  </script>
+</body>
+</html>

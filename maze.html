@@ -227,11 +227,13 @@
         this.rows = 15;
 
         this.player = { x: 0, y: 0 };
+        this.animatedPlayer = { x: 0, y: 0 };
         this.exit = { x: this.cols - 1, y: this.rows - 1 };
         
         this.keys = {};
         this.maze = [];
         this.visited = [];
+        this.animationSpeed = 0.25;
 
         this.generateMaze();
         this.setupListeners();
@@ -286,6 +288,7 @@
         }
 
         this.player = { x: 0, y: 0 };
+        this.animatedPlayer = { x: 0, y: 0 };
         this.moves = 0;
         document.getElementById('movesDisplay').textContent = this.moves;
       }
@@ -436,12 +439,16 @@
           this.cellSize - 4
         );
 
+        // Smooth player animation
+        this.animatedPlayer.x += (this.player.x - this.animatedPlayer.x) * this.animationSpeed;
+        this.animatedPlayer.y += (this.player.y - this.animatedPlayer.y) * this.animationSpeed;
+
         // Draw player
         this.ctx.fillStyle = '#10b981';
         this.ctx.beginPath();
         this.ctx.arc(
-          this.player.x * this.cellSize + this.cellSize / 2,
-          this.player.y * this.cellSize + this.cellSize / 2,
+          this.animatedPlayer.x * this.cellSize + this.cellSize / 2,
+          this.animatedPlayer.y * this.cellSize + this.cellSize / 2,
           this.cellSize / 3,
           0,
           Math.PI * 2

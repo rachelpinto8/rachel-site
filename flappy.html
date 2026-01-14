@@ -227,17 +227,17 @@
           width: 30,
           height: 30,
           velocity: 0,
-          gravity: 0.6,
-          jump: -12,
-          maxFall: 20
+          gravity: 0.35,
+          jump: -9,
+          maxFall: 12
         };
 
         // Pipes
         this.pipes = [];
-        this.pipeGap = 130;
+        this.pipeGap = 160;
         this.pipeWidth = 60;
-        this.pipeSpacing = 250;
-        this.nextPipeX = this.canvas.width + 100;
+        this.pipeSpacing = 280;
+        this.nextPipeX = this.canvas.width;
 
         this.setupListeners();
         this.gameLoop();
@@ -278,21 +278,20 @@
         this.bird.y += this.bird.velocity;
 
         // Generate pipes
-        if (this.nextPipeX < this.canvas.width) {
+        if (this.pipes.length === 0 || this.pipes[this.pipes.length - 1].x < this.canvas.width - this.pipeSpacing) {
           const gapStart = Math.random() * (this.canvas.height - this.pipeGap - 100) + 50;
           this.pipes.push({
-            x: this.nextPipeX,
+            x: this.canvas.width,
             gapStart: gapStart,
             gapEnd: gapStart + this.pipeGap,
             scored: false
           });
-          this.nextPipeX += this.pipeSpacing;
         }
 
         // Update pipes
         this.pipes = this.pipes.filter(pipe => pipe.x + this.pipeWidth > 0);
         this.pipes.forEach(pipe => {
-          pipe.x -= 6;
+          pipe.x -= 3.5;
 
           // Check scoring
           if (!pipe.scored && pipe.x + this.pipeWidth < this.bird.x && pipe.x + this.pipeWidth > this.bird.x - 10) {
@@ -401,7 +400,6 @@
         this.bird.y = this.canvas.height * 0.5;
         this.bird.velocity = 0;
         this.pipes = [];
-        this.nextPipeX = this.canvas.width + 100;
         this.score = 0;
         document.getElementById('scoreDisplay').textContent = this.score;
         this.gameState = 'playing';
