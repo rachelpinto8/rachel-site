@@ -135,13 +135,6 @@
       font-size: 0.95rem;
     }
 
-    .controls-game {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
     .btn-start, .btn-pause {
       padding: 0.9rem;
       border: none;
@@ -244,6 +237,14 @@
       margin-bottom: 1.5rem;
     }
 
+    .controls-game {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+
     .game-over-score {
       font-size: 1.5rem;
       font-weight: 700;
@@ -282,6 +283,39 @@
     }
 
     .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .game-btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
+      font-weight: 500;
+    }
+
+    .game-btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .game-btn-primary:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    .game-btn-secondary {
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      background: var(--surface);
+      text-decoration: none;
+    }
+
+    .game-btn-secondary:hover {
       border-color: var(--accent);
       color: var(--accent);
     }
@@ -350,11 +384,6 @@
       </div>
     </div>
 
-    <div class="instructions reveal">
-      <h3>How to Play</h3>
-      <p>Use arrow keys to move the snake. Eat the yellow food to grow and score points. Don't hit the walls or yourself!</p>
-    </div>
-
     <div class="game-board-wrapper reveal">
       <div class="game-board" id="gameBoard" role="grid" aria-label="Snake game board">
       </div>
@@ -368,9 +397,9 @@
     </div>
 
     <div class="controls-game reveal">
-      <button class="btn-start" id="startBtn">Start Game</button>
-      <button class="btn-pause" id="pauseBtn" style="display: none;">Pause</button>
-      <a href="index.html" class="btn-back">Back Home</a>
+      <button class="game-btn game-btn-primary" id="startBtn">Start Game</button>
+      <button class="game-btn game-btn-primary" id="pauseBtn" style="display: none;">Pause</button>
+      <a href="index.html" class="game-btn game-btn-secondary">Back Home</a>
     </div>
   </main>
 
@@ -519,7 +548,7 @@
 
       endGame() {
         this.gameActive = false;
-        this.startBtn.style.display = 'block';
+        this.startBtn.style.display = 'inline-block';
         this.pauseBtn.style.display = 'none';
 
         if (this.score > this.best) {

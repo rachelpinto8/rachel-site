@@ -226,6 +226,39 @@
       color: var(--text-secondary);
     }
 
+    .game-btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
+      font-weight: 500;
+    }
+
+    .game-btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .game-btn-primary:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    .game-btn-secondary {
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      background: var(--surface);
+      text-decoration: none;
+    }
+
+    .game-btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     @media (max-width: 768px) {
       .simon-header h1 {
         font-size: 2rem;
@@ -301,17 +334,6 @@
       </div>
     </div>
 
-    <div class="instructions reveal">
-      <h3>How to Play</h3>
-      <ol>
-        <li>Click "Start Game" to begin</li>
-        <li>Watch the sequence of colored buttons light up</li>
-        <li>Repeat the sequence by clicking the buttons</li>
-        <li>Each round adds one more color to the sequence</li>
-        <li>Get it wrong and it's game over!</li>
-      </ol>
-    </div>
-
     <div class="game-area reveal">
       <div class="message" id="message">Ready to play?</div>
 
@@ -326,12 +348,12 @@
         <h2>Game Over!</h2>
         <p id="gameOverMessage"></p>
       </div>
+    </div>
 
-      <div class="controls">
-        <button class="btn-start" id="startBtn">Start Game</button>
-        <button class="btn-reset" id="resetBtn" style="display: none;">Reset</button>
-        <a href="index.html" class="btn-back">Back Home</a>
-      </div>
+    <div class="game-controls reveal">
+        <button class="game-btn game-btn-primary" id="startBtn">Start Game</button>
+        <button class="game-btn game-btn-primary" id="resetBtn" style="display: none;">Reset</button>
+        <a href="index.html" class="game-btn game-btn-secondary">Back Home</a>
     </div>
   </main>
 
@@ -453,7 +475,7 @@
 
       endGame() {
         this.gameActive = false;
-        this.startBtn.style.display = 'block';
+        this.startBtn.style.display = 'inline-block';
         this.resetBtn.style.display = 'none';
 
         if (this.level > this.best) {

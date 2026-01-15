@@ -167,7 +167,7 @@
     }
 
     .controls {
-      display: flex;
+      display: none;
       gap: 1rem;
       justify-content: center;
       flex-wrap: wrap;
@@ -206,6 +206,45 @@
     }
 
     .btn-back:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .game-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .game-btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
+      font-weight: 500;
+    }
+
+    .game-btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .game-btn-primary:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    .game-btn-secondary {
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      background: var(--surface);
+      text-decoration: none;
+    }
+
+    .game-btn-secondary:hover {
       border-color: var(--accent);
       color: var(--accent);
     }
@@ -262,7 +301,7 @@
 
   <main class="container hangman-container">
     <section class="hangman-header reveal">
-      <h1>📝 Hangman</h1>
+      <h1>📝Hangman</h1>
       <p style="color: var(--text-secondary);">Guess the word before you run out of tries!</p>
     </section>
 
@@ -294,9 +333,13 @@
       <div class="message" id="message"></div>
 
       <div class="controls reveal">
-        <button class="btn-new" id="newGameBtn">New Game</button>
+        <button class="btn-new">New Game</button>
         <a href="index.html" class="btn-back">Back Home</a>
       </div>
+    </div>
+        <div class="game-controls reveal">
+      <button class="game-btn game-btn-primary" id="newGameBtn">New Game</button>
+      <a href="index.html" class="game-btn game-btn-secondary">Back Home</a>
     </div>
   </main>
 
