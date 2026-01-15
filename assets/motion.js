@@ -28,7 +28,7 @@ function initializeSecretMenu() {
   
   <div class="secret-menu-body">
     <div class="secret-menu-options">
-      <a href="game.html" class="secret-menu-item">
+      <a href="game" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🎮</span>
           <div class="secret-menu-text">
@@ -39,7 +39,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="rps.html" class="secret-menu-item">
+      <a href="rps" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🪨</span>
           <div class="secret-menu-text">
@@ -50,7 +50,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="memory.html" class="secret-menu-item">
+      <a href="memory" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🧠</span>
           <div class="secret-menu-text">
@@ -61,7 +61,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="messages.html" class="secret-menu-item">
+      <a href="messages" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">💬</span>
           <div class="secret-menu-text">
@@ -72,7 +72,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="appreciation.html" class="secret-menu-item">
+      <a href="appreciation" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">💝</span>
           <div class="secret-menu-text">
@@ -83,7 +83,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="guess.html" class="secret-menu-item">
+      <a href="guess" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🔢</span>
           <div class="secret-menu-text">
@@ -94,7 +94,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="dice.html" class="secret-menu-item">
+      <a href="dice" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🎲</span>
           <div class="secret-menu-text">
@@ -105,7 +105,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="2048.html" class="secret-menu-item">
+      <a href="2048" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">2️⃣</span>
           <div class="secret-menu-text">
@@ -116,7 +116,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="simon.html" class="secret-menu-item">
+      <a href="simon" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🎯</span>
           <div class="secret-menu-text">
@@ -127,7 +127,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="snake.html" class="secret-menu-item">
+      <a href="snake" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🐍</span>
           <div class="secret-menu-text">
@@ -138,7 +138,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="hangman.html" class="secret-menu-item">
+      <a href="hangman" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">📝</span>
           <div class="secret-menu-text">
@@ -149,7 +149,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="pong.html" class="secret-menu-item">
+      <a href="pong" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🏓</span>
           <div class="secret-menu-text">
@@ -160,7 +160,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="rng.html" class="secret-menu-item">
+      <a href="rng" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🎲</span>
           <div class="secret-menu-text">
@@ -171,7 +171,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="coin.html" class="secret-menu-item">
+      <a href="coin" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🪙</span>
           <div class="secret-menu-text">
@@ -182,7 +182,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="whack.html" class="secret-menu-item">
+      <a href="whack" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🦡</span>
           <div class="secret-menu-text">
@@ -193,7 +193,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="breakout.html" class="secret-menu-item">
+      <a href="breakout" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🧱</span>
           <div class="secret-menu-text">
@@ -204,7 +204,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="flappy.html" class="secret-menu-item">
+      <a href="flappy" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🐦</span>
           <div class="secret-menu-text">
@@ -215,7 +215,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="asteroids.html" class="secret-menu-item">
+      <a href="asteroids" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🚀</span>
           <div class="secret-menu-text">
@@ -226,7 +226,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="pwd.html" class="secret-menu-item">
+      <a href="pwd" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🔐</span>
           <div class="secret-menu-text">
@@ -237,7 +237,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="timer.html" class="secret-menu-item">
+      <a href="timer" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">⏱️</span>
           <div class="secret-menu-text">
@@ -248,7 +248,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="maze.html" class="secret-menu-item">
+      <a href="maze" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🏃</span>
           <div class="secret-menu-text">
@@ -259,7 +259,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="connect4.html" class="secret-menu-item">
+      <a href="connect4" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🔴</span>
           <div class="secret-menu-text">
@@ -270,7 +270,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="minesweeper.html" class="secret-menu-item">
+      <a href="minesweeper" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">💣</span>
           <div class="secret-menu-text">
@@ -281,7 +281,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="flow.html" class="secret-menu-item">
+      <a href="flow" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🌊</span>
           <div class="secret-menu-text">
@@ -292,7 +292,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="converter.html" class="secret-menu-item">
+      <a href="converter" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">📏</span>
           <div class="secret-menu-text">
@@ -303,7 +303,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="color.html" class="secret-menu-item">
+      <a href="color" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🎨</span>
           <div class="secret-menu-text">
@@ -314,7 +314,7 @@ function initializeSecretMenu() {
         <span class="secret-menu-arrow">→</span>
       </a>
       
-      <a href="wheel.html" class="secret-menu-item">
+      <a href="wheel" class="secret-menu-item">
         <div class="secret-menu-item-content">
           <span class="secret-menu-icon">🎡</span>
           <div class="secret-menu-text">
