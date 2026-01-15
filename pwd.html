@@ -289,6 +289,46 @@
       color: var(--accent);
     }
 
+    .game-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .game-btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
+      font-weight: 500;
+    }
+
+    .game-btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .game-btn-primary:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    .game-btn-secondary {
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      background: var(--surface);
+      text-decoration: none;
+    }
+
+    .game-btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     @media (max-width: 768px) {
       .pwd-header h1 {
         font-size: 2rem;
@@ -389,11 +429,12 @@
         </div>
       </div>
 
-      <button class="btn-generate" id="generateBtn">Generate Password</button>
+      
     </div>
 
-    <div class="controls reveal">
-      <a href="index.html" class="btn-back">Back Home</a>
+    <div class="game-controls reveal">
+      <button class="game-btn game-btn-primary" id="generateBtn">Generate Password</button>
+      <a href="index.html" class="game-btn game-btn-secondary">Back Home</a>
     </div>
   </main>
 

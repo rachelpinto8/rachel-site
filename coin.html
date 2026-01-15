@@ -208,6 +208,45 @@
     .history-item:last-child {
       margin-bottom: 0;
     }
+    .game-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .game-btn {
+      padding: 0.7rem 1.5rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: inherit;
+      font-weight: 500;
+    }
+
+    .game-btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .game-btn-primary:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    .game-btn-secondary {
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      background: var(--surface);
+      text-decoration: none;
+    }
+
+    .game-btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
 
     @media (max-width: 768px) {
       .coin-header h1 {
@@ -293,9 +332,9 @@
       <div id="historyList"></div>
     </div>
 
-    <div class="controls reveal">
-      <button class="btn-reset" id="resetBtn">New Game</button>
-      <a href="index.html" class="btn-back">Back Home</a>
+    <div class="game-controls reveal">
+      <button class="game-btn game-btn-primary" id="resetBtn">New Game</button>
+      <a href="index.html" class="game-btn game-btn-secondary">Back Home</a>
     </div>
   </main>
 
