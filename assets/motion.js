@@ -176,7 +176,7 @@ function initializeSecretMenu() {
           <span class="secret-menu-icon">🪙</span>
           <div class="secret-menu-text">
             <h2>Coin Flipper</h2>
-            <p>Heads or tails?</p>
+            <p>Heads or tails?</p>  
           </div>
         </div>
         <span class="secret-menu-arrow">→</span>
